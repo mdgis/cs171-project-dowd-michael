@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.counties {
+  fill: black;
+  stroke: #000041;
+  stroke-width: .5;
+}
+
+.states {
+  fill: black;
+
+}
+
+.q0-9 { fill:rgb(247,251,255); }
+.q1-9 { fill:rgb(222,235,247); }
+.q2-9 { fill:rgb(198,219,239); }
+.q3-9 { fill:rgb(158,202,225); }
+.q4-9 { fill:rgb(107,174,214); }
+.q5-9 { fill:rgb(66,146,198); }
+.q6-9 { fill:rgb(33,113,181); }
+.q7-9 { fill:rgb(8,81,156); }
+.q8-9 { fill:rgb(8,48,107); }
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/queue.v1.min.js"></script>
+<script src="http://d3js.org/topojson.v1.min.js"></script>
+<script>
+
+var data;
+
+var width = 960,
+    height = 700;
+
+var rateByTAZ = d3.map();
+
+var quantize = d3.scale.quantize()
+    .domain([0.27, 0.92])
+    .range(d3.range(9).map(function(i) { return "q" + i + "-9"; }));
+
+var max = 0;
+
+var projection = d3.geo.mercator()
+        .center([-71.1603, 42.305])
+        .rotate([0, 0, 0])
+        .scale(25000)
+        .translate([width / 2, height / 2]);
+
+
+var path = d3.geo.path()
+    .projection(projection);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+queue()
+    .defer(d3.json, "topotaz2.json")
+    .defer(d3.csv, "access.csv", function(d) { rateByTAZ.set(d.TAZ, + d.timeauto2010); })
+    .await(ready);
+
+function ready(error, us) {
+    data = us;
+    console.log("autoAccess", rateByTAZ);
+    console.log(data)
+  svg.append("g")
+      .attr("class", "counties")
+    .selectAll("path")
+      .data(topojson.feature(us, us.objects.taz).features)
+    .enter().append("path")
+      .attr("class", function(d) {
+              return quantize(rateByTAZ.get(d.properties.TAZ));})
+      .attr("d", path);
+
+
+}
+
+d3.select(self.frameElement).style("height", height + "px");
+
+</script>
