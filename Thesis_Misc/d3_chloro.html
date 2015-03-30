@@ -59,7 +59,7 @@ var svg = d3.select("body").append("svg")
 
 queue()
     .defer(d3.json, "topotaz2.json")
-    .defer(d3.csv, "access.csv", function(d) { rateByTAZ.set(d.TAZ, + d.timeauto2010); })
+    .defer(d3.csv, "auto.tsv", function(d) { rateByTAZ.set(d.Z, + d.DtaMerge_base); })
     .await(ready);
 
 function ready(error, us) {
@@ -72,7 +72,7 @@ function ready(error, us) {
       .data(topojson.feature(us, us.objects.taz).features)
     .enter().append("path")
       .attr("class", function(d) {
-              return quantize(rateByTAZ.get(d.properties.TAZ));})
+              return quantize(rateByTAZ.get(d.properties.Z));})
       .attr("d", path);
 
 
