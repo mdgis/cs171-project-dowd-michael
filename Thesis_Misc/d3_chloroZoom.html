@@ -73,20 +73,7 @@ var columns = [];
 var rateByTAZ = d3.map();
 var current;
 var max = 0;
-
-function manualColor(val){
-    out =
-        val < 0.001358 ? 0 :
-        val < 0.002183 ? 1 :
-        val < 0.005146 ? 2 :
-        val < 0.010408 ? 3 :
-        val < 0.022089 ? 4 :
-        val < 0.033631 ? 5 :
-        val < 0.051477 ? 6 :
-        val < 0.078315 ? 7 :
-        val < 0.146280 ? 8 : 0
-    return  "a" + out + "-9"
-}
+maxlat = 83
 
 var projection = d3.geo.mercator()
         .center([-71.1603, 42.305])
@@ -95,6 +82,23 @@ var projection = d3.geo.mercator()
         .translate([width / 2, height / 2]);
 
 // find the top left and bottom right of current projection
+function mercatorBounds(projection, maxlat) {
+    var yaw = projection.rotate()[0],
+            xymax = projection([-yaw+180-1e-6,-maxlat]),
+            xymin = projection([-yaw-180+1e-6, maxlat]);
+
+    return [xymin,xymax];
+}
+
+var b = mercatorBounds(projection, maxlat),
+        s = width/(b[1][0]-b[0][0]),
+        scaleExtent = [s, 10*s];
+
+var zoom = d3.behavior.zoom()
+        .scaleExtent(scaleExtent)
+        .scale(projection.scale())
+        .translate([0,0])               // not linked directly to projection
+        .on("zoom", updateVis);
 
 var path = d3.geo.path()
     .projection(projection);
@@ -134,6 +138,33 @@ var tlast = [0,0],
 function updateVis(){
     console.log(max)
 
+    if (d3.event) {
+        var scale = d3.event.scale,
+                t = d3.event.translate;
+
+        // if scaling changes, ignore translation (otherwise touch zooms are weird)
+        if (scale != slast) {
+            projection.scale(scale);
+        } else {
+            var dx = t[0]-tlast[0],
+                    dy = t[1]-tlast[1],
+                    yaw = projection.rotate()[0],
+                    tp = projection.translate();
+
+            // use x translation to rotate based on current scale
+            projection.rotate([yaw+360.*dx/width*scaleExtent[0]/scale, 0, 0]);
+            // use y translation to translate projection, clamped by min/max
+            var b = mercatorBounds(projection, maxlat);
+            if (b[0][1] + dy > 0) dy = -b[0][1];
+            else if (b[1][1] + dy < height) dy = height-b[1][1];
+            projection.translate([tp[0],tp[1]+dy]);
+        }
+        // save last values.  resetting zoom.translate() and scale() would
+        // seem equivalent but doesn't seem to work reliably?
+        slast = scale;
+        tlast = t;
+    }
+
     var check = Object.keys(access[0])[1]
     var q =  check.indexOf("Dta") >= 0 ? "a" : check.indexOf("transit") >= 0 ? "t" : "w";
     var quantize = d3.scale.quantile()
@@ -146,7 +177,7 @@ function updateVis(){
             .data(topojson.feature(data, data.objects.taz).features)
             .enter().append("path")
             .attr("class", function(d) {
-                return manualColor(rateByTAZ.get(d.properties.TAZ))})
+                return quantize(rateByTAZ.get(d.properties.TAZ));})
             .attr("d", path);
 }
 
