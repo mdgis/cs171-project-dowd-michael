@@ -11,6 +11,9 @@
   stroke-width: .5;
 }
 
+#map{
+    display: block;
+}
 
 
 .a0-9 { fill:rgb(247,251,255); }
@@ -58,8 +61,12 @@
     <div class="Atype" id = "auto" >Auto</div>
     <div class="Atype" id = "transit" >Transit</div>
     <div class ="Atype" id = "walk">Walk</div>
+
+    <div id="map"></div>
 </div>
 <script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="packages/simple_statistics.js"></script>
+<script src="js/chloroClass.js"></script>
 <script src="http://d3js.org/queue.v1.min.js"></script>
 <script src="http://d3js.org/topojson.v1.min.js"></script>
 <script>
@@ -67,12 +74,13 @@
 var data;
 var access;
 var auto, transit, walk;
-var width = 960,
-    height = 700;
+var width = 1060,
+    height = 900;
 var columns = [];
 var rateByTAZ = d3.map();
 var current;
 var max = 0;
+var test
 
 function manualColor(val){
     out =
@@ -84,7 +92,7 @@ function manualColor(val){
         val < 0.033631 ? 5 :
         val < 0.051477 ? 6 :
         val < 0.078315 ? 7 :
-        val < 0.146280 ? 8 : 0
+        val < 0.146280 ? 8 : 0;
     return  "a" + out + "-9"
 }
 
@@ -99,9 +107,18 @@ var projection = d3.geo.mercator()
 var path = d3.geo.path()
     .projection(projection);
 
-var svg = d3.select("body").append("svg")
+var zoom = d3.behavior.zoom()
+        .translate(projection.translate())
+        .scale(projection.scale())
+        .scaleExtent([height*25, 500 * height])
+        .on("zoom", zoomed);
+
+var svg = d3.select("#map").append("svg")
         .attr("width", width)
         .attr("height", height);
+
+var g = svg.append("g")
+        .call(zoom);
 
 queue()
     .defer(d3.json, "data/topotaz2.json")
@@ -128,26 +145,28 @@ function showValue(val){
     wrangleData(access, val);
 }
 
-var tlast = [0,0],
-        slast = null;
 
 function updateVis(){
-    console.log(max)
+    console.log(max);
 
-    var check = Object.keys(access[0])[1]
+    var check = Object.keys(access[0])[1];
+    //Is it transit, auto, or walk
     var q =  check.indexOf("Dta") >= 0 ? "a" : check.indexOf("transit") >= 0 ? "t" : "w";
     var quantize = d3.scale.quantile()
             .domain([0.0, max])
             .range(d3.range(9).map(function(i) { return q + i + "-9"; }));
 
-    svg.append("g")
+    var tpath = svg.select("g")
             .attr("class", "taz")
             .selectAll("path")
             .data(topojson.feature(data, data.objects.taz).features)
-            .enter().append("path")
-            .attr("class", function(d) {
+
+    tpath.enter().append("path");
+    tpath.attr("class", function(d) {
                 return manualColor(rateByTAZ.get(d.properties.TAZ))})
             .attr("d", path);
+
+    tpath.exit().remove()
 }
 
 function wrangleData(access, level){
@@ -159,7 +178,7 @@ function wrangleData(access, level){
     console.log(columns)
     columns.splice(columns.indexOf("Z"),1);
 
-    level = columns[level]
+    level = columns[level];
     access.forEach(function(d) {
         if (d[level] > max) max = +d[level];
         rateByTAZ.set(d.Z, + d[level]); });
@@ -175,5 +194,11 @@ d3.select("body").selectAll(".Atype").on("click", function(d){
     wrangleData(access,+d3.select("#theSlider").property("value") )
 });
 d3.select(self.frameElement).style("height", height + "px");
+
+
+function zoomed() {
+    projection.translate(d3.event.translate).scale(d3.event.scale);
+    g.selectAll("path").attr("d", path);
+}
 
 </script>
