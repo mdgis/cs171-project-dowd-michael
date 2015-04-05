@@ -38,3 +38,44 @@ body{
     border: none;
     line-height: 13px;
 }
+
+.taz {
+    fill: gray;
+    stroke: #000041;
+    stroke-width: .5;
+}
+
+#map{
+    display: block;
+}
+
+.a0-9 { fill:rgb(247,251,255); }
+.a1-9 { fill:rgb(222,235,247); }
+.a2-9 { fill:rgb(198,219,239); }
+.a3-9 { fill:rgb(158,202,225); }
+.a4-9 { fill:rgb(107,174,214); }
+.a5-9 { fill:rgb(66,146,198); }
+.a6-9 { fill:rgb(33,113,181); }
+.a7-9 { fill:rgb(8,81,156); }
+.a8-9 { fill:rgb(8,48,107); }
+
+.t0-9 { fill:#EFE2E2;}
+.t1-9 { fill:#E0C6C6;}
+.t2-9 { fill:#D1AAAA;}
+.t3-9 { fill:#C18D8D;}
+.t4-9 { fill:#B27171;}
+.t5-9 { fill:#A35555;}
+.t6-9 { fill:#933838;}
+.t7-9 { fill:#841C1C;}
+.t8-9 { fill:#750000;}
+
+
+.w0-9 { fill:#FFFFFF}
+.w1-9 { fill:#C6C6C6; }
+.w2-9 { fill:#AAAAAA; }
+.w3-9 { fill:#8D8D8D; }
+.w4-9 { fill:#717171; }
+.w5-9 { fill:#555555 }
+.w6-9 { fill:#383838;}
+.w7-9 { fill:#1C1C1C; }
+.w8-9 { fill:#000000; }
