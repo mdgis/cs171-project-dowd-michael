@@ -1,5 +1,3 @@
-var r;
-r = roads;
 StreetMapVis = function(_parentElement){
     this.parentElement = _parentElement;
     this.width = 1060;
@@ -18,32 +16,10 @@ StreetMapVis.prototype.initVis = function(){
     function transitStyle(feature) {
         return {
             weight: setWeight(feature.properties["MODE"]),
-           // opacity: setOpacity(feature.properties["NAME"]),
             color: setColor(feature.properties["MODE"], feature.properties["NAME"])
         };
     }
 
-    var vMax = d3.max(r.features, function(d) {return d.properties["VSMP_2"]});
-    var vScale = d3.scale.linear()
-        .domain([100,vMax])
-        .range([1,20]);
-
-    function roadStyle(feature) {
-        return {
-            weight: setRoadWeight(feature.properties["VSMP_2"]),
-            // opacity: setOpacity(feature.properties["NAME"]),
-            color: "black"
-        };
-    }
-
-
-
-    console.log(vScale(3420.2))
-
-
-    function setRoadWeight(vol){
-        return Math.round(vScale(vol))
-    }
 
     function setWeight(mode){
         return (mode === 1) || (mode === 2) ? 1 :
@@ -88,11 +64,6 @@ StreetMapVis.prototype.initVis = function(){
         onEachFeature: null
     }).addTo(this.map);
 
-    //roads = L.geoJson(roads, {
-    //    style: roadStyle,
-    //    onEachFeature: null
-    //}).addTo(this.map);
-    //
 
 
     //this.svg = d3.select(that.map.getPanes().overlayPane).append("svg"),

@@ -6,11 +6,12 @@
  * @constructor
  */
 var t;
-AssetVis = function(_parentElement, _data,_MyClickHandler){
+AssetVis = function(_parentElement, _data, _label,_MyClickHandler){
     this.parentElement = _parentElement;
     this.data = _data;
     this.displayData = [];
     this.normal = false;
+    this.label = _label;
     this.allvotes = 0;
     this.baseTicks = [];
 
@@ -37,6 +38,12 @@ AssetVis.prototype.initVis = function(){
         .append("g")
         .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
 
+    this.svg.append("text")
+        .attr("x", (this.width / 2))
+        .attr("y", 0 - (this.margin.top / 2))
+        .attr("text-anchor", "middle")
+        .style("font-size", "16px")
+        .text(this.label);
 
 
     // creates axis and scales
@@ -48,6 +55,9 @@ AssetVis.prototype.initVis = function(){
     this.xAxis = d3.svg.axis()
         .scale(this.x)
         .orient("bottom")
+
+    this.xAxis.tickFormat(function(d,i){
+        return String(i+1) + "ft."});
 
 
     this.yAxis = d3.svg.axis()
@@ -61,6 +71,9 @@ AssetVis.prototype.initVis = function(){
 
     this.bargroup = this.svg.select(".bars");
 
+    var adjust = Math.random()*155
+    var adjust2 = Math.random()*255
+    var adjust3 = Math.random()*100
     this.bars = that.bargroup
         .selectAll(".rect")
         .data(d3.range(6))
@@ -68,7 +81,7 @@ AssetVis.prototype.initVis = function(){
         .append("rect")
         .attr("class","priosbar")
         .style("fill", function(d,i){
-            return d3.rgb(153,155,255).darker(i);
+            return d3.rgb(adjust,adjust3,adjust2).darker(i);
         })
         .style("stroke", "white")
         .style("stroke-width", 1)

@@ -1,6 +1,6 @@
 /* Accessibility Map Visualization */
-AccessVis = function(_parentElement){
-    this.parentElement = _parentElement
+AccessVis = function(_parentElement, _classLabel){
+    this.parentElement = _parentElement;
     this.width = 800;
     this.height = 900;
     this.columns = [];
@@ -8,11 +8,11 @@ AccessVis = function(_parentElement){
     this.max = 0;
     this.classify = [];
     this.mode = "";
-
+    this.classLabel = _classLabel;
     this.projection = d3.geo.mercator()
         .center([-71.1603, 42.305])
         .rotate([0, 0, 0])
-        .scale(25000)
+        .scale(30000)
         .translate([this.width / 2, this.height / 2]);
 
     this.initVis();
@@ -34,7 +34,8 @@ AccessVis.prototype.initVis = function() {
 
     this.svg = this.parentElement.append("svg")
         .attr("width", this.width)
-        .attr("height", this.height);
+        .attr("height", this.height)
+        .attr("class", this.classLabel)
 
     this.g = this.svg.append("g")
         .call(this.zoom);
@@ -44,7 +45,6 @@ AccessVis.prototype.initVis = function() {
 
 AccessVis.prototype.zoomed = function() {
     that = access_viz;
-    console.log(that.projection);
     that.projection.translate(d3.event.translate).scale(d3.event.scale);
     that.g.selectAll("path").attr("d", that.path);
 };
@@ -58,7 +58,6 @@ AccessVis.prototype.showValue = function(val){
 AccessVis.prototype.updateVis = function(){
     that = this;
 
-    console.log(that.classify)
     function manualColor(val) {
         out =
             val < that.classify[0] ? 0 :
@@ -70,11 +69,9 @@ AccessVis.prototype.updateVis = function(){
                                     val < that.classify[6] ? 6 :
                                         val < that.classify[7] ? 7 :
                                             val < that.classify[8] ? 8 : 0;
-        console.log(out)
         return that.mode + out + "-9"
     }
 
-    console.log("Classify", that.classify);
     var check = Object.keys(access[0])[1];
     //Is it transit, auto, or walk
     var q =  check.indexOf("Dta") >= 0 ? "a" : check.indexOf("transit") >= 0 ? "t" : "w";
@@ -106,17 +103,14 @@ AccessVis.prototype.wrangleData = function(access, level){
 
     that.mode = access === auto ? "a" : access === transit ? "t" : "w";
 
-    console.log("mode", that.mode);
 
     if (Object.keys(current[0])[1] !== Object.keys(access[0])[1]){
         that.max = 0;
         that.current = access
     }
     that.columns = Object.keys(access[0]);
-    console.log(that.columns);
     that.columns.splice(that.columns.indexOf("Z"),1);
 
-    console.log("level", level)
     level = that.columns[level];
     access.forEach(function(d) {
         if (d[level] > that.max) that.max = +d[level];

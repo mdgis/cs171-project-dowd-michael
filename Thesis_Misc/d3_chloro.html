@@ -17,12 +17,14 @@
     <!-- LEAFLET DATA -->
     <script src="data/transitLines.js"></script>
     <script src="data/dta100V.js"></script>
+
     <!-- Viz Elements -->
     <script src="js/accessibility.js"></script>
-    <!--<script src="js/streetMap.js"></script>-->
     <script src="js/topoMap.js"></script>
+    <script src="js/streetMap.js"></script>
     <script src="js/chart.js"></script>
     <script src="js/topoNet.js"></script>
+    <script src="js/groupedChart.js"></script>
 
     <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
     <link rel="stylesheet" type="text/css" href="libs/bootstrap/css/bootstrap.min.css">
@@ -47,6 +49,14 @@
                 <div class="Atype" id = "auto" >Auto</div>
                 <div class="Atype" id = "transit" >Transit</div>
                 <div class="Atype" id = "walk">Walk</div>
+                <div>
+                   <label>Layout&nbsp;&nbsp;<select id = "dropDown">
+                        <option value="Access">Accessibility</option>
+                        <option value="Volume">Volume</option>
+                        <option value="Transit">Transit Change</option>
+                        <option value="Assets">Inundated Assets</option>
+                    </select></label>
+                    </div>
 
             </div>
         </div>
@@ -63,7 +73,9 @@
                 <button type="button" class="btn btn-primary">Highway</button>
                 <button type="button" class="btn btn-primary">Transit</button>
                 <button type="button" class="btn btn-primary">Misc.</button>
+
                </div>
+                <div id = "context"></div>
             </div>
 
             <div>
@@ -93,7 +105,8 @@
 
 
 <script>
-    var jobs;
+    var t;
+    var jobs, hh, pop, tazarea;
     var data;
     var access;
     var current = null;
@@ -101,14 +114,17 @@
 
     queue()
             .defer(d3.json, "data/topotaz2.json")
-            .defer(d3.json, "data/jobs.json")
+            .defer(d3.json, "data/assets/jobs.json")
+            .defer(d3.json, "data/assets/hh.json")
+            .defer(d3.json, "data/assets/pop.json")
+            .defer(d3.json, "data/assets/tazarea.json")
             .defer(d3.tsv, "data/access_JOBS/autoJobs.tsv")
             .defer(d3.tsv, "data/access_Jobs/transitJobs.tsv")
             .defer(d3.tsv, "data/access_JOBS/walkJobs.tsv")
             .defer(d3.json, "data/DTA_g100V.json")
             .await(ready);
 
-    function ready(error, theTaz, Qjobs, Qauto, Qtransit, Qwalk, Qdta) {
+    function ready(error, theTaz, Qjobs, Qhh, Qpop, Qtazarea, Qauto, Qtransit, Qwalk, Qdta) {
         data = theTaz;
         auto = Qauto;
         transit = Qtransit;
@@ -116,28 +132,48 @@
         access = auto;
         jobs = Qjobs;
         dta = Qdta;
+        hh = Qhh;
+        pop = Qpop;
+        tazarea = Qtazarea;
 
 
-//        access_viz = new AccessVis(d3.select("#map"));
-       // net_viz = new NetVis(d3.select("#map"));
-//        access_viz.wrangleData(access, 0);
-//        access_viz.updateVis();
+        //Old
+        //net_viz = new NetVis(d3.select("#map")); //Just TopoJSON
 
-        street_viz = new StreetMapVis("map");
-        asset_viz = new AssetVis(d3.select("#chart"), jobs);
-        asset_viz2 = new AssetVis(d3.select("#chart1"), jobs);
-        asset_viz3 = new AssetVis(d3.select("#chart2"), jobs);
-        asset_viz4 = new AssetVis(d3.select("#chart3"), jobs);
+        // Accessibility Visualization
+        access_viz = new AccessVis(d3.select("#map"), "Access");
+        access_viz.wrangleData(access, 0);
+        access_viz.updateVis();
 
+        //Leaflet with Volume TopoJSON Road Network
+        //topo_street_viz = new TopoStreetMapVis("map");
+
+        //Public Transit On OFF Difference Maps
+//        street_viz = new StreetMapVis("map");
+
+        //Asset Charts 1-4
+        asset_viz = new AssetVis(d3.select("#chart"), jobs, "Jobs");
+        asset_viz2 = new AssetVis(d3.select("#chart1"), pop,  "Population");
+        asset_viz3 = new AssetVis(d3.select("#chart2"), hh, "Households");
+        asset_viz4 = new AssetVis(d3.select("#chart3"), tazarea, "Taz Area Meters Sq.");
 
     }
-
 
     $(document).ready(function() {
         $(".btn-primary").click(function(){
             console.log(this)
         });
     });
+
+//    $(document).ready(function() {
+//        var current = d3.select("#dropDown").value;
+//        $("#dropDown").on("change", function(){
+//            d3.select("#"+current).classed(".hide", true);
+//            d3.select("#"+this.value).classed(".hide",false);
+//
+//        });
+//    });
+
 
     function showValue(value){
         access_viz.showValue(value)
