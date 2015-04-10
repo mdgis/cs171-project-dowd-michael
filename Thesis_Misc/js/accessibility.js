@@ -1,12 +1,13 @@
 /* Accessibility Map Visualization */
-var test;
 AccessVis = function(_parentElement){
     this.parentElement = _parentElement
-    this.width = 1060;
+    this.width = 800;
     this.height = 900;
     this.columns = [];
     this.rateByTAZ = d3.map();
     this.max = 0;
+    this.classify = [];
+    this.mode = "";
 
     this.projection = d3.geo.mercator()
         .center([-71.1603, 42.305])
@@ -21,10 +22,7 @@ AccessVis = function(_parentElement){
 AccessVis.prototype.initVis = function() {
     that = this;
 
-
-
 // find the top left and bottom right of current projection
-
     this.path = d3.geo.path()
         .projection(this.projection);
 
@@ -58,22 +56,25 @@ AccessVis.prototype.showValue = function(val){
 
 
 AccessVis.prototype.updateVis = function(){
-    console.log("In Update Viz", access);
     that = this;
+
+    console.log(that.classify)
     function manualColor(val) {
         out =
-            val < 0.001358 ? 0 :
-                val < 0.002183 ? 1 :
-                    val < 0.005146 ? 2 :
-                        val < 0.010408 ? 3 :
-                            val < 0.022089 ? 4 :
-                                val < 0.033631 ? 5 :
-                                    val < 0.051477 ? 6 :
-                                        val < 0.078315 ? 7 :
-                                            val < 0.146280 ? 8 : 0;
-        return "a" + out + "-9"
+            val < that.classify[0] ? 0 :
+                val < that.classify[1] ? 1 :
+                    val < that.classify[2] ? 2 :
+                        val < that.classify[3] ? 3 :
+                            val < that.classify[4] ? 4 :
+                                val < that.classify[5] ? 5 :
+                                    val < that.classify[6] ? 6 :
+                                        val < that.classify[7] ? 7 :
+                                            val < that.classify[8] ? 8 : 0;
+        console.log(out)
+        return that.mode + out + "-9"
     }
 
+    console.log("Classify", that.classify);
     var check = Object.keys(access[0])[1];
     //Is it transit, auto, or walk
     var q =  check.indexOf("Dta") >= 0 ? "a" : check.indexOf("transit") >= 0 ? "t" : "w";
@@ -88,7 +89,10 @@ AccessVis.prototype.updateVis = function(){
 
     tpath.enter().append("path");
     tpath.attr("class", function(d) {
-        return manualColor(that.rateByTAZ.get(d.properties.TAZ))})
+        var val = that.rateByTAZ.get(d.properties.TAZ);
+        if (val < .00001 ) {return "white"}
+        else
+            return manualColor(val)})
         .attr("d", that.path);
 
     tpath.exit().remove()
@@ -96,20 +100,33 @@ AccessVis.prototype.updateVis = function(){
 
 AccessVis.prototype.wrangleData = function(access, level){
     that = this;
+    //Control For First Case Situations
+    var first = current === null;
+    if(!current){ current = auto };
+
+    that.mode = access === auto ? "a" : access === transit ? "t" : "w";
+
+    console.log("mode", that.mode);
+
     if (Object.keys(current[0])[1] !== Object.keys(access[0])[1]){
         that.max = 0;
         that.current = access
     }
     that.columns = Object.keys(access[0]);
-    console.log(that.columns)
+    console.log(that.columns);
     that.columns.splice(that.columns.indexOf("Z"),1);
 
+    console.log("level", level)
     level = that.columns[level];
     access.forEach(function(d) {
         if (d[level] > that.max) that.max = +d[level];
         that.rateByTAZ.set(d.Z, + d[level]); });
 
-    that.updateVis()
+    test = that.rateByTAZ
+    if (current !== access || first){
+        current = access;
+        that.classify = chloroQuantile(that.rateByTAZ.values(), 8, "jenks");}
+        that.updateVis()
 };
 
 
