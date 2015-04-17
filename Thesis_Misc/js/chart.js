@@ -43,7 +43,7 @@ AssetVis.prototype.initVis = function(){
         .attr("y", 0 - (this.margin.top / 2))
         .attr("text-anchor", "middle")
         .style("font-size", "16px")
-        .text(this.label);
+        .text(that.label);
 
 
     // creates axis and scales
@@ -54,7 +54,7 @@ AssetVis.prototype.initVis = function(){
 
     this.xAxis = d3.svg.axis()
         .scale(this.x)
-        .orient("bottom")
+        .orient("bottom");
 
     this.xAxis.tickFormat(function(d,i){
         return String(i+1) + "ft."});
@@ -71,25 +71,29 @@ AssetVis.prototype.initVis = function(){
 
     this.bargroup = this.svg.select(".bars");
 
-    var adjust = Math.random()*155
-    var adjust2 = Math.random()*255
-    var adjust3 = Math.random()*100
+
     this.bars = that.bargroup
         .selectAll(".rect")
         .data(d3.range(6))
         .enter()
         .append("rect")
         .attr("class","priosbar")
+        .attr("class", function(d,i){ return String(i) + " " + "priosbar "  + that.label})
         .style("fill", function(d,i){
-            return d3.rgb(adjust,adjust3,adjust2).darker(i);
+            console.log(that.label)
+            return that.label === "Jobs" ? golden[i+1] : that.label === "Pop" ? bluish[i] : that.label === "hh" ? redish[i]
+                : golden[i]
         })
+        .style("opacity", 0.8)
         .style("stroke", "white")
         .style("stroke-width", 1)
         .attr("x", function(d,i){ return that.x(i); })
-        //.on("click", function(d,i){
-        //    that.indicateSelected(this)
-        //    $(that.MyClickHandler).trigger("click",i);
-        //});
+        .on("click", function(d,i){
+            var level = +this.classList[0]+1;
+            var dim = this.classList[2];
+            map.removeLayer(asset_map_viz.rawTaz);
+            asset_map_viz.wrangleData(Demographics[dim.toLocaleLowerCase()], dim.toUpperCase(), level)
+        });
 
     this.svg.append("g")
         .attr("class", "x axis")
@@ -171,14 +175,7 @@ AssetVis.prototype.updateVis = function(first){
         .scale(this.y)
         .orient("left");
 
-    //this.xAxis.tickFormat(function(d){
-    //    return that.metaData[d].name;});
 
-    //if (this.normal){
-    //    this.yAxis.tickFormat(function(d, i){
-    //        return String(((that.baseTicks[i]/that.fixedTotal)*100).toFixed(2)) + "%"
-    //    })
-    //}
 
     // updates axis
     this.svg.select(".x.axis").call(this.xAxis)
@@ -225,18 +222,7 @@ AssetVis.prototype.updateVis = function(first){
  * be defined here.
  * @param selection
  */
-//AssetVis.prototype.onSelectionChange = function (selectionStart, selectionEnd){
-//
-//    if (String(selectionStart) === String(selectionEnd)){
-//        this.wrangleData(null);
-//    }
-//    else {
-//        this.wrangleData(function(d) {
-//            return ((d.time >= selectionStart) && (d.time <= selectionEnd));});
-//    }
-//    this.updateVis(false);
-//
-//};
+
 
 AssetVis.prototype.normalize = function(){
     this.normal = !this.normal;
@@ -282,31 +268,7 @@ function mySumArray(a,b) {
  * @param _filter - A filter can be, e.g.,  a function that is only true for data of a given time range
  * @returns {Array|*}
  */
-AssetVis.prototype.filterAndAggregate = function(_filter){
 
-    // Set filter to a function that accepts all items
-    // ONLY if the parameter _filter is NOT null use this parameter
-    //var filter = _filter || function(){return true;};
-    //
-    //if (_filter !== null){
-    //    filter = _filter;
-    //}
-    //var that = this;
-    //
-    //// create an array of values for age 0-100
-    //var res = d3.range(16).map(function () {
-    //    return 0;
-    //});
-    //
-    //// accumulate all values that fulfill the filter criterion
-    //this.data.filter(filter).forEach(function(d){
-    //    "use strict";
-    //    res = mySumArray(res, d.prios);
-    //});
-    //
-    //return res;
-
-};
 //Below changes the bar border to black when a bar is selected & then back to white when unselected
 AssetVis.prototype.indicateSelected = function(theBar){
     var bar = d3.select(theBar);

@@ -69,8 +69,7 @@ circle:hover{
 
 #DataSelection{
     margin: 2px;
-    background-color: #f5f5f5;
-    border-bottom: 1px solid gray;
+    border-bottom: 1px solid #f5f5f5;
     height: 450px;
 }
 
@@ -80,15 +79,30 @@ circle:hover{
 }
 
 #context{
-    background-color: #000000;
     height: 93%
 }
 
-#hide{
-    display: none;
+.hide{
+    background-color: #000000;
+    opacity: 0;
 }
 
-.a0-9 { fill:rgb(247,251,255); }
+.countries {
+    stroke: #6cb0e0;
+    stroke-width: 0.5px;
+
+}
+.centroids {
+    stroke: black;
+    fill: gray;
+    opacity: .5;
+    stroke-width: .1px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+}
+
+.a0-9 { fill:black; }
 .a1-9 { fill:rgb(222,235,247); }
 .a2-9 { fill:rgb(198,219,239); }
 .a3-9 { fill:rgb(158,202,225); }
@@ -98,7 +112,7 @@ circle:hover{
 .a7-9 { fill:rgb(8,81,156); }
 .a8-9 { fill:rgb(8,48,107); }
 
-.t0-9 { fill:#FFFFFF;}
+.t0-9 { fill:none;}
 .t1-9 { fill:#E0C6C6;}
 .t2-9 { fill:#D1AAAA;}
 .t3-9 { fill:#C18D8D;}
@@ -109,8 +123,8 @@ circle:hover{
 .t8-9 { fill:#750000;}
 
 
-.w0-9 { fill:#FFFFFF}
-.w1-9 { fill:#C6C6C6; }
+.w0-9 { fill:none}
+.w1-9 { fill:none; }
 .w2-9 { fill:#AAAAAA; }
 .w3-9 { fill:#8D8D8D; }
 .w4-9 { fill:#717171; }
@@ -119,4 +133,4 @@ circle:hover{
 .w7-9 { fill:#1C1C1C; }
 .w8-9 { fill:#000000; }
 
-.white {fill: white}
+.white {fill: none}

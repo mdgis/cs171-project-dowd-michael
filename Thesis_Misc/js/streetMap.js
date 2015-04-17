@@ -1,17 +1,10 @@
-StreetMapVis = function(_parentElement){
-    this.parentElement = _parentElement;
-    this.width = 1060;
-    this.height = 900;
-
+StreetMapVis = function(){
     this.initVis()
 };
 
 
 StreetMapVis.prototype.initVis = function(){
-    this.map = L.map(this.parentElement).setView([42.3596, -71.0561], 12);
-    this.map.attributionControl.addAttribution('Dowd Model Output');
     that = this;
-
 
     function transitStyle(feature) {
         return {
@@ -35,16 +28,17 @@ StreetMapVis.prototype.initVis = function(){
         }
         else if ( (mode === 3) || (mode === 4) ) {
             if (name.indexOf("red") > -1){
-                return "red"
+                return "#E22322"
+
             }
             else if (name.indexOf("green") > -1){
-                return "green"
+                return "#018445"
             }
             else if (name.indexOf("blue") > -1) {
-                return "blue"
+                return "#007AC2"
             }
             else if (name.indexOf("orange") > -1) {
-                return "orange"
+                return "#F3891D"
             }
         }
         else if (mode === 5){
@@ -53,34 +47,28 @@ StreetMapVis.prototype.initVis = function(){
         else {return null}
     }
 
-    L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
-        maxZoom: 18,
-        minZoom: 9,
-        id: 'examples.map-20v6611k'
-    }).addTo(this.map);
 
-    TransitLines = L.geoJson(transitLines, {
+    this.TransitLines = L.geoJson(transitLines, {
         style: transitStyle,
         onEachFeature: null
-    }).addTo(this.map);
+    }).addTo(map);
 
 
+    map._initPathRoot();
 
-    //this.svg = d3.select(that.map.getPanes().overlayPane).append("svg"),
-    //    this.g = this.svg.append("g").attr("class", "leaflet-zoom-hide");
+    //We pick up the SVG from the map object
+    this.svg = d3.select("#map").select("svg");
+    this.g = this.svg.append("g").attr("class","displayed");
 
-    that.map._initPathRoot()
-
-    // We pick up the SVG from the map object
-    var svg = d3.select("#map").select("svg"),
-        g = svg.append("g");
-    //D3 Overlay Stuff
+    // D3 Overlay Stuff
 
     d3.json("data/transitNodes4ft.json", function(collection) {
         that = street_viz;
 
+        //var transform = d3.geo.transform({point: projectPoint}),
+        //    path = d3.geo.path().projection(transform);
+
         var extent = d3.extent(collection.features.map(function(d){return d.properties["diff"]}));
-        console.log("extent", extent)
 
         var gainScale = d3.scale.sqrt()
                 .domain([0,extent[1]])
@@ -94,15 +82,15 @@ StreetMapVis.prototype.initVis = function(){
             d.LatLng = new L.LatLng(d.geometry.coordinates[1], d.geometry.coordinates[0])
         });
 
-        var feature = g.selectAll("circle")
+        var feature = that.g.selectAll("circle")
             .data(collection.features)
             .enter().append("circle")
             .style("fill", function(d){
                 var check = d.properties["diff"];
-                return check < 0 ? "#003333": check > 0 ? "blue": null
+                return check < 0 ? "orange": check > 0 ? "blue": null
             })
             .attr("r", function(d) {
-                if (that.map.getZoom() <= 13){
+                if (map.getZoom() <= 13){
                     var check = d.properties["diff"];
                 } else {
                     check = d.properties["diff"]
@@ -115,7 +103,7 @@ StreetMapVis.prototype.initVis = function(){
             .style("stroke", "black")
             .on("click", function(){console.log("Loss #", this.__data__.properties["diff"], "trips")});
 
-        that.map.on("viewreset", reset);
+        map.on("viewreset", reset);
         reset();
 
         // Reposition the SVG to cover the features.
@@ -123,10 +111,14 @@ StreetMapVis.prototype.initVis = function(){
             feature.attr("transform",
                 function(d) {
                     return "translate("+
-                        that.map.latLngToLayerPoint(d.LatLng).x +","+
-                        that.map.latLngToLayerPoint(d.LatLng).y +")";}
-
+                        map.latLngToLayerPoint(d.LatLng).x +","+
+                        map.latLngToLayerPoint(d.LatLng).y +")";}
             )
+        }
+
+        function projectPoint(x, y) {
+            var point = map.latLngToLayerPoint(new L.LatLng(y, x));
+            this.stream.point(point.x, point.y);
         }
 
 

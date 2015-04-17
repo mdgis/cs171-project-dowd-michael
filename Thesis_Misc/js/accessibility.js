@@ -15,6 +15,7 @@ AccessVis = function(_parentElement, _classLabel){
         .scale(30000)
         .translate([this.width / 2, this.height / 2]);
 
+    this.wrangleData(access,0)
     this.initVis();
 };
 
@@ -98,7 +99,7 @@ AccessVis.prototype.updateVis = function(){
 AccessVis.prototype.wrangleData = function(access, level){
     that = this;
     //Control For First Case Situations
-    var first = current === null;
+    this.first = current === null;
     if(!current){ current = auto };
 
     that.mode = access === auto ? "a" : access === transit ? "t" : "w";

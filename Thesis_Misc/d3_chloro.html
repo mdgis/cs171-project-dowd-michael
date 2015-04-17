@@ -6,9 +6,9 @@
     <script src="libs/d3/d3.min.js" charset="utf-8"></script>
     <script src="libs/jquery/jquery-2.1.1.min.js" charset="utf-8"></script>
     <script src="libs/bootstrap/js/bootstrap.min.js" charset="utf-8"></script>
-    <script src="http://d3js.org/queue.v1.min.js"></script>
-    <script src="http://d3js.org/topojson.v1.min.js"></script>
-    <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+    <script src="libs/queue/queue.min.js"></script>
+    <script src="libs/topojson-master/topojson.js"></script>
+    <script src="libs/leaflet-0.7.3/leaflet.js"></script>
     <script src="packages/simple_statistics.js"></script>
 
     <!-- My Tools -->
@@ -17,18 +17,25 @@
     <!-- LEAFLET DATA -->
     <script src="data/transitLines.js"></script>
     <script src="data/dta100V.js"></script>
+    <script src="RawData/taz.js"></script>
 
     <!-- Viz Elements -->
-    <script src="js/accessibility.js"></script>
+    <script src="js/ColorScales.js"></script>
+    <script src="js/Laccess.js"></script>
     <script src="js/topoMap.js"></script>
     <script src="js/streetMap.js"></script>
+    <script src="js/assets.js"></script>
     <script src="js/chart.js"></script>
     <script src="js/topoNet.js"></script>
     <script src="js/groupedChart.js"></script>
+    <script src="js/spider.js"></script>
+
+
 
     <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
     <link rel="stylesheet" type="text/css" href="libs/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+    <link rel="stylesheet" href="libs/leaflet-0.7.3/leaflet.css" />
+
     <link rel="stylesheet" type="text/css" href="css/mycss.css">
 
 
@@ -53,8 +60,9 @@
                    <label>Layout&nbsp;&nbsp;<select id = "dropDown">
                         <option value="Access">Accessibility</option>
                         <option value="Volume">Volume</option>
-                        <option value="Transit">Transit Change</option>
+                        <option value="Transit" selected="selected" >Transit Change</option>
                         <option value="Assets">Inundated Assets</option>
+                        <option value="Lost">Lost Trips</option>
                     </select></label>
                     </div>
 
@@ -111,6 +119,7 @@
     var access;
     var current = null;
     var auto, transit, walk, dta;
+    var currentMap = "Transit"
 
     queue()
             .defer(d3.json, "data/topotaz2.json")
@@ -136,27 +145,40 @@
         pop = Qpop;
         tazarea = Qtazarea;
 
+        Demographics = {
+            "jobs": jobs,
+            "hh"  : hh,
+            "pop" : pop
+        };
+
+        //Initialize the Map in the HTML
+        map = L.map("map").setView([42.3596, -71.0561], 12);
+
+
+        L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            minZoom: 9,
+            id: 'examples.map-20v6611k'
+        }).addTo(map);
+
+
 
         //Old
         //net_viz = new NetVis(d3.select("#map")); //Just TopoJSON
 
-        // Accessibility Visualization
-        access_viz = new AccessVis(d3.select("#map"), "Access");
-        access_viz.wrangleData(access, 0);
-        access_viz.updateVis();
-
-        //Leaflet with Volume TopoJSON Road Network
-        //topo_street_viz = new TopoStreetMapVis("map");
 
         //Public Transit On OFF Difference Maps
-//        street_viz = new StreetMapVis("map");
+        street_viz = new StreetMapVis("map");
+        //
 
-        //Asset Charts 1-4
+//
+//        //Asset Charts 1-4
         asset_viz = new AssetVis(d3.select("#chart"), jobs, "Jobs");
-        asset_viz2 = new AssetVis(d3.select("#chart1"), pop,  "Population");
-        asset_viz3 = new AssetVis(d3.select("#chart2"), hh, "Households");
+        asset_viz2 = new AssetVis(d3.select("#chart1"), pop,  "Pop");
+        asset_viz3 = new AssetVis(d3.select("#chart2"), hh, "hh");
         asset_viz4 = new AssetVis(d3.select("#chart3"), tazarea, "Taz Area Meters Sq.");
-
+        var asset_map_viz;
+        group_char_vix = new GroupChartVis("#context")
     }
 
     $(document).ready(function() {
@@ -165,14 +187,44 @@
         });
     });
 
-//    $(document).ready(function() {
-//        var current = d3.select("#dropDown").value;
-//        $("#dropDown").on("change", function(){
-//            d3.select("#"+current).classed(".hide", true);
-//            d3.select("#"+this.value).classed(".hide",false);
-//
-//        });
-//    });
+    $(document).ready(function() {
+        $("#dropDown").on("change", function(){
+            if (currentMap !== this.value){
+                if (currentMap === "Transit"){
+                    map.removeLayer(street_viz.TransitLines)
+                }
+                else if (currentMap === "Assets"){
+                    map.removeLayer(asset_map_viz.rawTaz)
+                }
+                else if (currentMap === "Volume" || currentMap === "Access" || currentMap === "Lost"){
+                    svg.remove();
+                }
+                d3.select('.displayed').remove();
+                if (this.value === "Transit"){
+                    street_viz = new StreetMapVis("map");
+                } else if (this.value === "Volume"){
+                    topo_street_viz = new TopoStreetMapVis();
+                } else if (this.value === "Access"){
+                    delete access_viz;
+                    current = null;
+                    access = auto;
+                    access_viz = new AccessVis(d3.select("#map"), "Access");
+                } else if (this.value === "Assets"){
+                    asset_map_viz = new AssetMapVis();
+                } else if (this.value === "Lost"){
+                    spider_vis = new SpiderViz("#map")
+                }
+            } else {
+                console.log("no Change")
+            }
+            currentMap = this.value;
+
+
+
+            //Leaflet with Volume TopoJSON Road Network
+
+        });
+    });
 
 
     function showValue(value){
