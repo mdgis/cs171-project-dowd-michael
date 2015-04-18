@@ -11,3 +11,4 @@ Libs: Contains all the libraries I am using. The libraries are bootstrap, topojs
 
 * There are many extra files in the folder right now, when the project is finalized I will clean out the repository so only necessary files and folders are present. *
 
+Please see: <http://mdgis.github.io/ >for working version.
