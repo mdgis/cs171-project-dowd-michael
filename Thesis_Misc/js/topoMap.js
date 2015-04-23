@@ -3,9 +3,9 @@ TopoStreetMapVis = function(){
 };
 
 TopoStreetMapVis.prototype.initVis = function(){
-    that = this;
-    svg = d3.select(map.getPanes().overlayPane).append("svg"),
-        g = svg.append("g").attr("class", "leaflet-zoom-hide");
+    var that = this;
+    svg = d3.select(map.getPanes().overlayPane).append("svg");
+    g = svg.append("g").attr("class", "leaflet-zoom-hide");
 
     gTopoMap = g.append("g").attr("class", "gTopoMap displayed");
 

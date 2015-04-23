@@ -5,7 +5,7 @@
  * @param _metaData -- the meta-data / data description object
  * @constructor
  */
-var t;
+
 AssetVis = function(_parentElement, _data, _label,_MyClickHandler){
     this.parentElement = _parentElement;
     this.data = _data;
@@ -16,12 +16,10 @@ AssetVis = function(_parentElement, _data, _label,_MyClickHandler){
     this.baseTicks = [];
 
     // define all constants here
-    this.margin = {top: 30, right: 20, bottom: 30, left: 50},
-        this.width = 400 - this.margin.left - this.margin.right,
-        this.height = 200 - this.margin.top - this.margin.bottom;
-
+    this.margin = {top: 30, right: 50, bottom: 30, left: 80};
+    this.width = 340 - this.margin.left - this.margin.right;
+    this.height = 200 - this.margin.top - this.margin.bottom;
     this.initVis();
-
 };
 
 
@@ -29,9 +27,7 @@ AssetVis = function(_parentElement, _data, _label,_MyClickHandler){
  * Method that sets up the SVG and the variables
  */
 AssetVis.prototype.initVis = function(){
-
     var that = this; // read about the this
-
     this.svg = this.parentElement.append("svg")
         .attr("width", this.width + this.margin.left + this.margin.right)
         .attr("height", this.height + this.margin.top + this.margin.bottom)
@@ -44,7 +40,6 @@ AssetVis.prototype.initVis = function(){
         .attr("text-anchor", "middle")
         .style("font-size", "16px")
         .text(that.label);
-
 
     // creates axis and scales
     this.y = d3.scale.linear().range([that.height, 0]);
@@ -77,10 +72,9 @@ AssetVis.prototype.initVis = function(){
         .data(d3.range(6))
         .enter()
         .append("rect")
-        .attr("class","priosbar")
-        .attr("class", function(d,i){ return String(i) + " " + "priosbar "  + that.label})
+        .attr("class","assetBar")
+        .attr("class", function(d,i){ return String(i) + " " + "assetBar "  + that.label})
         .style("fill", function(d,i){
-            console.log(that.label)
             return that.label === "Jobs" ? golden[i+1] : that.label === "Pop" ? bluish[i] : that.label === "hh" ? redish[i]
                 : golden[i]
         })
@@ -89,10 +83,14 @@ AssetVis.prototype.initVis = function(){
         .style("stroke-width", 1)
         .attr("x", function(d,i){ return that.x(i); })
         .on("click", function(d,i){
+            console.log("CLICKED Chart")
+            d3.selectAll(".assetBar").style("stroke", "white");
+            d3.select(this).style("stroke","black");
+
             var level = +this.classList[0]+1;
             var dim = this.classList[2];
-            map.removeLayer(asset_map_viz.rawTaz);
-            asset_map_viz.wrangleData(Demographics[dim.toLocaleLowerCase()], dim.toUpperCase(), level)
+            map3.removeLayer(asset_map_viz.Features);
+            asset_map_viz.wrangleDemData(Demographics[dim.toLocaleLowerCase()], dim.toUpperCase(), level)
         });
 
     this.svg.append("g")
@@ -128,12 +126,13 @@ AssetVis.prototype.wrangleData= function(_filterFunction){
         totals[key] += d[key]}
         });
 
-    delete totals["TAZ"]
+    delete totals["TAZ"];
     this.displayData = [];
     for (key in totals){this.displayData.push(totals[key])}
     this.displayData = this.displayData.slice(0,6)
 
 };
+
 
 
 /**
@@ -176,7 +175,6 @@ AssetVis.prototype.updateVis = function(first){
         .orient("left");
 
 
-
     // updates axis
     this.svg.select(".x.axis").call(this.xAxis)
         .selectAll("text")
@@ -191,7 +189,7 @@ AssetVis.prototype.updateVis = function(first){
 
     this.svg.select(".y.axis").call(this.yAxis);
 
-    this.bars = this.svg.selectAll(".priosbar")
+    this.bars = this.svg.selectAll(".assetBar")
         .data(this.displayData);
 
     if (first) {
@@ -216,26 +214,10 @@ AssetVis.prototype.updateVis = function(first){
 };
 
 
-/**
- * Gets called by event handler and should create new aggregated data
- * aggregation is done by the function "aggregate(filter)". Filter has to
- * be defined here.
- * @param selection
- */
-
-
 AssetVis.prototype.normalize = function(){
     this.normal = !this.normal;
     this.updateVis(false)
 };
-
-/*
- *
- * ==================================
- * From here on only HELPER functions
- * ==================================
- *
- * */
 
 
 function mySumArray(a,b) {
@@ -263,22 +245,10 @@ function mySumArray(a,b) {
 }
 
 
-/**
- * The aggregate function that creates the counts for each age for a given filter.
- * @param _filter - A filter can be, e.g.,  a function that is only true for data of a given time range
- * @returns {Array|*}
- */
-
 //Below changes the bar border to black when a bar is selected & then back to white when unselected
 AssetVis.prototype.indicateSelected = function(theBar){
     var bar = d3.select(theBar);
     var selectColor = bar.style("stroke") === "rgb(0, 0, 0)" ? "rgb(255, 255, 255)" : "rgb(0, 0, 0)";
-
     bar.style("stroke",selectColor)
-
 };
 
-
-/**
- * Created by mdowd on 4/7/15.
- */

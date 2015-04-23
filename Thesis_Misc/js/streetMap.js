@@ -1,58 +1,97 @@
+var StreetMapGlobals ={
+    "rootNodes": {},
+    "gainScale": null,
+    "lossScale": null
+};
+
+//Node Processing - Outputs Nested JSON saying which transit line is at which Transit Stop
+d3.tsv("RawData/PtOnOff.csv", function(data){
+    //First Determine all Unique Nodes
+    data.forEach(function(d){
+        if (!StreetMapGlobals.rootNodes[d.A]) {
+            var check = d.A;
+            StreetMapGlobals.rootNodes[check] = {Lines: {}, Total: 0
+            }
+        }
+    });
+
+    data.forEach(function(d){
+        StreetMapGlobals.rootNodes[d.A].Lines[d.Name] = +d.DiffB4ft;
+        StreetMapGlobals.rootNodes[d.A].Total += +d.DiffB4ft;
+    });
+});
+
+
+
 StreetMapVis = function(){
-    this.initVis()
+    this.initVis();
+
+    this.canvas = d3.select("#DataSelection").append("svg")
+        .attr("width", 650)
+        .attr("height", 550);
+
+    d3.json("scratch/transit.json", function(tdata){
+        that = street_viz;
+        that.treemap = d3.layout.treemap().sticky(true)
+            .size([650,550])
+            .nodes(tdata);
+
+        that.cells = that.canvas.selectAll(".cell")
+            .data(that.treemap)
+            .enter()
+            .append("g")
+            .attr("class", "cell");
+
+        that.cells.append("rect")
+            .on("click",function(d){
+                that.selectTransitLine(d.Name);
+                that.updateThePoints(d.Name);})
+            .attr("x",function (d) { return d.x })
+            .attr("y", function (d) { return d.y })
+            .attr("width", function (d) { return d.dx })
+            .attr("height", function (d) { return d.dy })
+            .attr("fill", function (d) { return d.children ? null :  styles.colorLines(d)})
+            .style("stroke", "white");
+
+        that.cells.append("text")
+            .attr("x", function (d) { return d.x + d.dx /10})
+            .attr("y", function (d) { return d.y + d.dy / 2})
+            .text(function (d) {
+                return d.Name === undefined? null: cleanText(d.Name)})
+            .attr("class", "boxText")
+            .style("fill", function(d){
+                if (d.Mode === 1){
+                    return "black"
+                }
+            });
+
+        function cleanText(d){
+            if (!isNaN(d.slice(0,1))){
+                return Math.floor(d)
+            } else {
+                return d
+            }
+        }
+    })
 };
 
 
+StreetMapVis.prototype.selectTransitLine = function(lineName){
+    street_viz.TransitLines.eachLayer(function(layer){
+        if (lookUp[layer.feature.properties.NAME] === lineName){
+            layer.setStyle({color :'yellow', weight: 15})
+        } else {
+            layer.setStyle(styles.transitStyle(layer.feature))
+        }
+    })
+};
+
 StreetMapVis.prototype.initVis = function(){
     that = this;
-
-    function transitStyle(feature) {
-        return {
-            weight: setWeight(feature.properties["MODE"]),
-            color: setColor(feature.properties["MODE"], feature.properties["NAME"])
-        };
-    }
-
-
-    function setWeight(mode){
-        return (mode === 1) || (mode === 2) ? 1 :
-            (mode === 3) || (mode === 4) ? 7:
-                (mode === 5) ? 3: null
-    }
-
-    function setColor(mode, name){
-        /*Color the subways by their name */
-        name = name.toLowerCase();
-        if ((mode === 1) || (mode === 2)){
-            return "yellow"
-        }
-        else if ( (mode === 3) || (mode === 4) ) {
-            if (name.indexOf("red") > -1){
-                return "#E22322"
-
-            }
-            else if (name.indexOf("green") > -1){
-                return "#018445"
-            }
-            else if (name.indexOf("blue") > -1) {
-                return "#007AC2"
-            }
-            else if (name.indexOf("orange") > -1) {
-                return "#F3891D"
-            }
-        }
-        else if (mode === 5){
-            return "gray"
-        }
-        else {return null}
-    }
-
-
     this.TransitLines = L.geoJson(transitLines, {
-        style: transitStyle,
+        style: styles.transitStyle,
         onEachFeature: null
     }).addTo(map);
-
 
     map._initPathRoot();
 
@@ -61,54 +100,63 @@ StreetMapVis.prototype.initVis = function(){
     this.g = this.svg.append("g").attr("class","displayed");
 
     // D3 Overlay Stuff
-
     d3.json("data/transitNodes4ft.json", function(collection) {
         that = street_viz;
+        //Only draw circles of nodes that actually changed
+        collection.features = collection.features.filter(function(d){
+            if (StreetMapGlobals.rootNodes[d.properties["A_1"]] !== undefined){
+                return true}
+        });
 
-        //var transform = d3.geo.transform({point: projectPoint}),
-        //    path = d3.geo.path().projection(transform);
+        that.extent = d3.extent(collection.features.map(function(d){
+            if (StreetMapGlobals.rootNodes[d.properties["A_1"]] !== undefined){
+                return StreetMapGlobals.rootNodes[d.properties["A_1"]].Total}
+        }));
 
-        var extent = d3.extent(collection.features.map(function(d){return d.properties["diff"]}));
+        StreetMapGlobals.gainScale = d3.scale.sqrt()
+                .domain([0,that.extent[1]])
+                .range([1,20]);
 
-        var gainScale = d3.scale.sqrt()
-                .domain([0,extent[1]])
-                .range([1,20])
-
-        var lossScale = d3.scale.sqrt()
-            .domain([0, Math.abs(extent[0])])
+        StreetMapGlobals.lossScale = d3.scale.sqrt()
+            .domain([0, Math.abs(that.extent[0])])
             .range([1,20]);
 
         collection.features.forEach(function(d) {
             d.LatLng = new L.LatLng(d.geometry.coordinates[1], d.geometry.coordinates[0])
         });
 
-        var feature = that.g.selectAll("circle")
+        that.feature = that.g.selectAll("circle")
             .data(collection.features)
             .enter().append("circle")
+            .attr("class", "transitChange")
             .style("fill", function(d){
-                var check = d.properties["diff"];
-                return check < 0 ? "orange": check > 0 ? "blue": null
+                if (StreetMapGlobals.rootNodes[d.properties["A_1"]] !== undefined) {
+                    var check = StreetMapGlobals.rootNodes[d.properties["A_1"]].Total;
+                    return check < 0 ? "orange": check > 0 ? "blue": null}
             })
             .attr("r", function(d) {
+                if (StreetMapGlobals.rootNodes[d.properties["A_1"]] !== undefined){
                 if (map.getZoom() <= 13){
-                    var check = d.properties["diff"];
+                    var check = StreetMapGlobals.rootNodes[d.properties["A_1"]].Total;
                 } else {
-                    check = d.properties["diff"]
+                    check = StreetMapGlobals.rootNodes[d.properties["A_1"]].Total
                 }
-                return check > 200 ? gainScale(check) :
-                            check < -50 ? lossScale(Math.abs(check)) :
-                                check === 0 ? 0 : 0
+                return check > 200 ? StreetMapGlobals.gainScale(check) :
+                            check < -50 ? StreetMapGlobals.lossScale(Math.abs(check)) :
+                                check === 0 ? 0 : 0}
             })
             .style("opacity", 0.3)
             .style("stroke", "black")
-            .on("click", function(){console.log("Loss #", this.__data__.properties["diff"], "trips")});
+            .on("click", function(){console.log("Loss #", JSON.stringify(StreetMapGlobals.rootNodes[this.__data__.properties["A_1"]].Lines, "trips"))});
 
         map.on("viewreset", reset);
         reset();
 
         // Reposition the SVG to cover the features.
         function reset() {
-            feature.attr("transform",
+            that = street_viz;
+            that.
+                feature.attr("transform",
                 function(d) {
                     return "translate("+
                         map.latLngToLayerPoint(d.LatLng).x +","+
@@ -121,11 +169,39 @@ StreetMapVis.prototype.initVis = function(){
             this.stream.point(point.x, point.y);
         }
 
-
     });
 };
 
-
+StreetMapVis.prototype.updateThePoints =function(route){
+    console.log("in the update points", route+"_");
+    route = route.trim();
+    d3.selectAll(".transitChange")
+        .transition()
+        .duration(2000)
+        .attr("r", function(d) {
+            if (Object.keys(StreetMapGlobals.rootNodes[d.properties.A_1].Lines).indexOf(route) > -1){
+                if (StreetMapGlobals.rootNodes[d.properties["A_1"]] !== undefined){
+                    if (map.getZoom() <= 13){
+                        var check = StreetMapGlobals.rootNodes[d.properties["A_1"]].Total;
+                    } else {
+                        check = StreetMapGlobals.rootNodes[d.properties["A_1"]].Total
+                    }
+                    return check > 200 ? StreetMapGlobals.gainScale(check) * 2:
+                        check < -50 ? StreetMapGlobals.lossScale(Math.abs(check)) *2 :
+                            check === 0 ? 0 : 0}
+            } else {
+                if (StreetMapGlobals.rootNodes[d.properties["A_1"]] !== undefined){
+                    if (map.getZoom() <= 13){
+                        check = StreetMapGlobals.rootNodes[d.properties["A_1"]].Total;
+                    } else {
+                        check = StreetMapGlobals.rootNodes[d.properties["A_1"]].Total
+                    }
+                    return check > 200 ? StreetMapGlobals.gainScale(check) :
+                        check < -50 ? StreetMapGlobals.lossScale(Math.abs(check))/4 :
+                            check === 0 ? 0 : 0}
+            }
+        })
+}
 
 
 

@@ -1,17 +1,13 @@
-/**
- * Created by mdowd on 4/10/15.
- */
+
 GroupChartVis = function(_parentElement, _data){
     this.parentElement = _parentElement;
     this.margin = {top: 20, right: 0, bottom: 30, left: 50},
-    this.width = 800 - this.margin.left - this.margin.right,
+        this.width = 600 - this.margin.left - this.margin.right,
         this.height = 400 - this.margin.top - this.margin.bottom;
 
     this.data = _data;
     this.initVis();
 };
-
-
 
 GroupChartVis.prototype.initVis = function() {
     that = this;
@@ -35,34 +31,33 @@ GroupChartVis.prototype.initVis = function() {
         .orient("left")
         .tickFormat(d3.format(".2s"));
 
-    this.svg = d3.select(this.parentElement).append("svg")
+    this.svg = d3.select(this.parentElement).append("svg").attr("class","groupJobs")
         .attr("width", this.width + this.margin.left + this.margin.right)
         .attr("height", this.height + this.margin.top + this.margin.bottom)
         .append("g")
-        .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
+        .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")")
+
 
     this.updateVis();
 };
 
 GroupChartVis.prototype.updateVis = function(){
-    that = this;
-
-    d3.csv("data/assets/groupJobs.csv", function(error, data) {
-        var jobType = d3.keys(data[0]).filter(function (key) {
+    var that = this;
+        var jobType = d3.keys(that.data[0]).filter(function (key) {
             return key !== "Level";
         });
 
-        data.forEach(function (d) {
+        that.data.forEach(function (d) {
             d.jobs = jobType.map(function (name) {
                 return {name: name, value: +d[name]};
             });
         });
 
-        that.x0.domain(data.map(function (d) {
+        that.x0.domain(that.data.map(function (d) {
             return d.Level;
         }));
         that.x1.domain(jobType).rangeRoundBands([0, that.x0.rangeBand()]);
-        that.y.domain([0, d3.max(data, function (d) {
+        that.y.domain([0, d3.max(that.data, function (d) {
             return d3.max(d.jobs, function (d) {
                 return d.value;
             });
@@ -83,8 +78,8 @@ GroupChartVis.prototype.updateVis = function(){
             .style("text-anchor", "end")
             .text("Jobs");
 
-         that.slrLevel = that.svg.selectAll(".slrLevel")
-            .data(data)
+        that.slrLevel = that.svg.selectAll(".slrLevel")
+            .data(that.data)
             .enter().append("g")
             .attr("class", "g")
             .attr("transform", function (d) {
@@ -129,6 +124,5 @@ GroupChartVis.prototype.updateVis = function(){
             .style("text-anchor", "end")
             .text(function(d) { return d; });
 
-    })
 
 };
