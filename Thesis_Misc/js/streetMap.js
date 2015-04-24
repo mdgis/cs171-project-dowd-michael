@@ -12,7 +12,7 @@ var StreetMapGlobals ={
         })
      },
     "updateThePoints" : function(route){
-        console.log("in the update points", route+"_");
+        //console.log("in the update points", route+"_");
         route = route.trim();
         d3.selectAll(".transitChange")
             .transition()
@@ -70,7 +70,6 @@ StreetMapVis = function(){
         .attr("height", 650);
 
     d3.json("scratch/transit.json", function(tdata){
-        console.log(tdata)
         that = street_viz;
         that.treemap = d3.layout.treemap().sticky(true)
             .padding(6)
@@ -104,7 +103,14 @@ StreetMapVis = function(){
             .attr("x", function (d) { return d.x + d.dx /10})
             .attr("y", function (d) { return d.y + d.dy / 2})
             .text(function (d) {
-                return d.Name === undefined? null: cleanText(d.Name)})
+                if (d.Name !== undefined){
+                    if (d.Mode === 5) {
+                        return d.Name.slice(0,4).toUpperCase()+"."
+                    } else {
+                        return cleanText(d.Name)
+                    }
+                } else {return null}
+            })
             .attr("class", "boxText")
             .style("fill", function(d){
                 if (d.Mode === 1){

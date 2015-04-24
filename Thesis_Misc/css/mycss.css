@@ -231,3 +231,8 @@ ul.tabs li.current{
     text-indent: 2px;
 }
 
+.line {
+    stroke: steelblue;
+    stroke-width: 2;
+    fill: none;
+}

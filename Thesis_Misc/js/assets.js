@@ -99,7 +99,7 @@ AssetMapVis.prototype.updateVis = function() {
 
 
 AssetMapVis.prototype.wrangleDemData = function(dim, label, level){
-    console.log("In the wrangelData and this = ", this);
+    console.log("In the wrangelData and this = ", this)
     var that = this;
 
     gradient = label.toLocaleLowerCase() === "jobs" ? golden : label.toLocaleLowerCase() === "pop" ? bluish:
@@ -117,13 +117,18 @@ AssetMapVis.prototype.wrangleDemData = function(dim, label, level){
     that.updateVis();
 
     if (that.asset_viz === null) {
-        that.asset_viz = new AssetVis(d3.select("#chart"), Demographics.jobs, "Jobs");
+        console.log("Asset viz", that.asset_viz)
+        that.asset_viz = new AssetVis(d3.select("#chart"), Demographics.jobs,  "Jobs");
         that.asset_viz2 = new AssetVis(d3.select("#chart1"), Demographics.pop,  "Pop");
         that.asset_viz3 = new AssetVis(d3.select("#chart2"), Demographics.hh, "hh");
         that.asset_viz4 = new AssetVis(d3.select("#chart3"), Demographics.tazarea, "Taz Area Meters Sq.");
     }
 
 };
+
+//AssetMapVis.prototype.wrnangleOtherData = function(){
+//
+//}
 
 AssetMapVis.prototype.updateLayers = function(layer){
     this.Features.clearLayers();

@@ -39,9 +39,9 @@
     <script src="js/streetMap.js"></script>
     <script src="js/assets.js"></script>
     <script src="js/chart.js"></script>
-    <script src="old/topoNet.js"></script>
     <script src="js/groupedChart.js"></script>
     <script src="js/spider.js"></script>
+    <script src="js/LineCharts.js"></script>
 
     <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
     <link rel="stylesheet" type="text/css" href="libs/bootstrap/css/bootstrap.min.css">
@@ -534,7 +534,13 @@
         $(".AssetSelect").on("click", function(e){
             var check = e.target.innerText;
             if (check === "Roads"){
-                asset_map_viz.updateLayers("roads")
+                d3.select("#Jobs").remove()
+                d3.select("#Pop").remove()
+                d3.select("#hh").remove()
+                d3.select("#Taz").remove();
+                asset_map_viz.updateLayers("roads");
+                asset_map_viz.asset_viz = new LineVis(d3.select("#chart"), exits, "exits");
+                asset_map_viz.asset_viz = new LineVis(d3.select("#chart1"), indRoads, "Roads");
             } else if (check === "Demographics"){
                 asset_map_viz.updateLayers("taz")
             } else if (check === "Highway Exits"){

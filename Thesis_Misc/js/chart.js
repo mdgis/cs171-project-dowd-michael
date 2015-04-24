@@ -30,6 +30,7 @@ AssetVis = function(_parentElement, _data, _label){
 AssetVis.prototype.initVis = function(){
     var that = this; // read about the this
     this.svg = this.parentElement.append("svg")
+        .attr("id",this.label.split(" ")[0])
         .attr("width", this.width + this.margin.left + this.margin.right)
         .attr("height", this.height + this.margin.top + this.margin.bottom)
         .append("g")

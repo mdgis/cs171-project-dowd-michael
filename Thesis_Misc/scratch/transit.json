@@ -94,12 +94,12 @@
 				  {
 				    "Name": "Red ",
 				    "Mode": 3,
-				    "value": 20
+				    "value": 15
 				  },
 				  {
 				    "Name": "Green ",
 				    "Mode": 4,
-				    "value": 20
+				    "value": 15
 				  }]
 		},
 		{ "mode": "Bus",
