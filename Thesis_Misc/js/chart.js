@@ -12,7 +12,8 @@ AssetVis = function(_parentElement, _data, _label,_MyClickHandler){
     this.displayData = [];
     this.normal = false;
     this.label = _label;
-    this.allvotes = 0;
+    this.totalAssets = 0;
+    this.denominator = 1;
     this.baseTicks = [];
 
     // define all constants here
@@ -129,6 +130,7 @@ AssetVis.prototype.wrangleData= function(_filterFunction){
     delete totals["TAZ"];
     this.displayData = [];
     for (key in totals){this.displayData.push(totals[key])}
+    this.totalAssets = this.displayData[6]
     this.displayData = this.displayData.slice(0,6)
 
 };
@@ -139,34 +141,22 @@ AssetVis.prototype.wrangleData= function(_filterFunction){
  * the drawing function - should use the D3 selection, enter, exit
  */
 AssetVis.prototype.updateVis = function(first){
-
     var that = this;
-
+    that.denominator = that.normal ? that.totalAssets : 1;
+    //this.normal = true;
     //Get the Sum of all votes
     if (first){
-        this.all_votes = this.displayData.reduce(function(pv, cv) {
-            return pv + cv;
-        });
-        this.max = d3.max(this.displayData, function(d) { return d; });
         this.y.domain([0, d3.max(this.displayData, function(d) { return d })]);
         this.baseTicks = this.y.ticks();
-        this.alldata = this.displayData;
-        this.fixedTotal = this.displayData.reduce(function(pv, cv) {return pv + cv;});
         that = this
     }
 
-
-
-    var total = this.displayData.reduce(function(pv, cv) {return pv + cv;});
-    var num_votes = this.normal ? this.all_votes : 1.0;
-
-    d3.select('#normalSpan').text(String(((total/that.all_votes)*100).toFixed(2)) + "%");
-
-
     this.x.domain(this.displayData.map(function(d,i) {return i; }));
 
+    console.log(d3.max(this.displayData, function(d) {return d/that.totalAssets}));
     if (this.normal){
-        this.y.domain([0,that.max])
+        this.y.domain([0, (0.05 + +(d3.max(this.displayData, function(d) {return d/that.totalAssets}))).toFixed(1)
+        ])
     } else {
         this.y.domain([0, d3.max(this.displayData, function(d) { return d })]);}
 
@@ -187,10 +177,11 @@ AssetVis.prototype.updateVis = function(first){
         });
 
 
-    this.svg.select(".y.axis").call(this.yAxis);
+    this.svg.select(".y.axis").transition().call(this.yAxis);
 
     this.bars = this.svg.selectAll(".assetBar")
         .data(this.displayData);
+
 
     if (first) {
         this.bars
@@ -198,23 +189,24 @@ AssetVis.prototype.updateVis = function(first){
                 return that.x(i);
             })
             .attr("y", function (d) {
-                return that.y(d);
-            })
+                return that.y(d);}
+            )
             .attr("width", that.x.rangeBand());
     }
 
     this.bars.transition()
         .attr("height", function(d) {
-            var pad = num_votes > 1 ? 275 : 0;
-            return   (that.y(0) - (that.y(d)))})
+            //var pad = num_votes > 1 ? 275 : 0;
+            return   (that.y(0) - (that.y(d/that.denominator)))})
         .attr("y", function (d) {
-            return that.y(d);
+            return that.y(d/that.denominator);
         });
 
 };
 
 
 AssetVis.prototype.normalize = function(){
+    console.log("in normalize");
     this.normal = !this.normal;
     this.updateVis(false)
 };

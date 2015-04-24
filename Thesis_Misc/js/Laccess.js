@@ -1,4 +1,7 @@
 /* Accessibility map2 Visualization */
+
+accessVizGlobals = {};
+
 AccessVis = function(_parentElement, _classLabel){
     this.parentElement = _parentElement;
     this.width = 800;
@@ -25,10 +28,10 @@ AccessVis.prototype.projectPoint =function(x, y) {
 AccessVis.prototype.initVis = function() {
     that = this;
     //D3 Overlay Stuff
-    this.svg = d3.select(map2.getPanes().overlayPane).append("svg");
-    this.g = this.svg.append("g").attr("class", "leaflet-zoom-hide");
+    accessVizGlobals.svg = d3.select(map2.getPanes().overlayPane).append("svg");
+    accessVizGlobals.g = accessVizGlobals.svg.append("g").attr("class", "leaflet-zoom-hide");
     this.transform = d3.geo.transform({point: that.projectPoint});
-    this.path = d3.geo.path().projection(this.transform);
+    accessVizGlobals.path = d3.geo.path().projection(this.transform);
     this.wrangleData(access, 0);
     this.updateVis()
 };
@@ -56,7 +59,7 @@ AccessVis.prototype.updateVis = function(){
     var check = Object.keys(access[0])[1];
     //Is it transit, auto, or walk
     var q =  check.indexOf("Dta") >= 0 ? "a" : check.indexOf("transit") >= 0 ? "t" : "w";
-    var tpath = that.g.selectAll("path")
+    var tpath = accessVizGlobals.g.selectAll("path")
         .data(topojson.feature(data, data.objects.taz).features)
 
 
@@ -70,17 +73,17 @@ AccessVis.prototype.updateVis = function(){
     reset(that);
 
     // Reposition the SVG to cover the features.
-    function reset(Aviz) {
-        that = Aviz;
-        var bounds = that.path.bounds(topojson.feature(data, data.objects.taz)),
+    function reset(theViz) {
+        that = theViz;
+        var bounds = accessVizGlobals.path.bounds(topojson.feature(data, data.objects.taz)),
             topLeft = bounds[0],
             bottomRight = bounds[1];
-        that.svg.attr("width", bottomRight[0] - topLeft[0])
+        accessVizGlobals.svg.attr("width", bottomRight[0] - topLeft[0])
             .attr("height", bottomRight[1] - topLeft[1])
             .style("left", topLeft[0] + "px")
             .style("top", topLeft[1] + "px");
-        that.g.attr("transform", "translate(" + -topLeft[0] + "," + -topLeft[1] + ")");
-        tpath.attr("d", that.path);
+        accessVizGlobals.g.attr("transform", "translate(" + -topLeft[0] + "," + -topLeft[1] + ")");
+        tpath.attr("d", accessVizGlobals.path);
         }
 };
 
@@ -90,7 +93,7 @@ AccessVis.prototype.wrangleData = function(access, level){
     var first = current === null;
     if(!current){ current = accessUnits.auto }
 
-    that.mode = access === accessUnits.auto ? "a" : access === accessUnits.transit ? "t" : "w";
+    that.mode = access === accessUnits[accessUnits.method+"auto"] ? "a" : access === accessUnits[accessUnits.method+"transit"] ? "t" : "w";
 
     if (Object.keys(current[0])[1] !== Object.keys(access[0])[1]){
         that.max = 0;
@@ -102,7 +105,7 @@ AccessVis.prototype.wrangleData = function(access, level){
     level = that.columns[level];
     access.forEach(function(d) {
         if (d[level] > that.max) that.max = +d[level];
-        that.rateByTAZ.set(d.Z, + d[level]); });
+        that.rateByTAZ.set(Math.floor(d.Z), + d[level]); });
 
     test = that.rateByTAZ
     if (current !== access || first){

@@ -2,15 +2,18 @@ TopoStreetMapVis = function(){
     this.initVis()
 };
 
+
+///Probably need to fix some of the This & That things
+
 TopoStreetMapVis.prototype.initVis = function(){
     var that = this;
-    svg = d3.select(map.getPanes().overlayPane).append("svg");
-    g = svg.append("g").attr("class", "leaflet-zoom-hide");
+    that.svg = d3.select(map.getPanes().overlayPane).append("svg");
+    that.g = that.svg.append("g").attr("class", "leaflet-zoom-hide");
 
-    gTopoMap = g.append("g").attr("class", "gTopoMap displayed");
+    gTopoMap = that.g.append("g").attr("class", "gTopoMap displayed");
 
     d3.json("data/TdtaVp.json", function(collection) {
-        that = topo_street_viz;
+        var that = topo_street_viz;
         var transform = d3.geo.transform({point: projectPoint}),
             path = d3.geo.path().projection(transform);
 
@@ -32,11 +35,12 @@ TopoStreetMapVis.prototype.initVis = function(){
         reset();
         // Reposition the SVG to cover the features.
         function reset() {
+            var that = topo_street_viz;
             var bounds = path.bounds(topojson.feature(collection, collection.objects['dtaV'])),
                 topLeft = bounds[0],
                 bottomRight = bounds[1];
 
-            svg.attr("width", bottomRight[0] - topLeft[0])
+            that.svg.attr("width", bottomRight[0] - topLeft[0])
                 .attr("height", bottomRight[1] - topLeft[1])
                 .style("left", topLeft[0] + "px")
                 .style("top", topLeft[1] + "px");

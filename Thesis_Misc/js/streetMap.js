@@ -1,7 +1,46 @@
 var StreetMapGlobals ={
     "rootNodes": {},
     "gainScale": null,
-    "lossScale": null
+    "lossScale": null,
+    "selectTransitLine" : function(lineName){
+        street_viz.TransitLines.eachLayer(function(layer){
+            if (lookUp[layer.feature.properties.NAME] === lineName){
+                layer.setStyle({color :'yellow', weight: 15})
+            } else {
+                layer.setStyle(styles.transitStyle(layer.feature))
+            }
+        })
+     },
+    "updateThePoints" : function(route){
+        console.log("in the update points", route+"_");
+        route = route.trim();
+        d3.selectAll(".transitChange")
+            .transition()
+            .duration(2000)
+            .attr("r", function(d) {
+                if (Object.keys(StreetMapGlobals.rootNodes[d.properties.A_1].Lines).indexOf(route) > -1){
+                    if (StreetMapGlobals.rootNodes[d.properties["A_1"]] !== undefined){
+                        if (map.getZoom() <= 13){
+                            var check = StreetMapGlobals.rootNodes[d.properties["A_1"]].Total;
+                        } else {
+                            check = StreetMapGlobals.rootNodes[d.properties["A_1"]].Total
+                        }
+                        return check > 200 ? StreetMapGlobals.gainScale(check) * 2:
+                            check < -50 ? StreetMapGlobals.lossScale(Math.abs(check)) *2 :
+                                check === 0 ? 0 : 0}
+                } else {
+                    if (StreetMapGlobals.rootNodes[d.properties["A_1"]] !== undefined){
+                        if (map.getZoom() <= 13){
+                            check = StreetMapGlobals.rootNodes[d.properties["A_1"]].Total;
+                        } else {
+                            check = StreetMapGlobals.rootNodes[d.properties["A_1"]].Total
+                        }
+                        return check > 200 ? StreetMapGlobals.gainScale(check) :
+                            check < -50 ? StreetMapGlobals.lossScale(Math.abs(check))/4 :
+                                check === 0 ? 0 : 0}
+                }
+            })
+    }
 };
 
 //Node Processing - Outputs Nested JSON saying which transit line is at which Transit Stop
@@ -44,8 +83,8 @@ StreetMapVis = function(){
 
         that.cells.append("rect")
             .on("click",function(d){
-                that.selectTransitLine(d.Name);
-                that.updateThePoints(d.Name);})
+                StreetMapGlobals.selectTransitLine(d.Name);
+                StreetMapGlobals.updateThePoints(d.Name);})
             .attr("x",function (d) { return d.x })
             .attr("y", function (d) { return d.y })
             .attr("width", function (d) { return d.dx })
@@ -76,15 +115,7 @@ StreetMapVis = function(){
 };
 
 
-StreetMapVis.prototype.selectTransitLine = function(lineName){
-    street_viz.TransitLines.eachLayer(function(layer){
-        if (lookUp[layer.feature.properties.NAME] === lineName){
-            layer.setStyle({color :'yellow', weight: 15})
-        } else {
-            layer.setStyle(styles.transitStyle(layer.feature))
-        }
-    })
-};
+
 
 StreetMapVis.prototype.initVis = function(){
     that = this;
@@ -172,36 +203,6 @@ StreetMapVis.prototype.initVis = function(){
     });
 };
 
-StreetMapVis.prototype.updateThePoints =function(route){
-    console.log("in the update points", route+"_");
-    route = route.trim();
-    d3.selectAll(".transitChange")
-        .transition()
-        .duration(2000)
-        .attr("r", function(d) {
-            if (Object.keys(StreetMapGlobals.rootNodes[d.properties.A_1].Lines).indexOf(route) > -1){
-                if (StreetMapGlobals.rootNodes[d.properties["A_1"]] !== undefined){
-                    if (map.getZoom() <= 13){
-                        var check = StreetMapGlobals.rootNodes[d.properties["A_1"]].Total;
-                    } else {
-                        check = StreetMapGlobals.rootNodes[d.properties["A_1"]].Total
-                    }
-                    return check > 200 ? StreetMapGlobals.gainScale(check) * 2:
-                        check < -50 ? StreetMapGlobals.lossScale(Math.abs(check)) *2 :
-                            check === 0 ? 0 : 0}
-            } else {
-                if (StreetMapGlobals.rootNodes[d.properties["A_1"]] !== undefined){
-                    if (map.getZoom() <= 13){
-                        check = StreetMapGlobals.rootNodes[d.properties["A_1"]].Total;
-                    } else {
-                        check = StreetMapGlobals.rootNodes[d.properties["A_1"]].Total
-                    }
-                    return check > 200 ? StreetMapGlobals.gainScale(check) :
-                        check < -50 ? StreetMapGlobals.lossScale(Math.abs(check))/4 :
-                            check === 0 ? 0 : 0}
-            }
-        })
-}
 
 
 

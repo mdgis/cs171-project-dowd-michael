@@ -123,7 +123,9 @@
                 </div>
 
                 <div id="tab-2" class="tab-content">
-                    <p><strong>Click Bar to Update Map</strong> </p>
+                    <p><strong>Click Bar to Update Map &nbsp;&nbsp;&nbsp; </strong>
+                        <button type="button" class="Normal btn btn-default dropdown-toggle" onclick="normalCharts()"> Normalize
+                    </button> </p>
                     <div class="col-md-6 column">
                         <div class = "charts" id = "chart"></div>
                         </div>
@@ -231,6 +233,7 @@
                 <button type="button" class="btn btn-default  Atype">Auto</button>
                 <button type="button" class="btn btn-default  Atype">Transit</button>
                 <button type="button" class="btn btn-default Atype">Walk</button>
+                <button type="button" id ="accessMethod" class="btn btn-default Atype">Cutoff Measure</button>
 
             </div>
 
@@ -322,7 +325,6 @@
     var currentMap = "Transit";
     var waterLayer = null;
     var lookUp ={};
-
     d3.json("data/relabelTransit.json", function(data){
         data.forEach(function(d){
             lookUp[d.Raw] = d.CleanName
@@ -336,9 +338,12 @@
             .defer(d3.json, "data/assets/hh.json")
             .defer(d3.json, "data/assets/pop.json")
             .defer(d3.json, "data/assets/tazarea.json")
-            .defer(d3.tsv, "data/access_JOBS/autoJobs.tsv")
-            .defer(d3.tsv, "data/access_Jobs/transitJobs.tsv")
-            .defer(d3.tsv, "data/access_JOBS/walkJobs.tsv")
+            .defer(d3.csv, "data/access_JOBS/autoJobs.csv")
+            .defer(d3.csv, "data/access_Jobs/transitJobs.csv")
+            .defer(d3.csv, "data/access_JOBS/walkJobs.csv")
+            .defer(d3.csv, "data/access_JOBS/gautoJobs.csv")
+            .defer(d3.csv, "data/access_Jobs/gtransitJobs.csv")
+            .defer(d3.csv, "data/access_JOBS/gwalkJobs.csv")
             .defer(d3.json, "data/DTA_g100V.json")
             .defer(d3.csv, "data/assets/groupJobs.csv")
             .await(ready);
@@ -361,9 +366,14 @@
     };
 
     var accessUnits = {
+      "method": "",
+      "mode": "auto",
       "auto": null,
       "transit" : null,
-      "walk":null
+      "walk":null,
+      "gauto":null,
+      "gtransit": null,
+      "gwalk" : null
     };
 
     var styles = {
@@ -418,18 +428,22 @@
     };
 
 
-    function ready(error, theTaz, Qjobs, Qhh, Qpop, Qtazarea, Qauto, Qtransit, Qwalk, Qdta, Qgjobs) {
+    function ready(error, theTaz, Qjobs, Qhh, Qpop, Qtazarea, Qauto, Qtransit, Qwalk, QGauto, QGtransit, QGwalk, Qdta, Qgrjobs) {
         data = theTaz;
         accessUnits.auto = Qauto;
         accessUnits.transit = Qtransit;
         accessUnits.walk = Qwalk;
+        accessUnits.gauto = QGauto;
+        accessUnits.gwalk = QGtransit;
+        accessUnits.gtransit = QGwalk;
         access = accessUnits.auto;
         Demographics.jobs = Qjobs;
         Demographics.hh = Qhh;
         Demographics.pop = Qpop;
-        Demographics.gjobs = Qgjobs;
+        Demographics.gjobs = Qgrjobs;
         Demographics.tazarea = Qtazarea;
         dta = Qdta;
+
 
 
         //Initialize the MapS in the HTML
@@ -515,9 +529,6 @@
         first();
     }
 
-    //Water Level Stuff
-
-
 
     //Water Layers For Many of the Views
     function addWater(level, theMap){
@@ -545,17 +556,38 @@
         }
     }
 
+    function normalCharts(){
+        asset_map_viz.asset_viz.normalize();
+        asset_map_viz.asset_viz2.normalize();
+        asset_map_viz.asset_viz3.normalize();
+        asset_map_viz.asset_viz4.normalize();
+    }
+
     showValue(0);
     //Acceessibility Click
     d3.select("body").selectAll(".Atype").on("click", function(d){
+        var that = access_viz;
         console.log("In the accses click", this);
-        that = access_viz;
-        if (this.innerText === "Walk") access = accessUnits.walk;
-        if (this.innerText === "Auto") access = accessUnits.auto;
-        if (this.innerText === "Transit") access = accessUnits.transit;
-        document.getElementById("AccessSlider").value = "0";
-        document.getElementById("range").innerHTML=  "0ft";
-        that.wrangleData(access,+d3.select("#AccessSlider").property("value") )
+        if ( this.innerText === "Cutoff Measure" || this.innerText === "Gamma Measure"){
+            if (this.innerText === "Cutoff Measure") {
+                this.innerText = "Gamma Measure";
+                accessUnits.method = "g";
+            } else if (this.innerText === "Gamma Measure") {
+                this.innerText = "Cutoff Measure";
+                accessUnits.method = "";
+            }
+            access = accessUnits[accessUnits.method + accessUnits.mode];
+            that.wrangleData(access,+d3.select("#AccessSlider").property("value") )
+        }
+        else {
+            if (this.innerText === "Walk") access = accessUnits[accessUnits.method+"walk"];
+            if (this.innerText === "Auto") access = accessUnits[accessUnits.method+"auto"];
+            if (this.innerText === "Transit") access = accessUnits[accessUnits.method+"transit"];
+            accessUnits.mode = this.innerText.toLowerCase();
+            document.getElementById("AccessSlider").value = "0";
+            document.getElementById("range").innerHTML=  "0ft";
+            that.wrangleData(access,+d3.select("#AccessSlider").property("value") )
+        }
     });
 
 
