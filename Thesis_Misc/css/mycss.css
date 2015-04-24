@@ -4,9 +4,12 @@
     margin-right: 65px;
 }
 
-#intro{
+.intro{
     width: 1200px;
-    height: 500px;
+}
+
+.topic{
+
 }
 body{
     font-family: 'PT Sans', sans-serif;
@@ -60,7 +63,7 @@ body{
     stroke-width: .5;
 }
 
-#map,#map2, #map3, #map4{
+#map,#map2, #map3, #map4, #map5{
     clear: left;
     width: 660px;
     height: 800px;
@@ -218,3 +221,13 @@ ul.tabs li.current{
 .hide{
     visibility: hidden;
 }
+
+.node {
+    border: solid 1px white;
+    font: 10px sans-serif;
+    line-height: 12px;
+    overflow: hidden;
+    position: absolute;
+    text-indent: 2px;
+}
+

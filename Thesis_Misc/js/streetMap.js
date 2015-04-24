@@ -66,13 +66,20 @@ StreetMapVis = function(){
     this.initVis();
 
     this.canvas = d3.select("#DataSelection").append("svg")
-        .attr("width", 650)
-        .attr("height", 550);
+        .attr("width", 750)
+        .attr("height", 650);
 
     d3.json("scratch/transit.json", function(tdata){
+        console.log(tdata)
         that = street_viz;
         that.treemap = d3.layout.treemap().sticky(true)
-            .size([650,550])
+            .padding(6)
+            .sort(function(a,b){
+                if(a.Name){
+                    return b.Name.toLocaleLowerCase() - a.Name.toLowerCase()}
+                else return true
+            })
+            .size([750,650])
             .nodes(tdata);
 
         that.cells = that.canvas.selectAll(".cell")
@@ -82,6 +89,7 @@ StreetMapVis = function(){
             .attr("class", "cell");
 
         that.cells.append("rect")
+            .attr("class", function(d){ return "treeMap"})
             .on("click",function(d){
                 StreetMapGlobals.selectTransitLine(d.Name);
                 StreetMapGlobals.updateThePoints(d.Name);})
@@ -89,7 +97,7 @@ StreetMapVis = function(){
             .attr("y", function (d) { return d.y })
             .attr("width", function (d) { return d.dx })
             .attr("height", function (d) { return d.dy })
-            .attr("fill", function (d) { return d.children ? null :  styles.colorLines(d)})
+            .attr("fill", function (d) { return d.children ? "white" :  styles.colorLines(d)})
             .style("stroke", "white");
 
         that.cells.append("text")

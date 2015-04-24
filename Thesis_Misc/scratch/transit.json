@@ -2,10 +2,10 @@
 	"mode" : "Transit",
 	"value": 100,
 	"children": [
-			{ 
+			{
 				"mode":"Commuter Rail",
 				"value": 50,
-				"children": 
+				"children":
 				  [{
 				    "Name": "Attleboro ",
 				    "Mode": 5,

@@ -6,7 +6,7 @@
  * @constructor
  */
 
-AssetVis = function(_parentElement, _data, _label,_MyClickHandler){
+AssetVis = function(_parentElement, _data, _label){
     this.parentElement = _parentElement;
     this.data = _data;
     this.displayData = [];
@@ -116,7 +116,6 @@ AssetVis.prototype.initVis = function(){
 AssetVis.prototype.wrangleData= function(_filterFunction){
     // displayData should hold the data which is visualized
     //this.displayData = this.filterAndAggregate(_filterFunction);
-
     var totals = {};
     for (key in this.data[0]){
         totals[key] = 0
@@ -134,7 +133,6 @@ AssetVis.prototype.wrangleData= function(_filterFunction){
     this.displayData = this.displayData.slice(0,6)
 
 };
-
 
 
 /**
@@ -164,7 +162,6 @@ AssetVis.prototype.updateVis = function(first){
         .scale(this.y)
         .orient("left");
 
-
     // updates axis
     this.svg.select(".x.axis").call(this.xAxis)
         .selectAll("text")
@@ -176,9 +173,7 @@ AssetVis.prototype.updateVis = function(first){
             return "rotate(-65)";
         });
 
-
     this.svg.select(".y.axis").transition().call(this.yAxis);
-
     this.bars = this.svg.selectAll(".assetBar")
         .data(this.displayData);
 
@@ -201,41 +196,13 @@ AssetVis.prototype.updateVis = function(first){
         .attr("y", function (d) {
             return that.y(d/that.denominator);
         });
-
 };
-
 
 AssetVis.prototype.normalize = function(){
     console.log("in normalize");
     this.normal = !this.normal;
     this.updateVis(false)
 };
-
-
-function mySumArray(a,b) {
-    var summed = [];
-    if (a.length !== b.length){
-        return null;
-    } else {
-        a.forEach(function(d,i) {
-            var val_d;
-            var val_bi;
-            if (+d > 0){
-                val_d = +d;
-            } else {
-                val_d = 0;
-            }
-            if (+b[i] > 0){
-                val_bi = +b[i];
-            } else {
-                val_bi = 0;
-            }
-            summed.push(val_d + val_bi);
-        });
-    }
-    return summed;
-}
-
 
 //Below changes the bar border to black when a bar is selected & then back to white when unselected
 AssetVis.prototype.indicateSelected = function(theBar){

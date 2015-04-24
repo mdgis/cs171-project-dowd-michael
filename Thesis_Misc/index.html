@@ -158,7 +158,7 @@
 
     <!--These are the "Some other title paragraphs"-->
     <div class="row clearfix">
-        <div class="col-md-12 column" id = "intro">
+        <div class="col-md-12 column intro">
             <h1>Some other title</h1>
             <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ornare orci a finibus pulvinar. Donec dapibus magna a nunc accumsan mattis. Duis eu rhoncus quam. Vestibulum in tortor sed nisl malesuada malesuada. Vivamus sed neque a metus mattis molestie eu ut elit. Sed dignissim id dolor sit amet tristique. Vivamus porttitor nisi auctor aliquet fringilla. Aenean vel nunc ultricies velit pharetra maximus. Integer erat est, porttitor sed tempor nec, mollis ac mi.
 
@@ -205,7 +205,7 @@
 
     <div class="row clearfix">
 
-        <div class="col-md-12 column" id = "intro">
+        <div class="col-md-12 column intro" >
 
             <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ornare orci a finibus pulvinar. Donec dapibus magna a nunc accumsan mattis. Duis eu rhoncus quam. Vestibulum in tortor sed nisl malesuada malesuada. Vivamus sed neque a metus mattis molestie eu ut elit. Sed dignissim id dolor sit amet tristique. Vivamus porttitor nisi auctor aliquet fringilla. Aenean vel nunc ultricies velit pharetra maximus. Integer erat est, porttitor sed tempor nec, mollis ac mi.
 
@@ -271,8 +271,8 @@
 
         <!--Next Title Area-->
         <div class =  "row clearfix">
-            <div class="col-md-12 column" id = "intro">
-                <h1>Visualizing Inundation Impacts on Transportation Networks</h1>
+            <div class="col-md-12 column intro" >
+                <h1>Lost Trips</h1>
                 <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ornare orci a finibus pulvinar. Donec dapibus magna a nunc accumsan mattis. Duis eu rhoncus quam. Vestibulum in tortor sed nisl malesuada malesuada. Vivamus sed neque a metus mattis molestie eu ut elit. Sed dignissim id dolor sit amet tristique. Vivamus porttitor nisi auctor aliquet fringilla. Aenean vel nunc ultricies velit pharetra maximus. Integer erat est, porttitor sed tempor nec, mollis ac mi.
 
                     Etiam ex nulla, sollicitudin vel laoreet in, finibus eu nunc. Vestibulum justo felis, dapibus id justo non, aliquam ullamcorper nulla. Pellentesque id posuere dolor. Sed id orci dignissim, aliquet tortor mattis, egestas eros. Interdum et malesuada fames ac ante ipsum primis in faucibus. Integer lobortis, orci at posuere scelerisque, tellus lectus hendrerit leo, non pulvinar lectus nisl at mauris. Cras cursus, nibh et iaculis dignissim, ante neque iaculis turpis, vitae auctor mi turpis id odio. Interdum et malesuada fames ac ante ipsum primis in faucibus.
@@ -309,6 +309,36 @@
 
     </div>
 
+    <!--Traffic Map-->
+    <div class =  "row clearfix">
+        <div class="col-md-12 column intro" >
+            <h1>Auto Network Impacts</h1>
+
+        </div>
+        <!--Accessibility Map-->
+        <div class="col-md-6 column">
+            <!--Top-->
+            <div id="DataSelection1">
+                <p>   Etiam ex nulla, sollicitudin vel laoreet in, finibus eu nunc. Vestibulum justo felis, dapibus id justo non, aliquam ullamcorper nulla. Pellentesque id posuere dolor. Sed id orci dignissim, aliquet tortor mattis, egestas eros. Interdum et malesuada fames ac ante ipsum primis in faucibus. Integer lobortis, orci at posuere scelerisque, tellus lectus hendrerit leo, non pulvinar lectus nisl at mauris. Cras cursus, nibh et iaculis dignissim, ante neque iaculis turpis, vitae auctor mi turpis id odio. Interdum et malesuada fames ac ante ipsum primis in faucibus.
+                    Etiam ex nulla, sollicitudin vel laoreet in, finibus eu nunc. Vestibulum justo felis, dapibus id justo non, aliquam ullamcorper nulla. Pellentesque id posuere dolor. Sed id orci dignissim, aliquet tortor mattis, egestas eros. Interdum et malesuada fames ac ante ipsum primis in faucibus. Integer lobortis, orci at posuere scelerisque, tellus lectus hendrerit leo, non pulvinar lectus nisl at mauris. Cras cursus, nibh et iaculis dignissim, ante neque iaculis turpis, vitae auctor mi turpis id odio. Interdum et malesuada fames ac ante ipsum primis in faucibus.
+
+
+                </p>
+            </div>
+
+            <div id = "DataLower">
+                <div>
+
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 column">
+            <div id="map5"></div>
+        </div>
+
+    </div>
 
 
 </div><!-- This closes the map container-->
@@ -476,6 +506,12 @@
             id: 'examples.map-20v6611k'
         }).addTo(map4);
 
+        map5 = L.map("map5").setView([42.3596, -71.0561],12);
+        L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+            minZoom: 9,
+            id: 'examples.map-20v6611k'
+        }).addTo(map5);
 
 
         //Public Transit On OFF Difference Maps
@@ -489,6 +525,7 @@
         group_char_viz = new GroupChartVis("#context", Demographics.gjobs);
         //Spider Map
         spider_viz = new SpiderViz(map4);
+        traffic_map = new TopoStreetMapVis(map5)
 
     }
 

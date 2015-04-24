@@ -1,4 +1,5 @@
-TopoStreetMapVis = function(){
+TopoStreetMapVis = function(_map){
+    this.map = _map
     this.initVis()
 };
 
@@ -7,13 +8,13 @@ TopoStreetMapVis = function(){
 
 TopoStreetMapVis.prototype.initVis = function(){
     var that = this;
-    that.svg = d3.select(map.getPanes().overlayPane).append("svg");
+    that.svg = d3.select(that.map.getPanes().overlayPane).append("svg");
     that.g = that.svg.append("g").attr("class", "leaflet-zoom-hide");
 
     gTopoMap = that.g.append("g").attr("class", "gTopoMap displayed");
 
     d3.json("data/TdtaVp.json", function(collection) {
-        var that = topo_street_viz;
+        var that = traffic_map;
         var transform = d3.geo.transform({point: projectPoint}),
             path = d3.geo.path().projection(transform);
 
@@ -31,11 +32,11 @@ TopoStreetMapVis.prototype.initVis = function(){
 
         });
 
-        map.on("viewreset", reset);
+        that.map.on("viewreset", reset);
         reset();
         // Reposition the SVG to cover the features.
         function reset() {
-            var that = topo_street_viz;
+            var that = traffic_map;
             var bounds = path.bounds(topojson.feature(collection, collection.objects['dtaV'])),
                 topLeft = bounds[0],
                 bottomRight = bounds[1];
@@ -51,7 +52,7 @@ TopoStreetMapVis.prototype.initVis = function(){
         }
 
         function projectPoint(x, y) {
-            var point = map.latLngToLayerPoint(new L.LatLng(y, x));
+            var point = that.map.latLngToLayerPoint(new L.LatLng(y, x));
             this.stream.point(point.x, point.y);
         }
 
