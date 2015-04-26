@@ -80,7 +80,7 @@
                     <div class="Btype" id = "slider">
                         <span id = "min"></span><input id="AssetSlider" type="range" min=0 max=6 step=1 value=0 oninput="showValue(value,'Asset')"><span id="max"></span>
                         <span>Inundation Level :&nbsp;</span>
-                        <span id="range">0ft</span>
+                        <span id="Assetrange">0ft</span>
                     </div>
                     <button type="button" class="btn btn-default AssetSelect">Demographics</button>
                     <div class="btn-group-vertical">
@@ -181,7 +181,7 @@
                         <div class="Btype" id = "slider">
                             <span id = "min"></span><input id="Transit" type="range" min=0 max=6 step=1 value=0 oninput="showValue(value,'Transit')"><span id="max"></span>
                             <span>Inundation Level :&nbsp;</span>
-                            <span id="range">0ft</span>
+                            <span id="Transitrange">0ft</span>
                         </div>
 
                     </div>
@@ -199,6 +199,10 @@
             <!--Top-->
             <div id="DataSelection">
                     <!--Holds the Transit Trip Selection Table-->
+            </div>
+
+            <div id="RoutesAtStop" style = "margin-left: 10px;border-bottom: 1px solid #000000">
+                <!--Holds the Transit Trip Selection Table-->
             </div>
         </div>
     </div>
@@ -227,7 +231,7 @@
                 <div class="Btype" id = "slider">
                     <span id = "min"></span><input id="AccessSlider" type="range" min=0 max=6 step=1 value=0 oninput="showValue(value, 'Access')"><span id="max"></span>
                     <span>Inundation Level :&nbsp;</span>
-                    <span id="range">0ft</span>
+                    <span id="Accessrange">0ft</span>
                 </div>
 
                 <button type="button" class="btn btn-default  Atype">Auto</button>
@@ -284,15 +288,28 @@
                     Maecenas eget feugiat justo. Nullam eros erat, suscipit sed turpis ut, tempus pharetra orci. Suspendisse tincidunt nisl a vehicula fermentum. Mauris bibendum orci dictum placerat vulputate. Fusce ut velit pulvinar, sagittis ex ac, convallis lorem. Duis purus felis, venenatis tristique sollicitudin et, aliquam eget est. Donec egestas odio quis ligula pulvinar, id finibus est sodales. Integer eu semper leo. Maecenas eu lorem vel nunc dapibus ullamcorper. Etiam semper, eros ut ultricies maximus, felis metus aliquam libero, ac efficitur massa sapien eu urna. Nullam vehicula quis tellus tincidunt malesuada. Nulla pulvinar tempus mauris, mollis varius nisl blandit pulvinar. Praesent et porta odio. Sed sit amet volutpat lacus, et hendrerit lorem. Etiam non vestibulum nisl.</p>
 
             </div>
-            <!--Accessibility Map-->
+            <div class="col-md-12 column">
+                <div class="btn-group-horizontal btn-group" id = "SpiderSelection">
+
+                    <div class="Btype" id = "slider">
+                        <span id = "min"></span><input id="AccessSlider" type="range" min=0 max=6 step=1 value=0 oninput="showValue(value, 'Lost')"><span id="max"></span>
+                        <span>Inundation Level :&nbsp;</span>
+                        <span id="Lostrange">0ft</span>
+                    </div>
+
+                    <button type="button" class="btn btn-default  Stype">Auto</button>
+                    <button type="button" class="btn btn-default  Stype">Transit</button>
+                    <button type="button" class="btn btn-default Stype">Total</button>
+
+                </div>
+
+            </div>
+            <!--Spider Map-->
             <div class="col-md-6 column">
                 <!--Top-->
-                <div id="DataSelection1">
-                    <p>   Etiam ex nulla, sollicitudin vel laoreet in, finibus eu nunc. Vestibulum justo felis, dapibus id justo non, aliquam ullamcorper nulla. Pellentesque id posuere dolor. Sed id orci dignissim, aliquet tortor mattis, egestas eros. Interdum et malesuada fames ac ante ipsum primis in faucibus. Integer lobortis, orci at posuere scelerisque, tellus lectus hendrerit leo, non pulvinar lectus nisl at mauris. Cras cursus, nibh et iaculis dignissim, ante neque iaculis turpis, vitae auctor mi turpis id odio. Interdum et malesuada fames ac ante ipsum primis in faucibus.
-                        Etiam ex nulla, sollicitudin vel laoreet in, finibus eu nunc. Vestibulum justo felis, dapibus id justo non, aliquam ullamcorper nulla. Pellentesque id posuere dolor. Sed id orci dignissim, aliquet tortor mattis, egestas eros. Interdum et malesuada fames ac ante ipsum primis in faucibus. Integer lobortis, orci at posuere scelerisque, tellus lectus hendrerit leo, non pulvinar lectus nisl at mauris. Cras cursus, nibh et iaculis dignissim, ante neque iaculis turpis, vitae auctor mi turpis id odio. Interdum et malesuada fames ac ante ipsum primis in faucibus.
 
+                <div id="spiderHist">
 
-                    </p>
                 </div>
 
                 <div id = "DataLower">
@@ -304,7 +321,7 @@
             </div>
 
             <div class="col-md-6 column">
-                <div id="map4"></div>
+                <div id="map4">
             </div>
 
     </div>
@@ -314,8 +331,20 @@
         <div class="col-md-12 column intro" >
             <h1>Auto Network Impacts</h1>
 
+            <div class="btn-group-horizontal btn-group" id = "SpiderSelection">
+
+                <div class="Btype" id = "slider">
+                    <span id = "min"></span><input id="netSlider" type="range" min=0 max=6 step=1 value=0 onchange="showValue(value, 'Net')"><span id="netSpan"></span>
+                    <span>Inundation Level :&nbsp;</span>
+                    <span id="Netrange">0ft</span>
+                </div>
+
+                <button type="button" class="btn btn-default" id="Nettype" value = "V">Volumes</button>
+
+
+            </div>
         </div>
-        <!--Accessibility Map-->
+        <!--Traffic Volumes Map-->
         <div class="col-md-6 column">
             <!--Top-->
             <div id="DataSelection1">
@@ -347,7 +376,7 @@
 
 
 <script>
-
+    var test
     var data;
     var access;
     var current = null;
@@ -361,6 +390,15 @@
         })
     });
 
+    function distance(lat1, lon1, lat2, lon2) {
+        var R = 6371;
+        var a =
+                0.5 - Math.cos((lat2 - lat1) * Math.PI / 180)/2 +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                (1 - Math.cos((lon2 - lon1) * Math.PI / 180))/2;
+
+        return R * 2 * Math.asin(Math.sqrt(a));
+    }
 
     queue()
             .defer(d3.json, "data/TazClip.json")
@@ -374,8 +412,8 @@
             .defer(d3.csv, "data/access_JOBS/gautoJobs.csv")
             .defer(d3.csv, "data/access_Jobs/gtransitJobs.csv")
             .defer(d3.csv, "data/access_JOBS/gwalkJobs.csv")
-            .defer(d3.json, "data/DTA_g100V.json")
             .defer(d3.csv, "data/assets/groupJobs.csv")
+            .defer(d3.json, "data/dtaTopo0ft.json")
             .await(ready);
 
     var water = {
@@ -404,6 +442,16 @@
       "gauto":null,
       "gtransit": null,
       "gwalk" : null
+    };
+
+    var nets = {
+        "n0" : null,
+        "n1" : null,
+        "n2" : null,
+        "n3" : null,
+        "n4" : null,
+        "n5" : null,
+        "n6" : null
     };
 
     var styles = {
@@ -458,7 +506,7 @@
     };
 
 
-    function ready(error, theTaz, Qjobs, Qhh, Qpop, Qtazarea, Qauto, Qtransit, Qwalk, QGauto, QGtransit, QGwalk, Qdta, Qgrjobs) {
+    function ready(error, theTaz, Qjobs, Qhh, Qpop, Qtazarea, Qauto, Qtransit, Qwalk, QGauto, QGtransit, QGwalk,  Qgrjobs, Qnet0) {
         data = theTaz;
         accessUnits.auto = Qauto;
         accessUnits.transit = Qtransit;
@@ -472,11 +520,30 @@
         Demographics.pop = Qpop;
         Demographics.gjobs = Qgrjobs;
         Demographics.tazarea = Qtazarea;
-        dta = Qdta;
+        nets.n0 = Qnet0;
 
 
 
-        //Initialize the MapS in the HTML
+        queue()
+                .defer(d3.json, "data/dtaTopo1ft.json")
+                .defer(d3.json, "data/dtaTopo2ft.json")
+                .defer(d3.json, "data/dtaTopo3ft.json")
+                .defer(d3.json, "data/dtaTopo4ft.json")
+                .defer(d3.json, "data/dtaTopo5ft.json")
+                .defer(d3.json, "data/dtaTopo6ft.json")
+                .await(netLoads);
+
+        function netLoads(error,Qn1, Qn2, Qn3,Qn4,Qn5,Qn6 ){
+            nets.n1 = Qn1;
+            nets.n2 = Qn2;
+            nets.n3 = Qn3;
+            nets.n4 = Qn4;
+            nets.n5 = Qn5;
+            nets.n6 = Qn6;
+            console.log("nets Loaded")
+        }
+
+        //Leaflet Base Maps
         map = L.map("map").setView([42.3596, -71.0561], 12);
         L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
             maxZoom: 18,
@@ -499,7 +566,7 @@
             id: 'examples.map-20v6611k'
         }).addTo(map3);
 
-        map4 = L.map("map4").setView([42.3596, -71.0561], 9);
+        map4 = L.map("map4").setView([42.3596, -71.0561], 12);
         L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
             maxZoom: 18,
             minZoom: 9,
@@ -513,6 +580,12 @@
             id: 'examples.map-20v6611k'
         }).addTo(map5);
 
+        L.control.scale().addTo(map);
+        L.control.scale().addTo(map2);
+        L.control.scale().addTo(map3);
+        L.control.scale().addTo(map4);
+        L.control.scale().addTo(map5);
+
 
         //Public Transit On OFF Difference Maps
         street_viz = new StreetMapVis("map");
@@ -525,7 +598,7 @@
         group_char_viz = new GroupChartVis("#context", Demographics.gjobs);
         //Spider Map
         spider_viz = new SpiderViz(map4);
-        traffic_map = new TopoStreetMapVis(map5)
+        traffic_map = new TopoStreetMapVis(map5, nets.n0)
 
     }
 
@@ -533,10 +606,10 @@
     $(document).ready(function() {
         $(".AssetSelect").on("click", function(e){
             var check = e.target.innerText;
-            if (check === "Roads"){
-                d3.select("#Jobs").remove()
-                d3.select("#Pop").remove()
-                d3.select("#hh").remove()
+            if (check === "Roads" || check === "Highway Exits"){
+                d3.select("#Jobs").remove();
+                d3.select("#Pop").remove();
+                d3.select("#hh").remove();
                 d3.select("#Taz").remove();
                 asset_map_viz.updateLayers("roads");
                 asset_map_viz.asset_viz = new LineVis(d3.select("#chart"), exits, "exits");
@@ -556,6 +629,29 @@
         })
     });
 
+    $(document).ready(function(){
+        $("#SpiderSelection").on("click", function(e){
+            d3.select("#theSpiderSVG").remove();
+            d3.select("#theSpiderHist").remove();
+            d3.selectAll(".theSpiderLines").remove()
+            d3.selectAll(".centroids").remove();
+            spider_viz.changeMode(e.target)
+        })
+    });
+
+    $(document).ready(function(){
+        $("#Nettype").on("click", function(e){
+            var check = e.target.innerText;
+            var value = d3.select("#netSlider")[0][0].value;
+
+            var data = nets["n"+ value];
+            var attribute = check === "Volumes" ? "q" : "V";
+            console.log(check, data, value, attribute)
+            e.target.innerText = e.target.innerText === "Volumes" ? "Queues" : "Volumes";
+            e.target.value = e.target.innerText === "Queues" ? "q" : "V";
+            traffic_map.updateVis(data,attribute)
+        })
+    });
 
     function updateSpecialChart(check){
         console.log("in update", check);
@@ -590,10 +686,26 @@
 
     //Slider
     function showValue(value, sliderViz){
-        document.getElementById("range").innerHTML= value + "ft";
+        console.log(value, sliderViz)
+        document.getElementById(sliderViz + "range").innerHTML = value + "ft";
         if (sliderViz === "Access"){
             access_viz.showValue(value)
-        } else {
+        } else if (sliderViz === "Net" ){
+            var value = d3.select("#netSlider")[0][0].value;
+            var attribute = d3.select("#Nettype")[0][0].value;
+            console.log(attribute, "ATTR")
+            var data = nets["n"+value];
+            traffic_map.updateVis(data, attribute)
+        } else if (sliderViz === "Asset" ){
+            if (value === "0"){
+                console.log("in here")
+                d3.selectAll("rect.assetBar").classed("desaturate", false);
+            } else {
+                d3.selectAll("rect.assetBar").classed("desaturate", true);
+                d3.selectAll("rect.s" + (value-1) + ".assetBar").classed("desaturate", false);
+            }
+
+
             theMap = sliderViz  === "Asset" ? map3 : sliderViz === "Transit" ? map : sliderViz === "Access" ? map2: null;
             addWater(value, theMap)
         }
@@ -606,7 +718,7 @@
         asset_map_viz.asset_viz4.normalize();
     }
 
-    showValue(0);
+    //(0);
     //Acceessibility Click
     d3.select("body").selectAll(".Atype").on("click", function(d){
         var that = access_viz;
@@ -632,6 +744,7 @@
             that.wrangleData(access,+d3.select("#AccessSlider").property("value") )
         }
     });
+
 
 
 

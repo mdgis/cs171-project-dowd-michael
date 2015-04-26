@@ -1,45 +1,91 @@
+
 var StreetMapGlobals ={
     "rootNodes": {},
     "gainScale": null,
     "lossScale": null,
     "selectTransitLine" : function(lineName){
         street_viz.TransitLines.eachLayer(function(layer){
-            if (lookUp[layer.feature.properties.NAME] === lineName){
-                layer.setStyle({color :'yellow', weight: 15})
+            if (lookUp[layer.feature.properties.NAME] !== lineName){
+                layer.setStyle({color :'black', weight: 1})
             } else {
-                layer.setStyle(styles.transitStyle(layer.feature))
+                layer.setStyle(styles.transitStyle(layer.feature));
+                layer.setStyle({weight: 10})
             }
         })
      },
     "updateThePoints" : function(route){
         //console.log("in the update points", route+"_");
         route = route.trim();
-        d3.selectAll(".transitChange")
-            .transition()
-            .duration(2000)
-            .attr("r", function(d) {
-                if (Object.keys(StreetMapGlobals.rootNodes[d.properties.A_1].Lines).indexOf(route) > -1){
-                    if (StreetMapGlobals.rootNodes[d.properties["A_1"]] !== undefined){
-                        if (map.getZoom() <= 13){
-                            var check = StreetMapGlobals.rootNodes[d.properties["A_1"]].Total;
-                        } else {
-                            check = StreetMapGlobals.rootNodes[d.properties["A_1"]].Total
-                        }
-                        return check > 200 ? StreetMapGlobals.gainScale(check) * 2:
-                            check < -50 ? StreetMapGlobals.lossScale(Math.abs(check)) *2 :
-                                check === 0 ? 0 : 0}
-                } else {
-                    if (StreetMapGlobals.rootNodes[d.properties["A_1"]] !== undefined){
-                        if (map.getZoom() <= 13){
-                            check = StreetMapGlobals.rootNodes[d.properties["A_1"]].Total;
-                        } else {
-                            check = StreetMapGlobals.rootNodes[d.properties["A_1"]].Total
-                        }
-                        return check > 200 ? StreetMapGlobals.gainScale(check) :
-                            check < -50 ? StreetMapGlobals.lossScale(Math.abs(check))/4 :
-                                check === 0 ? 0 : 0}
+        var routeNodes=[];
+        var allNodes = d3.selectAll(".transitChange");
+        var nearGainNodes = [];
+        var ignoreNodes =[];
+
+            allNodes.each(function(d){
+                var check1 = StreetMapGlobals.rootNodes[d.properties["A_1"]] !== undefined;
+                var check2 = Object.keys(StreetMapGlobals.rootNodes[d.properties.A_1].Lines).indexOf(route) > -1;
+                if (check1 && check2){
+                    routeNodes.push({"A":d.properties.A_1, "lat":d.LatLng.lat, "lng": d.LatLng.lng })
                 }
-            })
+            });
+
+            allNodes.each(function(d){
+                var check1 = StreetMapGlobals.rootNodes[d.properties["A_1"]] !== undefined;
+                var check2 = Object.keys(StreetMapGlobals.rootNodes[d.properties.A_1].Lines).indexOf(route) == -1;
+
+                if (check1  && check2 ) {
+                    var check = StreetMapGlobals.rootNodes[d.properties["A_1"]].Total;
+                    if (check > 100) {
+                        for (i = 0; i<routeNodes.length; i++){
+                            var dist  = distance(routeNodes[i].lat,routeNodes[i].lng,d.LatLng.lat, d.LatLng.lng ) ;
+                            if (dist < 1){
+                                nearGainNodes.push({"A":d.properties.A_1});
+                                break
+                            } else {
+                                if(i === routeNodes.length -1){
+                                    ignoreNodes.push(d.properties.A_1)
+                                }
+                            }
+                        }
+                    } else {
+                        ignoreNodes.push(d.properties.A_1)
+                    }
+                }
+            });
+
+
+
+        console.log("Route Nodes", routeNodes.length, "GainNodes", nearGainNodes.length)
+        console.log("ignoreNodes length", ignoreNodes.length)
+        routeNodes.forEach(function(d){
+                var nodeClass = ".n" + d.A
+                    d3.select(nodeClass).transition().duration(2000)
+                        .attr("r", function(d) {
+                                var check = StreetMapGlobals.rootNodes[d.properties["A_1"]].Total;
+                                return check > 200 ? StreetMapGlobals.gainScale(check)*1.5:
+                                    check < -50 ? StreetMapGlobals.lossScale(Math.abs(check))*1.5:
+                                        check === 0 ? 0 : 0})
+            }
+        );
+
+        ignoreNodes.forEach(function(d){
+                var nodeClass = ".n" + d;
+                d3.select(nodeClass).transition().duration(1500)
+                    .attr("r", 0)
+            }
+        );
+
+        nearGainNodes.forEach(function(d){
+                var nodeClass = ".n" + d.A;
+                d3.select(nodeClass).transition().duration(2500)
+                    .attr("r", function(d) {
+                        var check = StreetMapGlobals.rootNodes[d.properties["A_1"]].Total;
+                        return StreetMapGlobals.gainScale(check)*1.5;
+                        });
+            }
+        );
+
+        if (routeNodes.length === 0) {allNodes.attr("r", 0)};
     }
 };
 
@@ -64,7 +110,7 @@ d3.tsv("RawData/PtOnOff.csv", function(data){
 
 StreetMapVis = function(){
     this.initVis();
-
+    this.LinesAtStop();
     this.canvas = d3.select("#DataSelection").append("svg")
         .attr("width", 750)
         .attr("height", 650);
@@ -173,11 +219,11 @@ StreetMapVis.prototype.initVis = function(){
         that.feature = that.g.selectAll("circle")
             .data(collection.features)
             .enter().append("circle")
-            .attr("class", "transitChange")
+            .attr("class", function(d) {return "transitChange " + "n" + d.properties["A_1"]})
             .style("fill", function(d){
                 if (StreetMapGlobals.rootNodes[d.properties["A_1"]] !== undefined) {
                     var check = StreetMapGlobals.rootNodes[d.properties["A_1"]].Total;
-                    return check < 0 ? "orange": check > 0 ? "blue": null}
+                    return check < 0 ? "#400000": check > 0 ? "steelBlue": null}
             })
             .attr("r", function(d) {
                 if (StreetMapGlobals.rootNodes[d.properties["A_1"]] !== undefined){
@@ -192,7 +238,11 @@ StreetMapVis.prototype.initVis = function(){
             })
             .style("opacity", 0.3)
             .style("stroke", "black")
-            .on("click", function(){console.log("Loss #", JSON.stringify(StreetMapGlobals.rootNodes[this.__data__.properties["A_1"]].Lines, "trips"))});
+            .on("click", function(){
+                var check = StreetMapGlobals.rootNodes[this.__data__.properties["A_1"]].Lines;
+                //console.log("Loss #", JSON.stringify(check, "trips"))
+                that.UpdateLinesAtStop(check)
+            });
 
         map.on("viewreset", reset);
         reset();
@@ -220,6 +270,180 @@ StreetMapVis.prototype.initVis = function(){
 
 
 
+StreetMapVis.prototype.LinesAtStop = function(data){
+    that = this;
+    that.pieRadius = 70;
+    that.pieWidth = 550;
+    that.pieHeight = 150;
+    that.pieLabelr = that.pieRadius
+
+    that.routeStopSVG = d3.select("#RoutesAtStop").append("svg")
+        .attr("width", that.pieWidth)
+        .attr("height",  that.pieHeight)
+        .append("g")
+        .attr("transform", "translate(" + that.pieWidth / 2+ "," + that.pieHeight / 2 + ")");
 
 
+    that.pie = d3.layout.pie()
+        .value(function(d) { return d; })
+        .sort(null);
 
+    that.pieData = [1,1,1,1,1,0,0,0,0,0];
+
+    var color = d3.scale.category20();
+
+    that.arc = d3.svg.arc()
+        .outerRadius(that.pieRadius - 10)
+        .innerRadius(50);
+
+    that.piePath = that.routeStopSVG.selectAll("arc")
+        .data(that.pie(that.pieData))
+        .enter().append("path")
+        .attr("fill", "black")
+        .attr("stroke", "white")
+        .attr("d", that.arc)
+        .each(function(d) { this._current = d; }); // store the initial angles
+
+
+    that.piePath.each(function(d){
+        that.routeStopSVG.append("text")
+        .attr("transform", function(j) {
+
+            var c = that.arc.centroid(d),
+                x = c[0],
+                y = c[1],
+            // pythagorean theorem for hypotenuse
+                h = Math.sqrt(x*x + y*y);
+            return "translate(" + (x/h * that.pieLabelr) +  ',' +
+                (y/h * that.pieLabelr) +  ")";
+        })
+        .attr("dy", ".35em")
+        .attr("text-anchor", function(j) {
+            // are we past the center?
+            return (d.endAngle + d.startAngle)/2 > Math.PI ?
+                "end" : "start";
+        })
+        .text(function(j, i) {
+            if (i === 1) return "Click circle to display routes at that stop" });
+    })
+
+};
+
+StreetMapVis.prototype.UpdateLinesAtStop = function(selectedRouteData){
+    that = this;
+    that.pieData = [1,1,0,0,0,0,0,0,0,0];
+
+    console.log(selectedRouteData)
+    that.piePath = that.piePath.data(that.pie(that.pieData)); // compute the new angles
+    that.piePath
+        .style("fill", function(d){
+            return d.data < 0 ? "black" : d.data > 0 ? "#400000" : "none";
+        })
+        .style("stroke", "black")
+        .transition().duration(150).attrTween("d", arcTween); // redraw the arcs
+
+
+    setTimeout(execute, 200)
+
+    function execute() {
+        d3.selectAll(".pieText").remove();
+        that.pieData = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        that.refData = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        var routes = Object.keys(selectedRouteData);
+        routes.forEach(function (d, i) {
+            that.pieData[i] = Math.abs(selectedRouteData[d]);
+            that.refData[i] = selectedRouteData[d]
+        });
+
+        var total = that.refData.reduce(function (previousValue, currentValue, index, array) {
+            return previousValue + currentValue;
+        });
+
+        that.piePath = that.piePath.data(that.pie(that.pieData)); // compute the new angles
+        that.piePath
+            .style("fill", function (d, i) {
+                return +selectedRouteData[routes[i]] < 0 ? "#700000" : d.data > 0 ? "steelBlue" : "none";
+            })
+            .style("stroke", "white")
+            .transition().duration(1000).attrTween("d", arcTween); // redraw the arcs
+
+
+        that.piePath.each(function (d, i) {
+            if (+d.data !== 0){
+                that.routeStopSVG.append("text")
+                    .attr("class", "pieText")
+                    .attr("transform", function (j) {
+                        var c = that.arc.centroid(d),
+                            x = c[0],
+                            y = c[1],
+                        // pythagorean theorem for hypotenuse
+                            h = Math.sqrt(x * x + y * y);
+                        return "translate(" + (x / h * that.pieLabelr) + ',' +
+                            (y / h * that.pieLabelr) + ")";
+                    })
+                    .attr("dy", ".35em")
+                    .attr("text-anchor", function (j) {
+                        // are we past the center?
+                        return (d.endAngle + d.startAngle) / 2 > Math.PI ?
+                            "end" : "start";
+                    })
+                    .text(function (j) {
+                        if (["Green", "Orange", "Red", "Blue"].indexOf(routes[i]) > -1) {
+                            return routes[i] + " Line" + " :" + selectedRouteData[routes[i]]
+                        } else {
+                            return routes[i] + " :" + selectedRouteData[routes[i]]
+                        }
+                    })
+                }
+        });
+
+        that.routeStopSVG.append("text")
+            .attr("class", "pieText")
+            .attr("text-anchor", "middle")
+            .attr("transform", "translate(0,-10)")
+            .text(d3.format("0,000")(Math.floor(total)))
+
+        that.routeStopSVG.append("text")
+            .attr("class", "pieText")
+            .attr("text-anchor", "middle")
+            .attr("transform", "translate(0,10)")
+            .text(function (d) {
+                return total > 0 ? "Increase In" : "Decrease In"
+            })
+
+        that.routeStopSVG.append("text")
+            .attr("class", "pieText")
+            .attr("text-anchor", "middle")
+            .attr("transform", "translate(0,25)")
+            .text("Riders");
+
+        //that.piePath.each(function (d, i) {
+        //
+        //    if (+d.data !== 0) {
+        //        console.log("DI", d, i)
+        //        that.routeStopSVG.append("text")
+        //            .attr("class", "pieText")
+        //            .attr("text-anchor", "middle")
+        //            .attr("transform", function(j) {
+        //                if (routes.length === 1 ){
+        //                    return  "translate(200,0)"
+        //                } else {
+        //                    return "translate(200," + -10  + ")"}
+        //            })
+        //            .text(function(){
+        //                return routes[i] +" " + selectedRouteData[routes[i]]})
+        //        }
+        //})
+
+    }
+};
+
+
+function arcTween(a) {
+    that = street_viz
+    var i = d3.interpolate(this._current, a);
+    this._current = i(0);
+    return function(t) {
+        return that.arc(i(t));
+    };
+}

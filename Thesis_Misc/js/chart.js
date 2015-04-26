@@ -75,7 +75,7 @@ AssetVis.prototype.initVis = function(){
         .enter()
         .append("rect")
         .attr("class","assetBar")
-        .attr("class", function(d,i){ return String(i) + " " + "assetBar "  + that.label})
+        .attr("class", function(d,i){ return "s" + String(i) + " " + "assetBar "  + that.label})
         .style("fill", function(d,i){
             return that.label === "Jobs" ? golden[i+1] : that.label === "Pop" ? bluish[i] : that.label === "hh" ? redish[i]
                 : golden[i]
@@ -89,7 +89,7 @@ AssetVis.prototype.initVis = function(){
             d3.selectAll(".assetBar").style("stroke", "white");
             d3.select(this).style("stroke","black");
 
-            var level = +this.classList[0]+1;
+            var level = +this.classList[0].slice(1,2)+1
             var dim = this.classList[2];
             map3.removeLayer(asset_map_viz.Features);
             asset_map_viz.wrangleDemData(Demographics[dim.toLocaleLowerCase()], dim.toUpperCase(), level)
@@ -152,7 +152,7 @@ AssetVis.prototype.updateVis = function(first){
 
     this.x.domain(this.displayData.map(function(d,i) {return i; }));
 
-    console.log(d3.max(this.displayData, function(d) {return d/that.totalAssets}));
+    //console.log(d3.max(this.displayData, function(d) {return d/that.totalAssets}));
     if (this.normal){
         this.y.domain([0, (0.05 + +(d3.max(this.displayData, function(d) {return d/that.totalAssets}))).toFixed(1)
         ])
