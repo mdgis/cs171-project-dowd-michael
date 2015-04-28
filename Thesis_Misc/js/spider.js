@@ -32,7 +32,7 @@ SpiderViz.prototype.ready = function(error, taz, auto, pt, total) {
 
 
 SpiderViz.prototype.initVis = function(){
-    that = this;
+    var that = this;
     that.vMax = d3.max(that.links, function(d) {return Math.abs(d.val)});
     that.vScale = d3.scale.linear()
         .domain([10,that.vMax])
@@ -126,21 +126,21 @@ SpiderViz.prototype.updateVis = function(extent){
 };
 
 SpiderViz.prototype.projectPoint = function (x, y) {
-    that = spider_viz;
+    var that = spider_viz;
     var point = that.parentElement.latLngToLayerPoint(new L.LatLng(y, x));
     this.stream.point(point.x, point.y);
 };
 
 SpiderViz.prototype.loaded = function(taz, spider) {
 
-    that = spider_viz;
+    var that = spider_viz;
     that.Mtaz = taz;
     that.links = [];
     that.vals = [];
 
 
     that.links.push(9)
-    tazById = d3.map();
+    var tazById = d3.map();
 
     that.svg = d3.select(that.parentElement.getPanes().overlayPane).append("svg").attr("id","theSpiderSVG");
     that.g = that.svg.append("g");

@@ -26,7 +26,7 @@ AccessVis.prototype.projectPoint =function(x, y) {
 };
 
 AccessVis.prototype.initVis = function() {
-    that = this;
+    var that = this;
     //D3 Overlay Stuff
     accessVizGlobals.svg = d3.select(map2.getPanes().overlayPane).append("svg");
     accessVizGlobals.g = accessVizGlobals.svg.append("g").attr("class", "leaflet-zoom-hide");
@@ -41,9 +41,9 @@ AccessVis.prototype.showValue = function(val){
 };
 
 AccessVis.prototype.updateVis = function(){
-    that = this;
+    var that = this;
     function manualColor(val) {
-        out =
+        var out =
             val < that.classify[0] ? 0 :
                 val < that.classify[1] ? 1 :
                     val < that.classify[2] ? 2 :
@@ -60,7 +60,7 @@ AccessVis.prototype.updateVis = function(){
     //Is it transit, auto, or walk
     var q =  check.indexOf("Dta") >= 0 ? "a" : check.indexOf("transit") >= 0 ? "t" : "w";
     var tpath = accessVizGlobals.g.selectAll("path")
-        .data(topojson.feature(data, data.objects.taz).features)
+        .data(topojson.feature(data, data.objects.taz).features);
 
 
     tpath.enter().append("path").style("opacity", 0.7);
@@ -74,7 +74,7 @@ AccessVis.prototype.updateVis = function(){
 
     // Reposition the SVG to cover the features.
     function reset(theViz) {
-        that = theViz;
+        var that = theViz;
         var bounds = accessVizGlobals.path.bounds(topojson.feature(data, data.objects.taz)),
             topLeft = bounds[0],
             bottomRight = bounds[1];
@@ -88,7 +88,7 @@ AccessVis.prototype.updateVis = function(){
 };
 
 AccessVis.prototype.wrangleData = function(access, level){
-    that = this;
+    var that = this;
     //Control For First Case Situations
     var first = current === null;
     if(!current){ current = accessUnits.auto }
@@ -107,7 +107,7 @@ AccessVis.prototype.wrangleData = function(access, level){
         if (d[level] > that.max) that.max = +d[level];
         that.rateByTAZ.set(Math.floor(d.Z), + d[level]); });
 
-    test = that.rateByTAZ
+
     if (current !== access || first){
         current = access;
         that.classify = chloroQuantile(that.rateByTAZ.values(), 8, "jenks");}

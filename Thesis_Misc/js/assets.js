@@ -18,24 +18,19 @@ assetsGlobals = {
         } else if (check === "Highway Exits" || check === "Bus Stops" || "Bus Lines" || "T-Stops"){
             var asset = check === "Highway Exits" ? "exits" : check === "Bus Stops" ? "busStops" :
                     check === "T-Stops" ? "T_Stops" : check === "Bus Lines" ?  "busLines" : undefined;
-
             if (asset !== undefined){
-            asset_map_viz.Assets[asset].eachLayer(function(layer){
-                console.log("Can i see check", check)
-                if (level === 0 ){
-                    layer.setStyle({color :'black', weight: 1})
-                } else if (layer.feature.properties.slr_lvl <= level && layer.feature.properties.slr_lvl !== 0){
-                    layer.setStyle({color :'red', weight: 7})
-                } else {
-                    layer.setStyle({color :'black', weight: 1});
+                asset_map_viz.Assets[asset].eachLayer(function(layer){
+                    console.log("Can i see check", check);
+                    if (level === 0 ){
+                        layer.setStyle({color :'black', weight: 1})
+                    } else if (layer.feature.properties.slr_lvl <= level && layer.feature.properties.slr_lvl !== 0){
+                        layer.setStyle({color :'red', weight: 7})
+                    } else {
+                        layer.setStyle({color :'black', weight: 1});
 
-                }
-            })
-    }
-
-
-
-
+                    }
+                })
+            }
         }
     }
 };
@@ -92,8 +87,6 @@ AssetMapVis.prototype.updateVis = function() {
             layer.bindPopup(feature.properties["NAME"]);
         }
 
-
-
     }
 
 
@@ -108,6 +101,7 @@ AssetMapVis.prototype.updateVis = function() {
                                 d > that.classify[1]   ?colorObject[7] :
                                     'none';
     };
+
     that.Assets = {
         "lookUp":{
             "Roads"         : "Highway",
@@ -143,7 +137,6 @@ AssetMapVis.prototype.updateVis = function() {
 
 };
 
-
 AssetMapVis.prototype.wrangleDemData = function(dim, label, level){
     console.log("In the wrangelData and this = ", this)
     var that = this;
@@ -161,9 +154,8 @@ AssetMapVis.prototype.wrangleDemData = function(dim, label, level){
     });
 
     that.updateVis();
-
     if (that.asset_viz === null) {
-        console.log("Asset viz", that.asset_viz)
+        console.log("Asset viz", that.asset_viz);
         that.asset_viz = new AssetVis(d3.select("#chart"), Demographics.jobs,  "Jobs");
         that.asset_viz2 = new AssetVis(d3.select("#chart1"), Demographics.pop,  "Pop");
         that.asset_viz3 = new AssetVis(d3.select("#chart2"), Demographics.hh, "hh");
@@ -171,10 +163,6 @@ AssetMapVis.prototype.wrangleDemData = function(dim, label, level){
     }
 
 };
-
-//AssetMapVis.prototype.wrnangleOtherData = function(){
-//
-//}
 
 AssetMapVis.prototype.updateLayers = function(layer){
     this.Features.clearLayers();

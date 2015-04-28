@@ -1,5 +1,6 @@
 //TODO need to add legend
 //TODO need to add button that clears the selection
+
 var StreetMapGlobals ={
     "rootNodes": {},
     "gainScale": null,
@@ -16,6 +17,7 @@ var StreetMapGlobals ={
      },
     "updateThePoints" : function(route){
         //console.log("in the update points", route+"_");
+        if (+route.slice(0,1)) route = String(Math.floor(+route));
         route = route.trim();
         var routeNodes=[];
         var allNodes = d3.selectAll(".transitChange");
@@ -24,6 +26,7 @@ var StreetMapGlobals ={
 
             allNodes.each(function(d){
                 var check1 = StreetMapGlobals.rootNodes[d.properties["A_1"]] !== undefined;
+                console.log(route,"Route");
                 var check2 = Object.keys(StreetMapGlobals.rootNodes[d.properties.A_1].Lines).indexOf(route) > -1;
                 if (check1 && check2){
                     routeNodes.push({"A":d.properties.A_1, "lat":d.LatLng.lat, "lng": d.LatLng.lng })
@@ -37,7 +40,7 @@ var StreetMapGlobals ={
                 if (check1  && check2 ) {
                     var check = StreetMapGlobals.rootNodes[d.properties["A_1"]].Total;
                     if (check > 100) {
-                        for (i = 0; i<routeNodes.length; i++){
+                        for (var i = 0; i<routeNodes.length; i++){
                             var dist  = distance(routeNodes[i].lat,routeNodes[i].lng,d.LatLng.lat, d.LatLng.lng ) ;
                             if (dist < 1){
                                 nearGainNodes.push({"A":d.properties.A_1});
@@ -54,10 +57,6 @@ var StreetMapGlobals ={
                 }
             });
 
-
-
-        console.log("Route Nodes", routeNodes.length, "GainNodes", nearGainNodes.length);
-        console.log("ignoreNodes length", ignoreNodes.length)
         routeNodes.forEach(function(d){
                 var nodeClass = ".n" + d.A;
                     d3.select(nodeClass).transition().duration(2000)
@@ -86,7 +85,7 @@ var StreetMapGlobals ={
             }
         );
 
-        if (routeNodes.length === 0) {allNodes.attr("r", 0)};
+        if (routeNodes.length === 0) {allNodes.attr("r", 0)}
     }
 };
 
@@ -117,7 +116,7 @@ StreetMapVis = function(){
         .attr("height", 650);
 
     d3.json("scratch/transit.json", function(tdata){
-        that = street_viz;
+        var that = street_viz;
         that.treemap = d3.layout.treemap().sticky(true)
             .padding(6)
             .sort(function(a,b){
@@ -175,11 +174,8 @@ StreetMapVis = function(){
     })
 };
 
-
-
-
 StreetMapVis.prototype.initVis = function(){
-    that = this;
+    var that = this;
     this.TransitLines = L.geoJson(transitLines, {
         style: styles.transitStyle,
         onEachFeature: null
@@ -193,7 +189,7 @@ StreetMapVis.prototype.initVis = function(){
 
     // D3 Overlay Stuff
     d3.json("data/transitNodes4ft.json", function(collection) {
-        that = street_viz;
+        var that = street_viz;
         //Only draw circles of nodes that actually changed
         collection.features = collection.features.filter(function(d){
             if (StreetMapGlobals.rootNodes[d.properties["A_1"]] !== undefined){
@@ -228,11 +224,8 @@ StreetMapVis.prototype.initVis = function(){
             })
             .attr("r", function(d) {
                 if (StreetMapGlobals.rootNodes[d.properties["A_1"]] !== undefined){
-                if (map.getZoom() <= 13){
-                    var check = StreetMapGlobals.rootNodes[d.properties["A_1"]].Total;
-                } else {
                     check = StreetMapGlobals.rootNodes[d.properties["A_1"]].Total
-                }
+
                 return check > 200 ? StreetMapGlobals.gainScale(check) :
                             check < -50 ? StreetMapGlobals.lossScale(Math.abs(check)) :
                                 check === 0 ? 0 : 0}
@@ -241,7 +234,6 @@ StreetMapVis.prototype.initVis = function(){
             .style("stroke", "black")
             .on("click", function(){
                 var check = StreetMapGlobals.rootNodes[this.__data__.properties["A_1"]].Lines;
-                //console.log("Loss #", JSON.stringify(check, "trips"))
                 street_viz.UpdateLinesAtStop(check)
             });
 
@@ -272,11 +264,11 @@ StreetMapVis.prototype.initVis = function(){
 
 
 StreetMapVis.prototype.LinesAtStop = function(data){
-    var that = this;;
+    var that = this;
     that.pieRadius = 70;
     that.pieWidth = 550;
     that.pieHeight = 150;
-    that.pieLabelr = that.pieRadius
+    that.pieLabelr = that.pieRadius;
 
     that.routeStopSVG = d3.select("#RoutesAtStop").append("svg")
         .attr("width", that.pieWidth)
@@ -332,21 +324,19 @@ StreetMapVis.prototype.LinesAtStop = function(data){
 
 StreetMapVis.prototype.UpdateLinesAtStop = function(selectedRouteData){
     var that = street_viz;
-    console.log(that, "that")
     that.pieData = [0,0,0,1,0,0,0,0,0,0];
 
     console.log(selectedRouteData);
     that.piePath = that.piePath.data(that.pie(that.pieData)); // compute the new angles
     that.piePath
         .style("fill", function(d,i){
-            console.log("this I", i )
             return i === 0 ? "black" : i===1 ? "#400000" : null;
         })
         .style("stroke", "black")
         .transition().duration(150).attrTween("d", arcTween); // redraw the arcs
 
 
-    setTimeout(execute, 200)
+    setTimeout(execute, 200);
 
     function execute() {
         d3.selectAll(".pieText").remove();
@@ -404,7 +394,7 @@ StreetMapVis.prototype.UpdateLinesAtStop = function(selectedRouteData){
             .attr("class", "pieText")
             .attr("text-anchor", "middle")
             .attr("transform", "translate(0,-10)")
-            .text(d3.format("0,000")(Math.floor(total)))
+            .text(d3.format("0,000")(Math.floor(total)));
 
         that.routeStopSVG.append("text")
             .attr("class", "pieText")
@@ -427,7 +417,7 @@ StreetMapVis.prototype.UpdateLinesAtStop = function(selectedRouteData){
 
 
 function arcTween(a) {
-    that = street_viz
+    var that = street_viz;
     var i = d3.interpolate(this._current, a);
     this._current = i(0);
     return function(t) {

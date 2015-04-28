@@ -11,6 +11,7 @@
     <script src="libs/leaflet-0.7.3/leaflet.js"></script>
     <script src="packages/simple_statistics.js"></script>
     <script src="libs/jquery/jquery-ui.js"></script>
+    <script src="libs/csvtotable/js/jquery.csvToTable.js"></script>
 
     <!-- My Tools -->
     <script src="js/chloroClass.js"></script>
@@ -76,7 +77,6 @@
 
     <!--This is the top Bar -->
     <div class="row clearfix">
-
         <div class="col-md-12 column" id = "Bar">
                 <div class="btn-group-horizontal btn-group" id = "AssetSelection">
                     <div class="Btype slider">
@@ -106,7 +106,6 @@
                         </ul>
                      </div>
                  </div>
-
              </div>
         </div>
     <!--These are the Tabs-->
@@ -349,11 +348,12 @@
                 </p>
             </div>
 
-            <div class = "DataLower">
-                <div>
-
-
-                </div>
+            <div id = "testTable" style="height:300px;overflow:auto;">
+                <script>
+                    $(function() {
+                        $('#testTable').CSVToTable('libs/csvtotable/test.csv');
+                    });
+                </script>
             </div>
         </div>
 
@@ -547,7 +547,7 @@
 
         //Leaflet Base Maps
         map = L.map("map").setView([42.3596, -71.0561], 12);
-        L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
+        L.tileLayer('http://{s}.acetate.geoiq.com/tiles/acetate/{z}/{x}/{y}.png', {
             maxZoom: 18,
             minZoom: 9,
             id: 'examples.map-20v6611k'
@@ -673,7 +673,7 @@
     });
 
     function updateSpecialChart(check){
-        document.getElementById("spNormal").value = 0;
+        $("#spNormal").val(0);
         group_char_viz.transitionVis();
         var viz = asset_map_viz.Assets.lookUp[check];
         console.log("VIZ", viz);
@@ -708,7 +708,7 @@
     //Slider
     function showValue(value, sliderViz){
         console.log(value, sliderViz);
-        document.getElementById(sliderViz + "range").innerHTML = value + "ft";
+        $(sliderViz + "range").html(value+"ft")
         if (sliderViz === "Access"){
             access_viz.showValue(value)
         } else if (sliderViz === "Net" ){
@@ -735,9 +735,10 @@
     }
 
     function normalSpecial(){
-        var currentVal = +document.getElementById("spNormal").value;
+        var selected = $("#spNormal");
+        var currentVal = +selected.val();
         currentVal += 1;
-        document.getElementById("spNormal").value = currentVal;
+        selected.val(currentVal);
         console.log("normal special fired");
         group_char_viz.updateVis(true, currentVal);
     }
@@ -770,8 +771,8 @@
             if (this.innerText === "Auto") access = accessUnits[accessUnits.method+"auto"];
             if (this.innerText === "Transit") access = accessUnits[accessUnits.method+"transit"];
             accessUnits.mode = this.innerText.toLowerCase();
-            document.getElementById("AccessSlider").value = "0";
-            document.getElementById("Accessrange").innerHTML=  "0ft";
+            $("#AccessSlider").val(0); //Reset Slider Value to 0
+            $("#Accessrange").text("0ft"); //Reset Text to 0ft
             that.wrangleData(access,+d3.select("#AccessSlider").property("value") )
         }
     });
