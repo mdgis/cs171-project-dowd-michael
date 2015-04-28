@@ -30,6 +30,7 @@
     <script src="data/assets/busStops.js"></script>
     <script src="data/assets/mbtaArc.js"></script>
     <script src="data/assets/mbtaNodes.js"></script>
+    <script src="data/assets/busLines.js"></script>
 
 
     <!-- Viz Elements -->
@@ -75,6 +76,7 @@
 
     <!--This is the top Bar -->
     <div class="row clearfix">
+
         <div class="col-md-12 column" id = "Bar">
                 <div class="btn-group-horizontal btn-group" id = "AssetSelection">
                     <div class="Btype" id = "slider">
@@ -104,6 +106,7 @@
                         </ul>
                      </div>
                  </div>
+
              </div>
         </div>
     <!--These are the Tabs-->
@@ -146,6 +149,9 @@
                 <div id="tab-3" class="tab-content">
                     <p>Mauris eleifend est et turpis. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat, eu congue orci lorem eget lorem. Vestibulum non ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce sodales. Quisque eu urna vel enim commodo pellentesque. Praesent eu risus hendrerit ligula tempus pretium. Curabitur lorem enim, pretium nec, feugiat nec, luctus a, lacus.</p>
                     <p>Duis cursus. Maecenas ligula eros, blandit nec, pharetra at, semper at, magna. Nullam ac lacus. Nulla facilisi. Praesent viverra justo vitae neque. Praesent blandit adipiscing velit. Suspendisse potenti. Donec mattis, pede vel pharetra blandit, magna ligula faucibus eros, id euismod lacus dolor eget odio. Nam scelerisque. Donec non libero sed nulla mattis commodo. Ut sagittis. Donec nisi lectus, feugiat porttitor, tempor ac, tempor vitae, pede. Aenean vehicula velit eu tellus interdum rutrum. Maecenas commodo. Pellentesque nec elit. Fusce in lacus. Vivamus a libero vitae lectus hendrerit hendrerit.</p>
+                    <p><strong>Click to see Percentages &nbsp;&nbsp;&nbsp; </strong>
+                        <button type="button" class="Normal btn btn-default dropdown-toggle" id="spNormal" value = 0 onclick="normalSpecial()"> Normalize
+                        </button> </p>
                     <div id = "context"></div>
                 </div>
             </div>
@@ -159,19 +165,7 @@
     <!--These are the "Some other title paragraphs"-->
     <div class="row clearfix">
         <div class="col-md-12 column intro">
-            <h1>Some other title</h1>
-            <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ornare orci a finibus pulvinar. Donec dapibus magna a nunc accumsan mattis. Duis eu rhoncus quam. Vestibulum in tortor sed nisl malesuada malesuada. Vivamus sed neque a metus mattis molestie eu ut elit. Sed dignissim id dolor sit amet tristique. Vivamus porttitor nisi auctor aliquet fringilla. Aenean vel nunc ultricies velit pharetra maximus. Integer erat est, porttitor sed tempor nec, mollis ac mi.
 
-                Etiam ex nulla, sollicitudin vel laoreet in, finibus eu nunc. Vestibulum justo felis, dapibus id justo non, aliquam ullamcorper nulla. Pellentesque id posuere dolor. Sed id orci dignissim, aliquet tortor mattis, egestas eros. Interdum et malesuada fames ac ante ipsum primis in faucibus. Integer lobortis, orci at posuere scelerisque, tellus lectus hendrerit leo, non pulvinar lectus nisl at mauris. Cras cursus, nibh et iaculis dignissim, ante neque iaculis turpis, vitae auctor mi turpis id odio. Interdum et malesuada fames ac ante ipsum primis in faucibus.
-
-                Nam sed diam et urna fermentum luctus et eget magna. Fusce sed nisi tempor, molestie dui eget, interdum eros. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Quisque accumsan lorem finibus velit consectetur, a fermentum risus elementum. Aliquam lobortis enim at tristique maximus. Sed nec porttitor tortor. Aenean vitae metus non eros cursus hendrerit.
-
-                Aliquam erat volutpat. Nullam at mauris lorem. Aliquam tempus nec ligula id suscipit. Nunc elementum nulla a massa euismod, sed ullamcorper orci mollis. Morbi sem arcu, elementum ac dapibus in, tincidunt eu lectus. Nunc lacinia dolor turpis, id efficitur nisl congue condimentum. Praesent ullamcorper molestie nisl, id ornare nunc commodo ut. Donec suscipit tempus ultrices.
-
-                Maecenas eget feugiat justo. Nullam eros erat, suscipit sed turpis ut, tempus pharetra orci. Suspendisse tincidunt nisl a vehicula fermentum. Mauris bibendum orci dictum placerat vulputate. Fusce ut velit pulvinar, sagittis ex ac, convallis lorem. Duis purus felis, venenatis tristique sollicitudin et, aliquam eget est. Donec egestas odio quis ligula pulvinar, id finibus est sodales. Integer eu semper leo. Maecenas eu lorem vel nunc dapibus ullamcorper. Etiam semper, eros ut ultricies maximus, felis metus aliquam libero, ac efficitur massa sapien eu urna. Nullam vehicula quis tellus tincidunt malesuada. Nulla pulvinar tempus mauris, mollis varius nisl blandit pulvinar. Praesent et porta odio. Sed sit amet volutpat lacus, et hendrerit lorem. Etiam non vestibulum nisl.</p>
-
-
-    </div>
     <div class="row clearfix">
 
 
@@ -292,7 +286,7 @@
                 <div class="btn-group-horizontal btn-group" id = "SpiderSelection">
 
                     <div class="Btype" id = "slider">
-                        <span id = "min"></span><input id="AccessSlider" type="range" min=0 max=6 step=1 value=0 oninput="showValue(value, 'Lost')"><span id="max"></span>
+                        <span id = "min"></span><input id="LostSlider" type="range" min=0 max=6 step=1 value=0 oninput="showValue(value, 'Lost')"><span id="max"></span>
                         <span>Inundation Level :&nbsp;</span>
                         <span id="Lostrange">0ft</span>
                     </div>
@@ -407,13 +401,15 @@
             .defer(d3.json, "data/assets/pop.json")
             .defer(d3.json, "data/assets/tazarea.json")
             .defer(d3.csv, "data/access_JOBS/autoJobs.csv")
-            .defer(d3.csv, "data/access_Jobs/transitJobs.csv")
+            .defer(d3.csv, "data/access_JOBS/transitJobs.csv")
             .defer(d3.csv, "data/access_JOBS/walkJobs.csv")
             .defer(d3.csv, "data/access_JOBS/gautoJobs.csv")
-            .defer(d3.csv, "data/access_Jobs/gtransitJobs.csv")
+            .defer(d3.csv, "data/access_JOBS/gtransitJobs.csv")
             .defer(d3.csv, "data/access_JOBS/gwalkJobs.csv")
             .defer(d3.csv, "data/assets/groupJobs.csv")
             .defer(d3.json, "data/dtaTopo0ft.json")
+            .defer(d3.csv, "data/assets/groupRoads.csv")
+            .defer(d3.csv, "data/assets/groupTransitLines.csv")
             .await(ready);
 
     var water = {
@@ -430,8 +426,12 @@
         "hh"  : null,
         "pop" : null,
         "tazarea":null,
-        "gjobs": null
+        "gjobs": null,
+        "groads":null,
+        "gtlines":null
     };
+
+
 
     var accessUnits = {
       "method": "",
@@ -456,21 +456,22 @@
 
     var styles = {
         "waterStyle": function waterStyle(feature){
-                            return {weight: 1, color: "#000033"}
+                            return {weight: 1, color: "#000033", clickable:false}
             },
         "setTransitWeight": function setTransitWeight(mode){
             return (mode === 1) || (mode === 2) ? 1 :
                     (mode === 3) || (mode === 4) ? 7:
-                            (mode === 5) ? 3: null},
+                            (mode === 5) ? 3: 7},
         "setTransitColor": function setTransitColor(mode, name){
+            if (name.toLowerCase()){
                 name = name.toLowerCase();
-                if ((mode === 1) || (mode === 2)){
-                    return "yellow"
-                }
-                else if ( (mode === 3) || (mode === 4) ) {
-                    if (name.indexOf("red") > -1){
-                        return "#E22322"
-
+                    if ((mode === 1) || (mode === 2)){
+                        return "yellow"
+                    }   else if (mode === 5){
+                        return "gray"
+                    }
+                    else if (name.indexOf("red") > -1){
+                            return "#E22322"
                     }
                     else if (name.indexOf("green") > -1){
                         return "#018445"
@@ -481,9 +482,6 @@
                     else if (name.indexOf("orange") > -1) {
                         return "#F3891D"
                     }
-                }
-                else if (mode === 5){
-                    return "gray"
                 }
                 else {return null}
             },
@@ -499,14 +497,15 @@
             else if (d.Mode === 5) {
                 return "#E6F0F5"
             } else {
-                return d.Name === "Red " ? "#FF6666" : d.Name === "Green " ? "#99D6AD" : d.Name === "Blue " ? "#C2C2F0" :
-                        d.Name === "Orange " ? "#FFC266" : "yellow"}
+                var check = d.Name.trim();
+                return check === "Red" ? "#FF6666" : check === "Green" ? "#99D6AD" : check === "Blue" ? "#C2C2F0" :
+                        check === "Orange" ? "#FFC266" : "yellow"}
             }
 
     };
 
 
-    function ready(error, theTaz, Qjobs, Qhh, Qpop, Qtazarea, Qauto, Qtransit, Qwalk, QGauto, QGtransit, QGwalk,  Qgrjobs, Qnet0) {
+    function ready(error, theTaz, Qjobs, Qhh, Qpop, Qtazarea, Qauto, Qtransit, Qwalk, QGauto, QGtransit, QGwalk,  Qgrjobs, Qnet0, Qgroads, Qgtlines) {
         data = theTaz;
         accessUnits.auto = Qauto;
         accessUnits.transit = Qtransit;
@@ -520,6 +519,8 @@
         Demographics.pop = Qpop;
         Demographics.gjobs = Qgrjobs;
         Demographics.tazarea = Qtazarea;
+        Demographics.groads = Qgroads;
+        Demographics.gtlines = Qgtlines;
         nets.n0 = Qnet0;
 
 
@@ -595,7 +596,7 @@
         access_viz = new AccessVis(d3.select("#map2"), "Access");
         //Asset Map
         asset_map_viz = new AssetMapVis();
-        group_char_viz = new GroupChartVis("#context", Demographics.gjobs);
+        group_char_viz = new GroupChartVis("#context");
         //Spider Map
         spider_viz = new SpiderViz(map4);
         traffic_map = new TopoStreetMapVis(map5, nets.n0)
@@ -604,36 +605,53 @@
 
     //Listeners & Interaction
     $(document).ready(function() {
-        $(".AssetSelect").on("click", function(e){
+        $(".AssetSelect").on("click", function (e) {
             var check = e.target.innerText;
-            if (check === "Roads" || check === "Highway Exits"){
-                d3.select("#Jobs").remove();
-                d3.select("#Pop").remove();
-                d3.select("#hh").remove();
-                d3.select("#Taz").remove();
-                asset_map_viz.updateLayers("roads");
-                asset_map_viz.asset_viz = new LineVis(d3.select("#chart"), exits, "exits");
-                asset_map_viz.asset_viz = new LineVis(d3.select("#chart1"), indRoads, "Roads");
-            } else if (check === "Demographics"){
-                asset_map_viz.updateLayers("taz")
-            } else if (check === "Highway Exits"){
-                asset_map_viz.updateLayers("exits")
-            } else if (check === "Bus Stops"){
-                asset_map_viz.updateLayers("busStops")
-            } else if (check === "T-Lines"){
-                asset_map_viz.updateLayers("T_Lines")
-            } else if (check === "T-Stops"){
-                asset_map_viz.updateLayers("T_Stops")
+            console.log("CHECK", check);
+            if (check !== "Highway" && check !== "Transit") {
+                if (check === "Highway Exits") {
+                    asset_map_viz.updateLayers("exits")
+                } else if (check === "Bus Stops") {
+                    asset_map_viz.updateLayers("busStops")
+                } else if (check === "Roads") {
+                    asset_map_viz.updateLayers("roads")
+                } else if (check === "T-Lines") {
+                    asset_map_viz.updateLayers("T_Lines")
+                } else if (check === "T-Stops") {
+                    asset_map_viz.updateLayers("T_Stops")
+                } else if (check === "Bus Lines") {
+                    asset_map_viz.updateLayers("busLines")
+                }
+
+                if (asset_map_viz.Assets.lookUp[check] !== asset_map_viz.Assets.lookUp[asset_map_viz.Assets.selected]) {
+                    d3.selectAll(".littleCharts").remove();
+                    updateSpecialChart(check);
+                    asset_map_viz.Assets.selected = check;
+                    if (asset_map_viz.Assets.lookUp[check] === "Highway") {
+                        asset_map_viz.asset_viz = new LineVis(d3.select("#chart"), exits, "exits");
+                        asset_map_viz.asset_viz1 = new LineVis(d3.select("#chart1"), indRoads, "Roads");
+                    } else if (asset_map_viz.Assets.lookUp[check] === "Transit") {
+                        asset_map_viz.asset_viz = new LineVis(d3.select("#chart"), busStops, "Bus Stops");
+                        asset_map_viz.asset_viz2 = new LineVis(d3.select("#chart1"), T_Stops, "T - Stops");
+                    } else if (check === "Demographics") {
+                        that.asset_viz = new AssetVis(d3.select("#chart"), Demographics.jobs, "Jobs");
+                        that.asset_viz2 = new AssetVis(d3.select("#chart1"), Demographics.pop, "Pop");
+                        that.asset_viz3 = new AssetVis(d3.select("#chart2"), Demographics.hh, "hh");
+                        that.asset_viz4 = new AssetVis(d3.select("#chart3"), Demographics.tazarea, "Taz Area Meters Sq.");
+                        asset_map_viz.updateLayers("taz")
+                    }
+                }
             }
-            updateSpecialChart(check)
-        })
+
+
+        });
     });
 
     $(document).ready(function(){
         $("#SpiderSelection").on("click", function(e){
             d3.select("#theSpiderSVG").remove();
             d3.select("#theSpiderHist").remove();
-            d3.selectAll(".theSpiderLines").remove()
+            d3.selectAll(".theSpiderLines").remove();
             d3.selectAll(".centroids").remove();
             spider_viz.changeMode(e.target)
         })
@@ -646,7 +664,7 @@
 
             var data = nets["n"+ value];
             var attribute = check === "Volumes" ? "q" : "V";
-            console.log(check, data, value, attribute)
+            console.log(check, data, value, attribute);
             e.target.innerText = e.target.innerText === "Volumes" ? "Queues" : "Volumes";
             e.target.value = e.target.innerText === "Queues" ? "q" : "V";
             traffic_map.updateVis(data,attribute)
@@ -654,20 +672,19 @@
     });
 
     function updateSpecialChart(check){
-        console.log("in update", check);
+        document.getElementById("spNormal").value = 0;
+        group_char_viz.transitionVis();
+        var viz = asset_map_viz.Assets.lookUp[check];
+        console.log("VIZ", viz)
+        if (viz === "Highway") {
+            group_char_viz.wrangleData(Demographics.groads)
+        } else if (viz === "Transit") {
+            group_char_viz.wrangleData(Demographics.gtlines)
+        } else {
+            group_char_viz.wrangleData(Demographics.gjobs)
 
-        function first(){
-           d3.select(".groupJobs").attr("class", "hide");
-            call();
         }
-        function call(){
-            if (check === "Demographics"){
-
-            }
-        }
-        first();
     }
-
 
     //Water Layers For Many of the Views
     function addWater(level, theMap){
@@ -679,14 +696,17 @@
                 style: styles.waterStyle,
                 onEachFeature: null
             }).addTo(theMap);
+
         } else {
             if (waterLayer !== null)  theMap.removeLayer(waterLayer);
         }
     }
 
+
+
     //Slider
     function showValue(value, sliderViz){
-        console.log(value, sliderViz)
+        console.log(value, sliderViz);
         document.getElementById(sliderViz + "range").innerHTML = value + "ft";
         if (sliderViz === "Access"){
             access_viz.showValue(value)
@@ -697,18 +717,28 @@
             var data = nets["n"+value];
             traffic_map.updateVis(data, attribute)
         } else if (sliderViz === "Asset" ){
+            console.log("Selected Asset", asset_map_viz.Assets.selected)
             if (value === "0"){
-                console.log("in here")
                 d3.selectAll("rect.assetBar").classed("desaturate", false);
             } else {
                 d3.selectAll("rect.assetBar").classed("desaturate", true);
                 d3.selectAll("rect.s" + (value-1) + ".assetBar").classed("desaturate", false);
             }
-
-
             theMap = sliderViz  === "Asset" ? map3 : sliderViz === "Transit" ? map : sliderViz === "Access" ? map2: null;
             addWater(value, theMap)
+
+            assetsGlobals.highlightSlrFeatures(+value);
+
+
         }
+    }
+
+    function normalSpecial(){
+        var currentVal = +document.getElementById("spNormal").value;
+        currentVal += 1;
+        document.getElementById("spNormal").value = currentVal;
+        console.log("normal special fired");
+        group_char_viz.updateVis(true, currentVal);
     }
 
     function normalCharts(){
@@ -718,7 +748,7 @@
         asset_map_viz.asset_viz4.normalize();
     }
 
-    //(0);
+
     //Acceessibility Click
     d3.select("body").selectAll(".Atype").on("click", function(d){
         var that = access_viz;
@@ -740,7 +770,7 @@
             if (this.innerText === "Transit") access = accessUnits[accessUnits.method+"transit"];
             accessUnits.mode = this.innerText.toLowerCase();
             document.getElementById("AccessSlider").value = "0";
-            document.getElementById("range").innerHTML=  "0ft";
+            document.getElementById("Accessrange").innerHTML=  "0ft";
             that.wrangleData(access,+d3.select("#AccessSlider").property("value") )
         }
     });

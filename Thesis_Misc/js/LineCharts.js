@@ -32,7 +32,7 @@ LineVis = function(_parentElement, _data, _label){
  */
 LineVis.prototype.initVis = function() {
     var that = this; // read about the this
-    this.svg = this.parentElement.append("svg")
+    this.svg = this.parentElement.append("svg").attr("class", "littleCharts")
         .attr("width", this.width + this.margin.left + this.margin.right)
         .attr("height", this.height + this.margin.top + this.margin.bottom)
         .append("g")
@@ -60,61 +60,55 @@ LineVis.prototype.initVis = function() {
     });
 
     that = this;
-    var line = d3.svg.line()
-        .x(function(d) { return that.x(d[0]); })
-        .y(function(d) { return that.y(d[1]); });
+    that.line = d3.svg.line()
+        .x(function (d) {
+            return that.x(d[0]);
+        })
+        .y(function (d) {
+            return that.y(d[1]);
+        });
 
     this.yAxis = d3.svg.axis()
         .scale(this.y)
         .orient("left");
 
-    slrCounts = [0,0,0,0,0,0,0];
+    slrCounts = [0, 0, 0, 0, 0, 0, 0];
 
     //Count the features that are inundated and populate slrCounts
     //Function should work on any data set passed for a line chart
-    this.data.features.forEach(function(d){
+    this.data.features.forEach(function (d) {
         var check = +d.properties.slr_lvl;
         if (check === 1) {
-            slrCounts[0] +=1;
-            slrCounts[1] +=1;
-            slrCounts[2] +=1;
-            slrCounts[3] +=1;
-            slrCounts[4] +=1;
-            slrCounts[5] +=1;
-        } else if (check === 2){
-            slrCounts[1] +=1;
-            slrCounts[2] +=1;
-            slrCounts[3] +=1;
-            slrCounts[4] +=1;
-            slrCounts[5] +=1;
-        } else if (check ===3 ){
-            slrCounts[2] +=1;
-            slrCounts[3] +=1;
-            slrCounts[4] +=1;
-            slrCounts[5] +=1;
-        }else if (check === 4 ){
-            slrCounts[3] +=1;
-            slrCounts[4] +=1;
-            slrCounts[5] +=1;
-        }else if (check === 5 ){
-            slrCounts[4] +=1;
-            slrCounts[5] +=1;
-        } else if (check === 6 ){
-            slrCounts[5] +=1;
+            slrCounts[0] += 1;
+            slrCounts[1] += 1;
+            slrCounts[2] += 1;
+            slrCounts[3] += 1;
+            slrCounts[4] += 1;
+            slrCounts[5] += 1;
+        } else if (check === 2) {
+            slrCounts[1] += 1;
+            slrCounts[2] += 1;
+            slrCounts[3] += 1;
+            slrCounts[4] += 1;
+            slrCounts[5] += 1;
+        } else if (check === 3) {
+            slrCounts[2] += 1;
+            slrCounts[3] += 1;
+            slrCounts[4] += 1;
+            slrCounts[5] += 1;
+        } else if (check === 4) {
+            slrCounts[3] += 1;
+            slrCounts[4] += 1;
+            slrCounts[5] += 1;
+        } else if (check === 5) {
+            slrCounts[4] += 1;
+            slrCounts[5] += 1;
+        } else if (check === 6) {
+            slrCounts[5] += 1;
         }
-        slrCounts[6] +=1
+        slrCounts[6] += 1
     });
     console.log("SLRCOUNTS", slrCounts);
-
-    this.displayData = d3.zip(d3.range(6), slrCounts);
-    this.x.domain(d3.range(6));
-    this.y.domain([0,d3.max(slrCounts.slice(0,6))]);
-
-    this.svg.append("path")
-        .attr("class", "line")
-        .attr("d", line(this.displayData))
-
-
     this.svg.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0," + this.height + ")");
@@ -122,13 +116,30 @@ LineVis.prototype.initVis = function() {
     this.svg.append("g")
         .attr("class", "y axis");
 
-    this.yAxis = d3.svg.axis()
-        .scale(this.y)
+    this.displayData = d3.zip(d3.range(6), slrCounts);
+    this.x.domain(d3.range(6));
+    this.updateVis(false)
+}
+
+LineVis.prototype.updateVis = function(normal){
+    var that = this;
+
+    if (normal){};
+    that.y.domain([0,d3.max(slrCounts.slice(0,6))]);
+
+    that.svg.append("path")
+        .attr("class", "line")
+        .attr("d", that.line(that.displayData))
+
+
+
+    that.yAxis = d3.svg.axis()
+        .scale(that.y)
         .orient("left");
 
-    this.svg.select(".y.axis").call(this.yAxis);
+    that.svg.select(".y.axis").call(this.yAxis);
     // updates axis
-    this.svg.select(".x.axis").call(this.xAxis)
+    that.svg.select(".x.axis").call(this.xAxis)
         .selectAll("text")
         .style("text-anchor", "end")
         .attr("dx", "-.8em")

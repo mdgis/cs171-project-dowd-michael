@@ -1,5 +1,5 @@
 /* Accessibility map2 Visualization */
-
+//TODO add the Legend
 accessVizGlobals = {};
 
 AccessVis = function(_parentElement, _classLabel){

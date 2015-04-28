@@ -1,4 +1,5 @@
-
+//TODO need to add legend
+//TODO need to add button that clears the selection
 var StreetMapGlobals ={
     "rootNodes": {},
     "gainScale": null,
@@ -55,10 +56,10 @@ var StreetMapGlobals ={
 
 
 
-        console.log("Route Nodes", routeNodes.length, "GainNodes", nearGainNodes.length)
+        console.log("Route Nodes", routeNodes.length, "GainNodes", nearGainNodes.length);
         console.log("ignoreNodes length", ignoreNodes.length)
         routeNodes.forEach(function(d){
-                var nodeClass = ".n" + d.A
+                var nodeClass = ".n" + d.A;
                     d3.select(nodeClass).transition().duration(2000)
                         .attr("r", function(d) {
                                 var check = StreetMapGlobals.rootNodes[d.properties["A_1"]].Total;
@@ -223,7 +224,7 @@ StreetMapVis.prototype.initVis = function(){
             .style("fill", function(d){
                 if (StreetMapGlobals.rootNodes[d.properties["A_1"]] !== undefined) {
                     var check = StreetMapGlobals.rootNodes[d.properties["A_1"]].Total;
-                    return check < 0 ? "#400000": check > 0 ? "steelBlue": null}
+                    return check < 0 ? "#abcc19": check > 0 ? "steelBlue": null}
             })
             .attr("r", function(d) {
                 if (StreetMapGlobals.rootNodes[d.properties["A_1"]] !== undefined){
@@ -241,7 +242,7 @@ StreetMapVis.prototype.initVis = function(){
             .on("click", function(){
                 var check = StreetMapGlobals.rootNodes[this.__data__.properties["A_1"]].Lines;
                 //console.log("Loss #", JSON.stringify(check, "trips"))
-                that.UpdateLinesAtStop(check)
+                street_viz.UpdateLinesAtStop(check)
             });
 
         map.on("viewreset", reset);
@@ -271,7 +272,7 @@ StreetMapVis.prototype.initVis = function(){
 
 
 StreetMapVis.prototype.LinesAtStop = function(data){
-    that = this;
+    var that = this;;
     that.pieRadius = 70;
     that.pieWidth = 550;
     that.pieHeight = 150;
@@ -330,14 +331,16 @@ StreetMapVis.prototype.LinesAtStop = function(data){
 };
 
 StreetMapVis.prototype.UpdateLinesAtStop = function(selectedRouteData){
-    that = this;
-    that.pieData = [1,1,0,0,0,0,0,0,0,0];
+    var that = street_viz;
+    console.log(that, "that")
+    that.pieData = [0,0,0,1,0,0,0,0,0,0];
 
-    console.log(selectedRouteData)
+    console.log(selectedRouteData);
     that.piePath = that.piePath.data(that.pie(that.pieData)); // compute the new angles
     that.piePath
-        .style("fill", function(d){
-            return d.data < 0 ? "black" : d.data > 0 ? "#400000" : "none";
+        .style("fill", function(d,i){
+            console.log("this I", i )
+            return i === 0 ? "black" : i===1 ? "#400000" : null;
         })
         .style("stroke", "black")
         .transition().duration(150).attrTween("d", arcTween); // redraw the arcs
@@ -365,7 +368,7 @@ StreetMapVis.prototype.UpdateLinesAtStop = function(selectedRouteData){
                 return +selectedRouteData[routes[i]] < 0 ? "#700000" : d.data > 0 ? "steelBlue" : "none";
             })
             .style("stroke", "white")
-            .transition().duration(1000).attrTween("d", arcTween); // redraw the arcs
+            .transition().duration(750).attrTween("d", arcTween); // redraw the arcs
 
 
         that.piePath.each(function (d, i) {
@@ -409,7 +412,7 @@ StreetMapVis.prototype.UpdateLinesAtStop = function(selectedRouteData){
             .attr("transform", "translate(0,10)")
             .text(function (d) {
                 return total > 0 ? "Increase In" : "Decrease In"
-            })
+            });
 
         that.routeStopSVG.append("text")
             .attr("class", "pieText")
@@ -417,23 +420,7 @@ StreetMapVis.prototype.UpdateLinesAtStop = function(selectedRouteData){
             .attr("transform", "translate(0,25)")
             .text("Riders");
 
-        //that.piePath.each(function (d, i) {
-        //
-        //    if (+d.data !== 0) {
-        //        console.log("DI", d, i)
-        //        that.routeStopSVG.append("text")
-        //            .attr("class", "pieText")
-        //            .attr("text-anchor", "middle")
-        //            .attr("transform", function(j) {
-        //                if (routes.length === 1 ){
-        //                    return  "translate(200,0)"
-        //                } else {
-        //                    return "translate(200," + -10  + ")"}
-        //            })
-        //            .text(function(){
-        //                return routes[i] +" " + selectedRouteData[routes[i]]})
-        //        }
-        //})
+
 
     }
 };

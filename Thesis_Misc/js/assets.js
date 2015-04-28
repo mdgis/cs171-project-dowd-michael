@@ -1,19 +1,52 @@
 var gradient = golden;
 var currentAsset = null;
 var assetMap = null;
+//TODO allow user to turn off the water layer
+//TDOD try to get the asset layer above the water or make the water layer not cliablce
+assetsGlobals = {
+    "highlightSlrFeatures" : function(level){
+        var check = asset_map_viz.Assets.selected;
+        if (check === "Roads" ){
+            asset_map_viz.Assets.roads.eachLayer(function(layer){
+                //console.log(layer.feature.properties.slr_lvl)
+                if (level === 0 ){
+                    layer.setStyle({color :'gray', weight: 1})
+                } else if (layer.feature.properties.slr_lvl <= level && layer.feature.properties.slr_lvl !== 0){
+                    layer.setStyle({color :'red', weight: 1});
+                }
+            })
+        } else if (check === "Highway Exits" || check === "Bus Stops" || "Bus Lines" || "T-Stops"){
+            var asset = check === "Highway Exits" ? "exits" : check === "Bus Stops" ? "busStops" :
+                    check === "T-Stops" ? "T_Stops" : check === "Bus Lines" ?  "busLines" : undefined;
 
+            if (asset !== undefined){
+            asset_map_viz.Assets[asset].eachLayer(function(layer){
+                console.log("Can i see check", check)
+                if (level === 0 ){
+                    layer.setStyle({color :'black', weight: 1})
+                } else if (layer.feature.properties.slr_lvl <= level && layer.feature.properties.slr_lvl !== 0){
+                    layer.setStyle({color :'red', weight: 7})
+                } else {
+                    layer.setStyle({color :'black', weight: 1});
+
+                }
+            })
+    }
+
+
+
+
+        }
+    }
+};
 
 //Leaflet Style Functions ==> Move to Leaflet Javascript File
-function roadColor(d){
-    return d <= 5 ? "steelBlue" : "none"
-
-}
 
 function roadStyle(feature) {
     return {
         weight: 0.5,
         opacity: 1,
-        color: roadColor(feature.properties.slr_lvl),
+        color: "gray",
         fillOpacity: 0.7
     };
 }
@@ -55,6 +88,8 @@ AssetMapVis.prototype.updateVis = function() {
             layer.bindPopup(feature.properties["ROUTEKEY"]);
         } else if (feature.properties && feature.properties["LINE"]) {
             layer.bindPopup(feature.properties["LINE"]);
+        } else if (feature.properties && feature.properties["NAME"]) {
+            layer.bindPopup(feature.properties["NAME"]);
         }
 
 
@@ -74,21 +109,32 @@ AssetMapVis.prototype.updateVis = function() {
                                     'none';
     };
     that.Assets = {
+        "lookUp":{
+            "Roads"         : "Highway",
+            "Highway Exits" : "Highway",
+            "Bus Stops"     : "Transit",
+            "Bus Lines"     : "Transit",
+            "T-Stops"       : "Transit",
+            "T-Lines"       : "Transit",
+            "Demographics"  : "Demographics"
+        },
+        "selected": "Demographics",
        "roads": L.geoJson(indRoads, {style: roadStyle}),
         "taz"  : L.geoJson(rawTaz, {style: assetStyle}),
         "exits" : L.geoJson(exits, {style: function(feature) {
-                return {color: "blue"};}, pointToLayer: function(feature, latlng) {
+                return {color: "black"};}, pointToLayer: function(feature, latlng) {
                 return new L.CircleMarker(latlng, {radius: 5, fillOpacity: 0.85});
         }, onEachFeature: onEachFeature}),
         "busStops": L.geoJson(busStops, {style: function(feature) {
             return {color: "black"};}, pointToLayer: function(feature, latlng) {
             return new L.CircleMarker(latlng, {radius: 4, fillOpacity: 0.85});
         }, onEachFeature: onEachFeature}),
-        "T_Lines":L.geoJson(mbtaArc, {onEachFeature: onEachFeature}),
+        "T_Lines":L.geoJson(mbtaArc, {style: styles.transitStyle, onEachFeature: onEachFeature}),
         "T_Stops": L.geoJson(T_Stops, {style: function(feature) {
             return {color: "steelBlue"};}, pointToLayer: function(feature, latlng) {
             return new L.CircleMarker(latlng, {radius: 4, fillOpacity: 0.85});
-        }, onEachFeature: onEachFeature})
+        }, onEachFeature: onEachFeature}),
+        "busLines":L.geoJson(transitLines, {onEachFeature: onEachFeature})
 
     };
 
