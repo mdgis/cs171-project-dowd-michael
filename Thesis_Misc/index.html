@@ -79,8 +79,8 @@
 
         <div class="col-md-12 column" id = "Bar">
                 <div class="btn-group-horizontal btn-group" id = "AssetSelection">
-                    <div class="Btype" id = "slider">
-                        <span id = "min"></span><input id="AssetSlider" type="range" min=0 max=6 step=1 value=0 oninput="showValue(value,'Asset')"><span id="max"></span>
+                    <div class="Btype slider">
+                        <span class = "min"></span><input id="AssetSlider" type="range" min=0 max=6 step=1 value=0 oninput="showValue(value,'Asset')"><span class="max"></span>
                         <span>Inundation Level :&nbsp;</span>
                         <span id="Assetrange">0ft</span>
                     </div>
@@ -169,11 +169,11 @@
     <div class="row clearfix">
 
 
-        <div class="col-md-12 column" id = "Bar">
+        <div class="col-md-12 column">
             <h2>Transit Ridership Change</h2>
-                    <div class="btn-group-horizontal btn-group" id = "AssetSelection">
-                        <div class="Btype" id = "slider">
-                            <span id = "min"></span><input id="Transit" type="range" min=0 max=6 step=1 value=0 oninput="showValue(value,'Transit')"><span id="max"></span>
+                    <div class="btn-group-horizontal btn-group" id = "TransitSelection">
+                        <div class="Btype slider">
+                            <span class = "min"></span><input id="Transit" type="range" min=0 max=6 step=1 value=0 oninput="showValue(value,'Transit')"><span class="max"></span>
                             <span>Inundation Level :&nbsp;</span>
                             <span id="Transitrange">0ft</span>
                         </div>
@@ -220,10 +220,10 @@
         </div>
 
         <div class="col-md-12 column">
-            <div class="btn-group-horizontal btn-group" id = "AssetSelection">
+            <div class="btn-group-horizontal btn-group" id = "AccessSelection">
                 <h2>Accessibility Impacts</h2>
-                <div class="Btype" id = "slider">
-                    <span id = "min"></span><input id="AccessSlider" type="range" min=0 max=6 step=1 value=0 oninput="showValue(value, 'Access')"><span id="max"></span>
+                <div class="Btype slider">
+                    <span></span><input id="AccessSlider" type="range" min=0 max=6 step=1 value=0 oninput="showValue(value, 'Access')"><span></span>
                     <span>Inundation Level :&nbsp;</span>
                     <span id="Accessrange">0ft</span>
                 </div>
@@ -239,7 +239,7 @@
             <!--Accessibility Map-->
             <div class="col-md-6 column">
                 <!--Top-->
-                <div id="DataSelection1">
+                <div class="DataSelection" id = Access_DS>
                     <p>   Etiam ex nulla, sollicitudin vel laoreet in, finibus eu nunc. Vestibulum justo felis, dapibus id justo non, aliquam ullamcorper nulla. Pellentesque id posuere dolor. Sed id orci dignissim, aliquet tortor mattis, egestas eros. Interdum et malesuada fames ac ante ipsum primis in faucibus. Integer lobortis, orci at posuere scelerisque, tellus lectus hendrerit leo, non pulvinar lectus nisl at mauris. Cras cursus, nibh et iaculis dignissim, ante neque iaculis turpis, vitae auctor mi turpis id odio. Interdum et malesuada fames ac ante ipsum primis in faucibus.
                         Etiam ex nulla, sollicitudin vel laoreet in, finibus eu nunc. Vestibulum justo felis, dapibus id justo non, aliquam ullamcorper nulla. Pellentesque id posuere dolor. Sed id orci dignissim, aliquet tortor mattis, egestas eros. Interdum et malesuada fames ac ante ipsum primis in faucibus. Integer lobortis, orci at posuere scelerisque, tellus lectus hendrerit leo, non pulvinar lectus nisl at mauris. Cras cursus, nibh et iaculis dignissim, ante neque iaculis turpis, vitae auctor mi turpis id odio. Interdum et malesuada fames ac ante ipsum primis in faucibus.
 
@@ -247,7 +247,7 @@
                     </p>
                 </div>
 
-                <div id = "DataLower">
+                <div class = "DataLower">
                     <div>
 
 
@@ -283,10 +283,10 @@
 
             </div>
             <div class="col-md-12 column">
-                <div class="btn-group-horizontal btn-group" id = "SpiderSelection">
+                <div class="btn-group-horizontal btn-group" id = "LostSelection">
 
-                    <div class="Btype" id = "slider">
-                        <span id = "min"></span><input id="LostSlider" type="range" min=0 max=6 step=1 value=0 oninput="showValue(value, 'Lost')"><span id="max"></span>
+                    <div class="Btype slider">
+                        <span></span><input id="LostSlider" type="range" min=0 max=6 step=1 value=0 oninput="showValue(value, 'Lost')"><span></span>
                         <span>Inundation Level :&nbsp;</span>
                         <span id="Lostrange">0ft</span>
                     </div>
@@ -306,7 +306,7 @@
 
                 </div>
 
-                <div id = "DataLower">
+                <div class = "DataLower">
                     <div>
 
 
@@ -327,8 +327,8 @@
 
             <div class="btn-group-horizontal btn-group" id = "SpiderSelection">
 
-                <div class="Btype" id = "slider">
-                    <span id = "min"></span><input id="netSlider" type="range" min=0 max=6 step=1 value=0 onchange="showValue(value, 'Net')"><span id="netSpan"></span>
+                <div class="Btype slider">
+                    <span></span><input id="netSlider" type="range" min=0 max=6 step=1 value=0 onchange="showValue(value, 'Net')"><span id="netSpan"></span>
                     <span>Inundation Level :&nbsp;</span>
                     <span id="Netrange">0ft</span>
                 </div>
@@ -341,7 +341,7 @@
         <!--Traffic Volumes Map-->
         <div class="col-md-6 column">
             <!--Top-->
-            <div id="DataSelection1">
+            <div class="DataSelection">
                 <p>   Etiam ex nulla, sollicitudin vel laoreet in, finibus eu nunc. Vestibulum justo felis, dapibus id justo non, aliquam ullamcorper nulla. Pellentesque id posuere dolor. Sed id orci dignissim, aliquet tortor mattis, egestas eros. Interdum et malesuada fames ac ante ipsum primis in faucibus. Integer lobortis, orci at posuere scelerisque, tellus lectus hendrerit leo, non pulvinar lectus nisl at mauris. Cras cursus, nibh et iaculis dignissim, ante neque iaculis turpis, vitae auctor mi turpis id odio. Interdum et malesuada fames ac ante ipsum primis in faucibus.
                     Etiam ex nulla, sollicitudin vel laoreet in, finibus eu nunc. Vestibulum justo felis, dapibus id justo non, aliquam ullamcorper nulla. Pellentesque id posuere dolor. Sed id orci dignissim, aliquet tortor mattis, egestas eros. Interdum et malesuada fames ac ante ipsum primis in faucibus. Integer lobortis, orci at posuere scelerisque, tellus lectus hendrerit leo, non pulvinar lectus nisl at mauris. Cras cursus, nibh et iaculis dignissim, ante neque iaculis turpis, vitae auctor mi turpis id odio. Interdum et malesuada fames ac ante ipsum primis in faucibus.
 
@@ -349,7 +349,7 @@
                 </p>
             </div>
 
-            <div id = "DataLower">
+            <div class = "DataLower">
                 <div>
 
 
@@ -365,12 +365,13 @@
 
 
 </div><!-- This closes the map container-->
-
+</div>
+    </div>
 </body>
 
 
 <script>
-    var test
+    var test;
     var data;
     var access;
     var current = null;
@@ -488,7 +489,7 @@
         "transitStyle": function transitStyle(feature) {
                 return {
                     weight: styles.setTransitWeight(feature.properties["MODE"]),
-                    color: styles.setTransitColor(feature.properties["MODE"], feature.properties["NAME"]),
+                    color: styles.setTransitColor(feature.properties["MODE"], feature.properties["NAME"])
                 };
         },
         "colorLines" : function colorLines(d) {
@@ -675,7 +676,7 @@
         document.getElementById("spNormal").value = 0;
         group_char_viz.transitionVis();
         var viz = asset_map_viz.Assets.lookUp[check];
-        console.log("VIZ", viz)
+        console.log("VIZ", viz);
         if (viz === "Highway") {
             group_char_viz.wrangleData(Demographics.groads)
         } else if (viz === "Transit") {
@@ -711,13 +712,13 @@
         if (sliderViz === "Access"){
             access_viz.showValue(value)
         } else if (sliderViz === "Net" ){
-            var value = d3.select("#netSlider")[0][0].value;
+            var val = d3.select("#netSlider")[0][0].value;
             var attribute = d3.select("#Nettype")[0][0].value;
-            console.log(attribute, "ATTR")
-            var data = nets["n"+value];
+            console.log(attribute, "ATTR");
+            var data = nets["n"+val];
             traffic_map.updateVis(data, attribute)
         } else if (sliderViz === "Asset" ){
-            console.log("Selected Asset", asset_map_viz.Assets.selected)
+            console.log("Selected Asset", asset_map_viz.Assets.selected);
             if (value === "0"){
                 d3.selectAll("rect.assetBar").classed("desaturate", false);
             } else {
@@ -725,7 +726,7 @@
                 d3.selectAll("rect.s" + (value-1) + ".assetBar").classed("desaturate", false);
             }
             theMap = sliderViz  === "Asset" ? map3 : sliderViz === "Transit" ? map : sliderViz === "Access" ? map2: null;
-            addWater(value, theMap)
+            addWater(value, theMap);
 
             assetsGlobals.highlightSlrFeatures(+value);
 
