@@ -11,7 +11,6 @@ SpiderViz = function(_parentElement){
     this.transit = null;
     this.taz = null;
 
-
     queue().defer(d3.json, "RawData/tazCtopo.json")
         .defer(d3.csv, "RawData/autoDiff.csv")
         .defer(d3.csv, "RawData/ptDiff.csv")
@@ -29,7 +28,6 @@ SpiderViz.prototype.ready = function(error, taz, auto, pt, total) {
     that.total = total
     that.loaded(that.taz, that.auto)
 };
-
 
 SpiderViz.prototype.initVis = function(){
     var that = this;
@@ -132,14 +130,12 @@ SpiderViz.prototype.projectPoint = function (x, y) {
 };
 
 SpiderViz.prototype.loaded = function(taz, spider) {
-
     var that = spider_viz;
     that.Mtaz = taz;
     that.links = [];
     that.vals = [];
 
-
-    that.links.push(9)
+    that.links.push(9);
     var tazById = d3.map();
 
     that.svg = d3.select(that.parentElement.getPanes().overlayPane).append("svg").attr("id","theSpiderSVG");
@@ -176,10 +172,9 @@ SpiderViz.prototype.loaded = function(taz, spider) {
 SpiderViz.prototype.spiderHist = function(){
     var that = this;
 
-// Generate a Bates distribution of 10 random variables.
-    var values = that.vals//d3.range(1000).map(d3.random.bates(10));
+    var values = that.vals
 
-// A formatter for counts.
+    // A formatter for counts.
     var formatCount = d3.format(",.0f");
 
     var margin = {top: 10, right: 30, bottom: 30, left: 50},
@@ -190,7 +185,7 @@ SpiderViz.prototype.spiderHist = function(){
         .domain([d3.min(values), d3.max(values)])
         .range([0, width]);
 
-// Generate a histogram using twenty uniformly-spaced bins.
+    // Generate a histogram using 100(data is heavily skewed) uniformly-spaced bins.
     var data = d3.layout.histogram()
         .bins(x.ticks(100))
     (values);
@@ -202,7 +197,6 @@ SpiderViz.prototype.spiderHist = function(){
     var xAxis = d3.svg.axis()
         .scale(x)
         .orient("bottom");
-
 
     var yAxis = d3.svg.axis()
         .scale(y)
@@ -252,8 +246,6 @@ SpiderViz.prototype.spiderHist = function(){
 
 SpiderViz.prototype.changeMode = function(e){
     var that = this;
-
-    console.log("removed or not")
     var mode = e.innerText === "Auto" ? that.auto :
         e.innerText === "Transit" ? that.transit :
             e.innerText === "Total" ? that.total :

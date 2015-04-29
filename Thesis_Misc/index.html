@@ -282,7 +282,7 @@
 
             </div>
             <div class="col-md-12 column">
-                <div class="btn-group-horizontal btn-group" id = "LostSelection">
+                <div class="btn-group-horizontal btn-group" id = "SpiderSelection">
 
                     <div class="Btype slider">
                         <span></span><input id="LostSlider" type="range" min=0 max=6 step=1 value=0 oninput="showValue(value, 'Lost')"><span></span>
@@ -324,7 +324,7 @@
         <div class="col-md-12 column intro" >
             <h1>Auto Network Impacts</h1>
 
-            <div class="btn-group-horizontal btn-group" id = "SpiderSelection">
+            <div class="btn-group-horizontal btn-group" id = "NetSelection">
 
                 <div class="Btype slider">
                     <span></span><input id="netSlider" type="range" min=0 max=6 step=1 value=0 onchange="showValue(value, 'Net')"><span id="netSpan"></span>
@@ -332,7 +332,7 @@
                     <span id="Netrange">0ft</span>
                 </div>
 
-                <button type="button" class="btn btn-default" id="Nettype" value = "V">Volumes</button>
+                <button type="button" class="btn btn-default" id="netType" value = "V">Volumes</button>
 
 
             </div>
@@ -635,10 +635,10 @@
                         asset_map_viz.asset_viz = new LineVis(d3.select("#chart"), busStops, "Bus Stops");
                         asset_map_viz.asset_viz2 = new LineVis(d3.select("#chart1"), T_Stops, "T - Stops");
                     } else if (check === "Demographics") {
-                        that.asset_viz = new AssetVis(d3.select("#chart"), Demographics.jobs, "Jobs");
-                        that.asset_viz2 = new AssetVis(d3.select("#chart1"), Demographics.pop, "Pop");
-                        that.asset_viz3 = new AssetVis(d3.select("#chart2"), Demographics.hh, "hh");
-                        that.asset_viz4 = new AssetVis(d3.select("#chart3"), Demographics.tazarea, "Taz Area Meters Sq.");
+                        asset_map_viz.asset_viz = new AssetVis(d3.select("#chart"), Demographics.jobs, "Jobs");
+                        asset_map_viz.asset_viz2 = new AssetVis(d3.select("#chart1"), Demographics.pop, "Pop");
+                        asset_map_viz.asset_viz3 = new AssetVis(d3.select("#chart2"), Demographics.hh, "hh");
+                        asset_map_viz.asset_viz4 = new AssetVis(d3.select("#chart3"), Demographics.tazarea, "Taz Area Meters Sq.");
                         asset_map_viz.updateLayers("taz")
                     }
                 }
@@ -657,12 +657,11 @@
             spider_viz.changeMode(e.target)
         })
     });
-
+t = null;
     $(document).ready(function(){
-        $("#Nettype").on("click", function(e){
+        $("#netType").on("click", function(e){
             var check = e.target.innerText;
-            var value = d3.select("#netSlider")[0][0].value;
-
+            var value = $("#netSlider").val();
             var data = nets["n"+ value];
             var attribute = check === "Volumes" ? "q" : "V";
             console.log(check, data, value, attribute);
@@ -708,27 +707,35 @@
     //Slider
     function showValue(value, sliderViz){
         console.log(value, sliderViz);
-        $(sliderViz + "range").html(value+"ft")
+        $(sliderViz + "range").html(value+"ft");
         if (sliderViz === "Access"){
             access_viz.showValue(value)
         } else if (sliderViz === "Net" ){
-            var val = d3.select("#netSlider")[0][0].value;
-            var attribute = d3.select("#Nettype")[0][0].value;
-            console.log(attribute, "ATTR");
+            var val = $("#netSlider").val();
+            var attribute = $("#netType").val();
+            console.log("NETTUPE", attribute)
             var data = nets["n"+val];
             traffic_map.updateVis(data, attribute)
         } else if (sliderViz === "Asset" ){
             console.log("Selected Asset", asset_map_viz.Assets.selected);
-            if (value === "0"){
-                d3.selectAll("rect.assetBar").classed("desaturate", false);
+                if(asset_map_viz.Assets.selected === "Demographics" )
+                {
+                if (value === "0"){
+                    d3.selectAll("rect.assetBar").classed("desaturate", false);
+                } else {
+                    d3.selectAll("rect.assetBar").classed("desaturate", true);
+                    d3.selectAll("rect.s" + (value-1) + ".assetBar").classed("desaturate", false);
+
+                    var dim =asset_map_viz.Assets.demoDim;
+                    map3.removeLayer(asset_map_viz.Features);
+                    asset_map_viz.wrangleDemData(Demographics[dim.toLocaleLowerCase()], dim.toUpperCase(), +value)
+                }
+
             } else {
-                d3.selectAll("rect.assetBar").classed("desaturate", true);
-                d3.selectAll("rect.s" + (value-1) + ".assetBar").classed("desaturate", false);
+                    assetsGlobals.highlightSlrFeatures(+value);
             }
             theMap = sliderViz  === "Asset" ? map3 : sliderViz === "Transit" ? map : sliderViz === "Access" ? map2: null;
             addWater(value, theMap);
-
-            assetsGlobals.highlightSlrFeatures(+value);
 
 
         }

@@ -220,7 +220,7 @@ StreetMapVis.prototype.initVis = function(){
             .style("fill", function(d){
                 if (StreetMapGlobals.rootNodes[d.properties["A_1"]] !== undefined) {
                     var check = StreetMapGlobals.rootNodes[d.properties["A_1"]].Total;
-                    return check < 0 ? "#abcc19": check > 0 ? "steelBlue": null}
+                    return check < 0 ? "#abcc19": check > 0 ? "Blue": null}
             })
             .attr("r", function(d) {
                 if (StreetMapGlobals.rootNodes[d.properties["A_1"]] !== undefined){
