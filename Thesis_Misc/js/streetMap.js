@@ -111,68 +111,73 @@ d3.tsv("RawData/PtOnOff.csv", function(data){
 StreetMapVis = function(){
     this.initVis();
     this.LinesAtStop();
-    this.canvas = d3.select("#DataSelection").append("svg")
-        .attr("width", 750)
-        .attr("height", 650);
+    //this.canvas = d3.select("#DataSelection").append("svg")
+    //    .attr("width", 750)
+    //    .attr("height", 650);
 
-    d3.json("scratch/transit.json", function(tdata){
-        var that = street_viz;
-        that.treemap = d3.layout.treemap().sticky(true)
-            .padding(6)
-            .sort(function(a,b){
-                if(a.Name){
-                    return b.Name.toLocaleLowerCase() - a.Name.toLowerCase()}
-                else return true
-            })
-            .size([750,650])
-            .nodes(tdata);
-
-        that.cells = that.canvas.selectAll(".cell")
-            .data(that.treemap)
-            .enter()
-            .append("g")
-            .attr("class", "cell");
-
-        that.cells.append("rect")
-            .attr("class", function(d){ return "treeMap"})
-            .on("click",function(d){
-                StreetMapGlobals.selectTransitLine(d.Name);
-                StreetMapGlobals.updateThePoints(d.Name);})
-            .attr("x",function (d) { return d.x })
-            .attr("y", function (d) { return d.y })
-            .attr("width", function (d) { return d.dx })
-            .attr("height", function (d) { return d.dy })
-            .attr("fill", function (d) { return d.children ? "white" :  styles.colorLines(d)})
-            .style("stroke", "white");
-
-        that.cells.append("text")
-            .attr("x", function (d) { return d.x + d.dx /10})
-            .attr("y", function (d) { return d.y + d.dy / 2})
-            .text(function (d) {
-                if (d.Name !== undefined){
-                    if (d.Mode === 5) {
-                        return d.Name.slice(0,4).toUpperCase()+"."
-                    } else {
-                        return cleanText(d.Name)
-                    }
-                } else {return null}
-            })
-            .attr("class", "boxText")
-            .style("fill", function(d){
-                if (d.Mode === 1){
-                    return "black"
-                }
-            });
-
-        function cleanText(d){
-            if (!isNaN(d.slice(0,1))){
-                return Math.floor(d)
-            } else {
-                return d
-            }
-        }
-    })
+    //d3.json("scratch/transit.json", function(tdata){
+    //    var that = street_viz;
+    //    that.treemap = d3.layout.treemap().sticky(true)
+    //        .padding(6)
+    //        .sort(function(a,b){
+    //            if(a.Name){
+    //                return b.Name.toLocaleLowerCase() - a.Name.toLowerCase()}
+    //            else return true
+    //        })
+    //        .size([750,650])
+    //        .nodes(tdata);
+    //
+    //    that.cells = that.canvas.selectAll(".cell")
+    //        .data(that.treemap)
+    //        .enter()
+    //        .append("g")
+    //        .attr("class", "cell");
+    //
+    //    that.cells.append("rect")
+    //        .attr("class", function(d){ return "treeMap"})
+    //        .on("click",function(d){
+    //            console.log(d)
+    //            //StreetMapGlobals.selectTransitLine(d.Name);
+    //            //StreetMapGlobals.updateThePoints(d.Name);
+    //            })
+    //
+    //        .attr("x",function (d) { return d.x })
+    //        .attr("y", function (d) { return d.y })
+    //        .attr("width", function (d) { return d.dx })
+    //        .attr("height", function (d) { return d.dy })
+    //        .attr("fill", function (d) { return d.children ? "white" :  styles.colorLines(d)})
+    //        .style("stroke", "white");
+    //
+    //    that.cells.append("text")
+    //        .attr("x", function (d) { return d.x + d.dx /10})
+    //        .attr("y", function (d) { return d.y + d.dy / 2})
+    //        .text(function (d) {
+    //            if (d.Name !== undefined){
+    //                if (d.Mode === 5) {
+    //                    return d.Name.slice(0,4).toUpperCase()+"."
+    //                } else {
+    //                    return cleanText(d.Name)
+    //                }
+    //            } else {return null}
+    //        })
+    //        .attr("class", "boxText")
+    //        .style("fill", function(d){
+    //            if (d.Mode === 1){
+    //                return "black"
+    //            }
+    //        });
+    //
+    //    function cleanText(d){
+    //        if (!isNaN(d.slice(0,1))){
+    //            return Math.floor(d)
+    //        } else {
+    //            return d
+    //        }
+    //    }
+    //})
 };
+
+
 
 StreetMapVis.prototype.initVis = function(){
     var that = this;
@@ -260,15 +265,32 @@ StreetMapVis.prototype.initVis = function(){
     });
 };
 
+StreetMapVis.prototype.resetVis = function(){
+    var that = this;
+    that.g.selectAll("circle")
+        .transition().duration(1000)
+        .attr("r", function(d) {
+            if (StreetMapGlobals.rootNodes[d.properties["A_1"]] !== undefined){
+                check = StreetMapGlobals.rootNodes[d.properties["A_1"]].Total
+
+                return check > 200 ? StreetMapGlobals.gainScale(check) :
+                    check < -50 ? StreetMapGlobals.lossScale(Math.abs(check)) :
+                        check === 0 ? 0 : 0}
+        })
+    that.TransitLines.eachLayer(function(layer){
+        layer.setStyle(styles.transitStyle(layer.feature))
+    })
+
+};
 
 
 
 StreetMapVis.prototype.LinesAtStop = function(data){
     var that = this;
-    that.pieRadius = 70;
+    that.pieRadius = 80;
     that.pieWidth = 550;
-    that.pieHeight = 150;
-    that.pieLabelr = that.pieRadius;
+    that.pieHeight = 250;
+    that.pieLabelr = that.pieRadius+10;
 
     that.routeStopSVG = d3.select("#RoutesAtStop").append("svg")
         .attr("width", that.pieWidth)
@@ -287,7 +309,7 @@ StreetMapVis.prototype.LinesAtStop = function(data){
 
     that.arc = d3.svg.arc()
         .outerRadius(that.pieRadius - 10)
-        .innerRadius(50);
+        .innerRadius(80);
 
     that.piePath = that.routeStopSVG.selectAll("arc")
         .data(that.pie(that.pieData))

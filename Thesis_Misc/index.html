@@ -12,6 +12,7 @@
     <script src="packages/simple_statistics.js"></script>
     <script src="libs/jquery/jquery-ui.js"></script>
     <script src="libs/csvtotable/js/jquery.csvToTable.js"></script>
+    <script src="libs/stickyHeader/js/jquery.stickytableheaders.min.js"></script>
 
     <!-- My Tools -->
     <script src="js/chloroClass.js"></script>
@@ -48,7 +49,9 @@
     <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
     <link rel="stylesheet" type="text/css" href="libs/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="libs/leaflet-0.7.3/leaflet.css" />
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
     <link rel="stylesheet" type="text/css" href="css/mycss.css">
+
 
 
 </head>
@@ -73,11 +76,13 @@
 
 <div class="container">
     <div class="col-md-12 column" >
-        <h1>Visualizing Inundation Impacts on Transportation Networks</h1> </div>
+        <h1>Visualizing Inundation Impacts on Transportation Networks</h1>
+    </div>
 
     <!--This is the top Bar -->
     <div class="row clearfix">
         <div class="col-md-12 column" id = "Bar">
+            <h2>Inundated Assets</h2>
                 <div class="btn-group-horizontal btn-group" id = "AssetSelection">
                     <div class="Btype slider">
                         <span class = "min"></span><input id="AssetSlider" type="range" min=0 max=6 step=1 value=0 oninput="showValue(value,'Asset')"><span class="max"></span>
@@ -105,6 +110,7 @@
                             <li><a href="#">T-Lines</a></li>
                         </ul>
                      </div>
+                    <button type="button" class="btn btn-default waterSelect" value = 0 id = "assetWater">Water</button>
                  </div>
              </div>
         </div>
@@ -162,26 +168,21 @@
 
 
     <!--These are the "Some other title paragraphs"-->
-    <div class="row clearfix">
-        <div class="col-md-12 column intro">
 
     <div class="row clearfix">
-
 
         <div class="col-md-12 column">
-            <h2>Transit Ridership Change</h2>
+            <h2>Transit Ridership Change Given 4ft of Inundation</h2>
                     <div class="btn-group-horizontal btn-group" id = "TransitSelection">
-                        <div class="Btype slider">
-                            <span class = "min"></span><input id="Transit" type="range" min=0 max=6 step=1 value=0 oninput="showValue(value,'Transit')"><span class="max"></span>
-                            <span>Inundation Level :&nbsp;</span>
-                            <span id="Transitrange">0ft</span>
+                        <button type="button" class="btn btn-default  Ttype">Reset</button>
+                        <button type="button" class="btn btn-default  Ttype">View Water</button>
+                        <button type="button" class="btn btn-default  Ttype">Ridership Increase </button>
+
                         </div>
-
                     </div>
-                    </div>
+    </div>
 
-            </div>
-        </div>
+
 
     <div class="row clearfix">
 
@@ -190,11 +191,13 @@
         </div>
         <div class="col-md-6 column">
             <!--Top-->
+            <div id = "masterHead"></div>
+            <!--Holds the Transit Trip Selection Table-->
+
             <div id="DataSelection">
-                    <!--Holds the Transit Trip Selection Table-->
             </div>
 
-            <div id="RoutesAtStop" style = "margin-left: 10px;border-bottom: 1px solid #000000">
+            <div id="RoutesAtStop" style = "margin-left: 10px;marigin-bottom:30px;border-bottom: 1px solid #000000">
                 <!--Holds the Transit Trip Selection Table-->
             </div>
         </div>
@@ -348,13 +351,7 @@
                 </p>
             </div>
 
-            <div id = "testTable" style="height:300px;overflow:auto;">
-                <script>
-                    $(function() {
-                        $('#testTable').CSVToTable('libs/csvtotable/test.csv');
-                    });
-                </script>
-            </div>
+
         </div>
 
         <div class="col-md-6 column">
@@ -363,10 +360,120 @@
 
     </div>
 
+            <div class =  "row clearfix">
+                <div id = "testTable" style="height:300px;overflow:auto;">
+                    <script>
+
+                        var sorts = {"direction":0, current:null};
+                        d3.csv("data/transitLineSummary.csv",function(data){
+
+                            var tableData = data;
+                            // render the table
+                            var peopleTable = tabulate(data, ["Route","Mode","Base Ridership", "4ft Ridership","Difference"]);
+                            $('table').stickyTableHeaders();
+                        });
+
+                        function sortTable(h){
+                            console.log("sorting or not", h)
+                            sorts.direction += 1;
+                            var method=null;
+                            d3.select("#fullTable").selectAll(".tableRows").sort(function(a,b){
+                                if (h === "Route") {
+                                    return sorts.direction % 2 === 0 && sorts.current === h ? d3.descending(a[h], b[h]) :
+                                            d3.ascending(a[h], b[h])
+                                } else {
+                                    return sorts.direction % 2 === 0 && sorts.current === h ? a[h]-b[h] : b[h]-a[h]
+
+                                }
+
+                            })
+                            sorts.current = h;
+                        }
+
+                        function tabulate(data, columns) {
+                            var table = d3.select("#DataSelection").append("table")
+                                            .attr("id","fullTable")
+                                            .attr("style", "margin-left: 250px")
+                                            .attr("class", "TransitSelector"),
+                                    //thead = table.append("thead"),
+                                    tbody = table.append("tbody");
+
+                            // append the header row
+//                            thead.append("tr")
+//                                    .selectAll("th")
+//                                    .data(columns)
+//                                    .enter()
+//                                    .append("th")
+//                                    .on("click",function(d){
+//                                        console.log("CLICK", d)
+//                                        sortTable(d)
+//                                    })
+//                                    .attr("class", function(d){
+//                                       return "m" + d.split("_")[1]
+//                                    })
+//                                    .text(function(column) { return column; });
+
+
+                            var masterHead = d3.select("#masterHead").append("table")
+                                            .attr("style", "margin-left: 250px")
+                                            .attr("class", "TransitSelector"),
+                                    Mthead = masterHead.append("thead")
+
+                            // append the header row
+                            Mthead.append("tr")
+                                    .selectAll("th")
+                                    .data(columns)
+                                    .enter()
+                                    .append("th")
+                                    .on("click",function(d){
+                                        console.log("CLICK", d)
+                                        sortTable(d)
+                                    })
+                                    .attr("class", function(d){
+                                        return "m" + d.split("_")[1]
+                                    })
+                                    .text(function(column) { return column; });
+
+
+                            // create a row for each object in the data
+                            var rows = tbody.selectAll("tr")
+                                    .data(data)
+                                    .enter()
+                                    .append("tr")
+                                    .on("click", function(d){
+                                        console.log(d)
+                                        StreetMapGlobals.selectTransitLine(d.Route);
+                                        StreetMapGlobals.updateThePoints(d.Route);
+                                    })
+                                    .attr("class","tableRows");
+
+                            // create a cell in each row for each column
+                            var cells = rows.selectAll("td")
+                                    .data(function(row) {
+                                        return columns.map(function(column) {
+                                            return {column: column, value: row[column]};
+                                        });
+                                    })
+                                    .enter()
+                                    .append("td")
+                                    .attr("style", "font-family: Courier") // sets the font style
+                                    .html(function(d) { return d.value; });
+
+                            return table;
+
+
+
+                        }
+
+
+                    </script>
+                </div>
+            </div>
+
 
 </div><!-- This closes the map container-->
 </div>
-    </div>
+
 </body>
 
 
@@ -604,12 +711,23 @@
 
     }
 
+    function removeWater(aMap){
+        try {
+            aMap.removeLayer(waterLayer);
+            $("#AssetSlider").val(0);
+        }
+        catch(err){}
+    }
+
     //Listeners & Interaction
     $(document).ready(function() {
         $(".AssetSelect").on("click", function (e) {
             var check = e.target.innerText;
             console.log("CHECK", check);
             if (check !== "Highway" && check !== "Transit") {
+                if (asset_map_viz.Assets.selected !== check){
+                    removeWater(map3);
+                }
                 if (check === "Highway Exits") {
                     asset_map_viz.updateLayers("exits")
                 } else if (check === "Bus Stops") {
@@ -622,10 +740,12 @@
                     asset_map_viz.updateLayers("T_Stops")
                 } else if (check === "Bus Lines") {
                     asset_map_viz.updateLayers("busLines")
+
                 }
 
                 if (asset_map_viz.Assets.lookUp[check] !== asset_map_viz.Assets.lookUp[asset_map_viz.Assets.selected]) {
                     d3.selectAll(".littleCharts").remove();
+                    removeWater(map3)
                     updateSpecialChart(check);
                     asset_map_viz.Assets.selected = check;
                     if (asset_map_viz.Assets.lookUp[check] === "Highway") {
@@ -657,7 +777,7 @@
             spider_viz.changeMode(e.target)
         })
     });
-t = null;
+
     $(document).ready(function(){
         $("#netType").on("click", function(e){
             var check = e.target.innerText;
@@ -686,8 +806,26 @@ t = null;
         }
     }
 
+    $(".waterSelect").on("click", function(e){
+        var check  = e.target;
+        var sliderVal = $("#AssetSlider").val();
+            if (check.id === "assetWater") {
+                assetsGlobals.showWater = !assetsGlobals.showWater;
+                if (!assetsGlobals.showWater){
+                    addWater(0,map3)
+                }else {
+                    console.log("add")
+                    addWater(sliderVal,map3)
+                }
+            }
+
+    });
     //Water Layers For Many of the Views
     function addWater(level, theMap){
+        if (theMap === map3 && !assetsGlobals.showWater) {
+            console.log("in here", +$(".waterSelect").val())
+            if (waterLayer !== null)  theMap.removeLayer(waterLayer);
+        } else {
         if (level > 0){
             if (waterLayer !== null){
                 theMap.removeLayer(waterLayer);
@@ -699,6 +837,7 @@ t = null;
 
         } else {
             if (waterLayer !== null)  theMap.removeLayer(waterLayer);
+        }
         }
     }
 
@@ -713,7 +852,7 @@ t = null;
         } else if (sliderViz === "Net" ){
             var val = $("#netSlider").val();
             var attribute = $("#netType").val();
-            console.log("NETTUPE", attribute)
+            console.log("NETTUPE", attribute);
             var data = nets["n"+val];
             traffic_map.updateVis(data, attribute)
         } else if (sliderViz === "Asset" ){
@@ -722,6 +861,7 @@ t = null;
                 {
                 if (value === "0"){
                     d3.selectAll("rect.assetBar").classed("desaturate", false);
+                    map3.removeLayer(asset_map_viz.Features);
                 } else {
                     d3.selectAll("rect.assetBar").classed("desaturate", true);
                     d3.selectAll("rect.s" + (value-1) + ".assetBar").classed("desaturate", false);
@@ -757,6 +897,21 @@ t = null;
         asset_map_viz.asset_viz4.normalize();
     }
 
+
+    //Transit Selection Click
+    $(document).ready(function(){
+
+        $('.Ttype').click(function(e){
+            var clicked = e.target.innerText.trim();
+            console.log(clicked)
+            e.target.innerText = clicked === "Ridership Increase" ? "Ridership Decrease" :
+                    clicked ===  "Ridership Decrease"  ? "Ridership Increase" : clicked;
+            if (clicked === "Reset"){
+                street_viz.resetVis()
+            }
+        })
+
+    });
 
     //Acceessibility Click
     d3.select("body").selectAll(".Atype").on("click", function(d){

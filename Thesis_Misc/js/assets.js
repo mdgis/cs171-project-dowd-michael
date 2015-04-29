@@ -1,12 +1,12 @@
 var gradient = golden;
 var currentAsset = null;
 
-//TODO allow user to turn off the water layer
-//TDOD try to get the asset layer above the water or make the water layer not cliablce
+//TODO Fix the on click bit, just have it change dimension not water level
 assetsGlobals = {
     assetMap : null,
     classify: null,
     assetStyle: undefined,
+    showWater: true,
     "highlightSlrFeatures" : function(level){
         var check = asset_map_viz.Assets.selected;
         if (check === "Roads" ){
@@ -116,7 +116,7 @@ AssetMapVis.prototype.initViz = function(selected){
         "busLines":L.geoJson(transitLines, {onEachFeature: assetsGlobals.onEachFeature})
 
     };
-    that.wrangleDemData(Demographics.jobs, "jobs", 1);
+    that.wrangleDemData(Demographics.jobs, "jobs", 0);
 
 };
 
@@ -129,38 +129,37 @@ AssetMapVis.prototype.updateVis = function() {
 AssetMapVis.prototype.wrangleDemData = function(dim, label, level){
     var that = this;
 
-    gradient = label.toLocaleLowerCase() === "jobs" ? golden : label.toLocaleLowerCase() === "pop" ? bluish:
-        label.toLocaleLowerCase() === "hh" ? redish : golden;
-    this.classMap = d3.map();
-    Demographics[label.toLowerCase()].forEach(function(d){
-        that.classMap.set(d.TAZ, d[label.toUpperCase() +"_" + 6 + "ft"])
-    });
+        gradient = label.toLocaleLowerCase() === "jobs" ? golden : label.toLocaleLowerCase() === "pop" ? bluish:
+            label.toLocaleLowerCase() === "hh" ? redish : golden;
+        this.classMap = d3.map();
+        Demographics[label.toLowerCase()].forEach(function(d){
+            that.classMap.set(d.TAZ, d[label.toUpperCase() +"_" + 6 + "ft"])
+        });
 
-    assetsGlobals.assetMap = d3.map();
-    dim.forEach(function(d) {
-        assetsGlobals.assetMap.set(d.TAZ, d[label.toUpperCase()+"_"+level+"ft"]);
-    });
+        assetsGlobals.assetMap = d3.map();
+        dim.forEach(function(d) {
+            assetsGlobals.assetMap.set(d.TAZ, d[label.toUpperCase()+"_"+level+"ft"]);
+        });
 
 
-    if (that.asset_viz === null) {
-        that.asset_viz = new AssetVis(d3.select("#chart"), Demographics.jobs,  "Jobs");
-        that.asset_viz2 = new AssetVis(d3.select("#chart1"), Demographics.pop,  "Pop");
-        that.asset_viz3 = new AssetVis(d3.select("#chart2"), Demographics.hh, "hh");
-        that.asset_viz4 = new AssetVis(d3.select("#chart3"), Demographics.tazarea, "Taz Area Meters Sq.");
-    }
+        if (that.asset_viz === null) {
+            that.asset_viz = new AssetVis(d3.select("#chart"), Demographics.jobs,  "Jobs");
+            that.asset_viz2 = new AssetVis(d3.select("#chart1"), Demographics.pop,  "Pop");
+            that.asset_viz3 = new AssetVis(d3.select("#chart2"), Demographics.hh, "hh");
+            that.asset_viz4 = new AssetVis(d3.select("#chart3"), Demographics.tazarea, "Taz Area Meters Sq.");
+        }
 
-    assetsGlobals.classify = chloroQuantile(this.classMap.values(), 8, "jenks");
-    assetsGlobals.assetStyle = function(feature) {
-        return {
-            fillColor: assetsGlobals.getColor(feature.properties.TAZ, gradient),
-            weight: 0.5,
-            opacity: 1,
-            color: 'white',
-            fillOpacity: 0.7
+        assetsGlobals.classify = chloroQuantile(this.classMap.values(), 8, "jenks");
+        assetsGlobals.assetStyle = function(feature) {
+            return {
+                fillColor: assetsGlobals.getColor(feature.properties.TAZ, gradient),
+                weight: 0.5,
+                opacity: 1,
+                color: 'white',
+                fillOpacity: 0.7
+            };
         };
-    };
-    that.updateLayers("taz")
-
+        that.updateLayers("taz")
 
 };
 
