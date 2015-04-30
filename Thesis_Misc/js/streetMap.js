@@ -15,7 +15,7 @@ var StreetMapGlobals ={
             }
         })
      },
-    "updateThePoints" : function(route){
+    "updateThePoints" : function(route, searchType){
         //console.log("in the update points", route+"_");
         if (+route.slice(0,1)) route = String(Math.floor(+route));
         route = route.trim();
@@ -39,7 +39,8 @@ var StreetMapGlobals ={
 
                 if (check1  && check2 ) {
                     var check = StreetMapGlobals.rootNodes[d.properties["A_1"]].Total;
-                    if (check > 100) {
+                    //If visualizing nodes that had increases near a route
+                    if (check > 100 && searchType === "Ridership Increase") {
                         for (var i = 0; i<routeNodes.length; i++){
                             var dist  = distance(routeNodes[i].lat,routeNodes[i].lng,d.LatLng.lat, d.LatLng.lng ) ;
                             if (dist < 1){
@@ -51,7 +52,21 @@ var StreetMapGlobals ={
                                 }
                             }
                         }
-                    } else {
+                        //If visualizing nodes that decreases near a route
+                    } else if (check < -100 && searchType === "Ridership Decrease"){
+                        for (var i = 0; i<routeNodes.length; i++){
+                            dist  = distance(routeNodes[i].lat,routeNodes[i].lng,d.LatLng.lat, d.LatLng.lng ) ;
+                            if (dist < 1){
+                                nearGainNodes.push({"A":d.properties.A_1});
+                                break
+                            } else {
+                                if(i === routeNodes.length -1){
+                                    ignoreNodes.push(d.properties.A_1)
+                                }
+                            }
+                        }
+                    }
+                    else {
                         ignoreNodes.push(d.properties.A_1)
                     }
                 }
@@ -62,8 +77,8 @@ var StreetMapGlobals ={
                     d3.select(nodeClass).transition().duration(2000)
                         .attr("r", function(d) {
                                 var check = StreetMapGlobals.rootNodes[d.properties["A_1"]].Total;
-                                return check > 200 ? StreetMapGlobals.gainScale(check)*1.5:
-                                    check < -50 ? StreetMapGlobals.lossScale(Math.abs(check))*1.5:
+                                return check > 200 ? StreetMapGlobals.gainScale(check):
+                                    check < -50 ? StreetMapGlobals.lossScale(Math.abs(check)):
                                         check === 0 ? 0 : 0})
             }
         );
@@ -80,7 +95,7 @@ var StreetMapGlobals ={
                 d3.select(nodeClass).transition().duration(2500)
                     .attr("r", function(d) {
                         var check = StreetMapGlobals.rootNodes[d.properties["A_1"]].Total;
-                        return StreetMapGlobals.gainScale(check)*1.5;
+                        return StreetMapGlobals.gainScale(Math.abs(check));
                         });
             }
         );
@@ -111,70 +126,103 @@ d3.tsv("RawData/PtOnOff.csv", function(data){
 StreetMapVis = function(){
     this.initVis();
     this.LinesAtStop();
-    //this.canvas = d3.select("#DataSelection").append("svg")
-    //    .attr("width", 750)
-    //    .attr("height", 650);
 
-    //d3.json("scratch/transit.json", function(tdata){
-    //    var that = street_viz;
-    //    that.treemap = d3.layout.treemap().sticky(true)
-    //        .padding(6)
-    //        .sort(function(a,b){
-    //            if(a.Name){
-    //                return b.Name.toLocaleLowerCase() - a.Name.toLowerCase()}
-    //            else return true
-    //        })
-    //        .size([750,650])
-    //        .nodes(tdata);
-    //
-    //    that.cells = that.canvas.selectAll(".cell")
-    //        .data(that.treemap)
-    //        .enter()
-    //        .append("g")
-    //        .attr("class", "cell");
-    //
-    //    that.cells.append("rect")
-    //        .attr("class", function(d){ return "treeMap"})
-    //        .on("click",function(d){
-    //            console.log(d)
-    //            //StreetMapGlobals.selectTransitLine(d.Name);
-    //            //StreetMapGlobals.updateThePoints(d.Name);
-    //            })
-    //
-    //        .attr("x",function (d) { return d.x })
-    //        .attr("y", function (d) { return d.y })
-    //        .attr("width", function (d) { return d.dx })
-    //        .attr("height", function (d) { return d.dy })
-    //        .attr("fill", function (d) { return d.children ? "white" :  styles.colorLines(d)})
-    //        .style("stroke", "white");
-    //
-    //    that.cells.append("text")
-    //        .attr("x", function (d) { return d.x + d.dx /10})
-    //        .attr("y", function (d) { return d.y + d.dy / 2})
-    //        .text(function (d) {
-    //            if (d.Name !== undefined){
-    //                if (d.Mode === 5) {
-    //                    return d.Name.slice(0,4).toUpperCase()+"."
-    //                } else {
-    //                    return cleanText(d.Name)
-    //                }
-    //            } else {return null}
-    //        })
-    //        .attr("class", "boxText")
-    //        .style("fill", function(d){
-    //            if (d.Mode === 1){
-    //                return "black"
-    //            }
-    //        });
-    //
-    //    function cleanText(d){
-    //        if (!isNaN(d.slice(0,1))){
-    //            return Math.floor(d)
-    //        } else {
-    //            return d
-    //        }
-    //    }
-    //})
+    var commaFormat = d3.format("0,000");
+    var modeLookup = {
+        "1" : "Bus",
+        "2" : "Bus",
+        "3" : "The T",
+        "4" : "The T",
+        "5" : "Commuter Rail"
+    };
+
+    var sorts = {"direction":0, current:null};
+    d3.csv("data/transitLineSummary.csv",function(data){
+
+        var tableData = data;
+        // render the table
+        var peopleTable = tabulate(data, ["Route","Mode","Base Ridership", "4ft Ridership","Difference"]);
+        $('table').stickyTableHeaders();
+    });
+
+    function sortTable(h){
+        console.log("sorting or not", h);
+        sorts.direction += 1;
+        var method=null;
+        d3.select("#fullTable").selectAll(".tableRows").sort(function(a,b){
+            if (h === "Route") {
+                return sorts.direction % 2 === 0 && sorts.current === h ? d3.descending(a[h], b[h]) :
+                    d3.ascending(a[h], b[h])
+            } else {
+                return sorts.direction % 2 === 0 && sorts.current === h ? a[h]-b[h] : b[h]-a[h]
+
+            }
+
+        });
+        sorts.current = h;
+    }
+
+    function tabulate(data, columns) {
+        var table = d3.select("#DataSelection").append("table")
+                .attr("id","fullTable")
+                .attr("style", "margin-left: 250px")
+                .attr("class", "TransitSelector"),
+            tbody = table.append("tbody");
+
+        var masterHead = d3.select("#masterHead").append("table")
+                .attr("style", "margin-left: 250px")
+                .attr("class", "TransitSelector"),
+            Mthead = masterHead.append("thead")
+
+        // append the header row
+        Mthead.append("tr")
+            .selectAll("th")
+            .data(columns)
+            .enter()
+            .append("th")
+            .on("click",function(d){
+                console.log("CLICK", d)
+                sortTable(d)
+            })
+            .attr("class", function(d){
+                return "m" + d.split("_")[1]
+            })
+            .text(function(column) { return column; });
+
+
+        // create a row for each object in the data
+        var rows = tbody.selectAll("tr")
+            .data(data)
+            .enter()
+            .append("tr")
+            .on("click", function(d){
+                var search =  $("#searchType").html();
+                StreetMapGlobals.selectTransitLine(d.Route);
+                StreetMapGlobals.updateThePoints(d.Route,search);
+            })
+            .attr("class","tableRows");
+
+        // create a cell in each row for each column
+        var cells = rows.selectAll("td")
+            .data(function(row) {
+                return columns.map(function(column) {
+                    return {column: column, value: row[column]};
+                });
+            })
+            .enter()
+            .append("td")
+            .html(function(d) {
+                return d.column === "Mode" ? modeLookup[d.value] :
+                    d.column === "Route" ? d.value:
+                        commaFormat(Math.round(d.value));
+            });
+
+        return table;
+
+
+
+    }
+
 };
 
 
@@ -187,6 +235,14 @@ StreetMapVis.prototype.initVis = function(){
     }).addTo(map);
 
     map._initPathRoot();
+
+    var Tlegend = L.control( { position: 'bottomright' } );
+    Tlegend.onAdd = function (map) {
+        var div = L.DomUtil.create('div', 'tranistLegend');
+
+        return div
+    };
+    Tlegend.addTo(map);
 
     //We pick up the SVG from the map object
     this.svg = d3.select("#map").select("svg");
@@ -206,13 +262,14 @@ StreetMapVis.prototype.initVis = function(){
                 return StreetMapGlobals.rootNodes[d.properties["A_1"]].Total}
         }));
 
+        console.log(that.extent[0], that.extent[1])
         StreetMapGlobals.gainScale = d3.scale.sqrt()
                 .domain([0,that.extent[1]])
-                .range([1,20]);
+                .range([1,30]);
 
         StreetMapGlobals.lossScale = d3.scale.sqrt()
-            .domain([0, Math.abs(that.extent[0])])
-            .range([1,20]);
+            .domain([0, d3.max([Math.abs(that.extent[0]), that.extent[1]])])
+            .range([1,30]);
 
         collection.features.forEach(function(d) {
             d.LatLng = new L.LatLng(d.geometry.coordinates[1], d.geometry.coordinates[0])
@@ -229,7 +286,7 @@ StreetMapVis.prototype.initVis = function(){
             })
             .attr("r", function(d) {
                 if (StreetMapGlobals.rootNodes[d.properties["A_1"]] !== undefined){
-                    check = StreetMapGlobals.rootNodes[d.properties["A_1"]].Total
+                    check = StreetMapGlobals.rootNodes[d.properties["A_1"]].Total;
 
                 return check > 200 ? StreetMapGlobals.gainScale(check) :
                             check < -50 ? StreetMapGlobals.lossScale(Math.abs(check)) :
@@ -261,8 +318,10 @@ StreetMapVis.prototype.initVis = function(){
             var point = map.latLngToLayerPoint(new L.LatLng(y, x));
             this.stream.point(point.x, point.y);
         }
-
+        that.addLegend()
     });
+
+
 };
 
 StreetMapVis.prototype.resetVis = function(){
@@ -446,3 +505,75 @@ function arcTween(a) {
         return that.arc(i(t));
     };
 }
+
+
+
+StreetMapVis.prototype.addLegend = function() {
+    that = this;
+    //d3.selectAll(".accessLegendRect").remove();
+    d3.selectAll(".transitLegendSVG").remove();
+    var legendData = [500,15000,30000];
+    //var legendData = [{loss:20000,goin:0},{loss:10000,gain:0},{loss:500,gain:0}]
+    var legendHeight = 170;
+
+    var legend = d3.select("div.tranistLegend")
+        .append("svg")
+        .attr("class","transitLegendSVG")
+        .attr("width",100)
+        .attr("height",legendHeight)
+        .append("g")
+        .attr("transform", "translate(0," + (legendHeight-20) + ")")
+        .selectAll("g.transitLegend")
+        .data(legendData.reverse())
+        .enter()
+        .append("g")
+        .attr("class", "transitLegend");
+
+    var ls_w = 30
+    var initial = 0;
+    var xOffset = 43
+    legend.append("circle")
+        .attr("class","transitLossCircle")
+        .attr("r", function(d) {
+            return StreetMapGlobals.lossScale(d)
+
+        })
+        .attr("cx", xOffset)
+        .attr("cy", function(d){
+
+            return -StreetMapGlobals.lossScale(d)
+        })
+        .style("stroke", "black")
+        .style("stroke-width", 0.5)
+        .style("fill", "orange")
+        .style("opacity", 0.5);
+
+    legend.append("circle")
+        .attr("class","transitGainCircle")
+        .attr("r", function(d) {
+            return StreetMapGlobals.lossScale(d)
+
+        })
+        .attr("cx", xOffset)
+        .attr("cy", function(d){
+
+            return -StreetMapGlobals.lossScale(d) - legendHeight/2 +10
+        })
+        .style("stroke", "black")
+        .style("stroke-width", 0.5)
+        .style("fill", "blue")
+        .style("opacity", 0.5);
+
+    legend.append("text")
+        .attr("x", xOffset)
+        .attr("y", -legendHeight+30)
+        .attr('text-anchor', 'middle')
+        .text("Increased");
+
+    legend.append("text")
+        .attr("x", xOffset)
+        .attr("y", -legendHeight/2+22)
+        .attr('text-anchor', 'middle')
+        .text("Decreased");
+
+};

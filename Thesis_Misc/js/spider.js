@@ -25,7 +25,7 @@ SpiderViz.prototype.ready = function(error, taz, auto, pt, total) {
     that.taz = taz;
     that.auto = auto;
     that.transit = pt;
-    that.total = total
+    that.total = total;
     that.loaded(that.taz, that.auto)
 };
 
@@ -172,7 +172,7 @@ SpiderViz.prototype.loaded = function(taz, spider) {
 SpiderViz.prototype.spiderHist = function(){
     var that = this;
 
-    var values = that.vals
+    var values = that.vals;
 
     // A formatter for counts.
     var formatCount = d3.format(",.0f");

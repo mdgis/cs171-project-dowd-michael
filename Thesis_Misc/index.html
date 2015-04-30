@@ -52,12 +52,19 @@
     <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
     <link rel="stylesheet" type="text/css" href="css/mycss.css">
 
+    <script>
+        $(window).load(function() {
+            // Animate loader off screen
+            $(".se-pre-con").fadeOut("slow");
+        });
+    </script>
 
 
 </head>
-
 <body>
 
+
+<div class="se-pre-con" >Loading</div>
 <script>
     $(document).ready(function(){
 
@@ -122,16 +129,16 @@
         <div class="col-lg-6">
             <div class="tabContainer">
                 <ul class="tabs">
-                    <li class="tab-link-current" data-tab="tab-1">Context</li>
-                    <li class="tab-link" data-tab="tab-2">Charts</li>
+                    <li class="tab-link" data-tab="tab-1">Context</li>
+                    <li class="tab-link-current" data-tab="tab-2">Charts</li>
                     <li class="tab-link" data-tab="tab-3">Specifics</li>
                 </ul>
-                <div id="tab-1" class = "tab-content current">
+                <div id="tab-1" class = "tab-content">
                     <p>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor. Aenean aliquet fringilla sem. Suspendisse sed ligula in ligula suscipit aliquam. Praesent in eros vestibulum mi adipiscing adipiscing. Morbi facilisis. Curabitur ornare consequat nunc. Aenean vel metus. Ut posuere viverra nulla. Aliquam erat volutpat. Pellentesque convallis. Maecenas feugiat, tellus pellentesque pretium posuere, felis lorem euismod felis, eu ornare leo nisi vel felis. Mauris consectetur tortor et purus.</p>
                 </div>
 
-                <div id="tab-2" class="tab-content">
-                    <p><strong>Click Bar to Update Map &nbsp;&nbsp;&nbsp; </strong>
+                <div id="tab-2" class="tab-content current">
+                    <p><strong>Click Chart to View Different Asset &nbsp;&nbsp;&nbsp; </strong>
                         <button type="button" class="Normal btn btn-default dropdown-toggle" onclick="normalCharts()"> Normalize
                     </button> </p>
                     <div class="col-md-6 column">
@@ -176,8 +183,7 @@
                     <div class="btn-group-horizontal btn-group" id = "TransitSelection">
                         <button type="button" class="btn btn-default  Ttype">Reset</button>
                         <button type="button" class="btn btn-default  Ttype">View Water</button>
-                        <button type="button" class="btn btn-default  Ttype">Ridership Increase </button>
-
+                        <button type="button" class="btn btn-default  Ttype" id = "searchType">Ridership Increase </button>
                         </div>
                     </div>
     </div>
@@ -207,15 +213,17 @@
 
         <div class="col-md-12 column intro" >
 
-            <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ornare orci a finibus pulvinar. Donec dapibus magna a nunc accumsan mattis. Duis eu rhoncus quam. Vestibulum in tortor sed nisl malesuada malesuada. Vivamus sed neque a metus mattis molestie eu ut elit. Sed dignissim id dolor sit amet tristique. Vivamus porttitor nisi auctor aliquet fringilla. Aenean vel nunc ultricies velit pharetra maximus. Integer erat est, porttitor sed tempor nec, mollis ac mi.
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ornare orci a finibus pulvinar. Donec dapibus magna a nunc accumsan mattis. Duis eu rhoncus quam. Vestibulum in tortor sed nisl malesuada malesuada. Vivamus sed neque a metus mattis molestie eu ut elit. Sed dignissim id dolor sit amet tristique. Vivamus porttitor nisi auctor aliquet fringilla. Aenean vel nunc ultricies velit pharetra maximus. Integer erat est, porttitor sed tempor nec, mollis ac mi.
 
                 Etiam ex nulla, sollicitudin vel laoreet in, finibus eu nunc. Vestibulum justo felis, dapibus id justo non, aliquam ullamcorper nulla. Pellentesque id posuere dolor. Sed id orci dignissim, aliquet tortor mattis, egestas eros. Interdum et malesuada fames ac ante ipsum primis in faucibus. Integer lobortis, orci at posuere scelerisque, tellus lectus hendrerit leo, non pulvinar lectus nisl at mauris. Cras cursus, nibh et iaculis dignissim, ante neque iaculis turpis, vitae auctor mi turpis id odio. Interdum et malesuada fames ac ante ipsum primis in faucibus.
 
-                Nam sed diam et urna fermentum luctus et eget magna. Fusce sed nisi tempor, molestie dui eget, interdum eros. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Quisque accumsan lorem finibus velit consectetur, a fermentum risus elementum. Aliquam lobortis enim at tristique maximus. Sed nec porttitor tortor. Aenean vitae metus non eros cursus hendrerit.
+                Nam sed diam et urna fermentum luctus et eget magna. Fusce sed nisi tempor, molestie dui eget, interdum eros. Pellentesque habitant ta tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Quisque accumsan lorem finibus velit consectetur, a fermentum risus elementum. Aliquam lobortis enim at tristique maximus. Sed nec porttitor tortor. Aenean vitae metus non eros cursus hendrerit.
 
                 Aliquam erat volutpat. Nullam at mauris lorem. Aliquam tempus nec ligula id suscipit. Nunc elementum nulla a massa euismod, sed ullamcorper orci mollis. Morbi sem arcu, elementum ac dapibus in, tincidunt eu lectus. Nunc lacinia dolor turpis, id efficitur nisl congue condimentum. Praesent ullamcorper molestie nisl, id ornare nunc commodo ut. Donec suscipit tempus ultrices.
 
-                Maecenas eget feugiat justo. Nullam eros erat, suscipit sed turpis ut, tempus pharetra orci. Suspendisse tincidunt nisl a vehicula fermentum. Mauris bibendum orci dictum placerat vulputate. Fusce ut velit pulvinar, sagittis ex ac, convallis lorem. Duis purus felis, venenatis tristique sollicitudin et, aliquam eget est. Donec egestas odio quis ligula pulvinar, id finibus est sodales. Integer eu semper leo. Maecenas eu lorem vel nunc dapibus ullamcorper. Etiam semper, eros ut ultricies maximus, felis metus aliquam libero, ac efficitur massa sapien eu urna. Nullam vehicula quis tellus tincidunt malesuada. Nulla pulvinar tempus mauris, mollis varius nisl blandit pulvinar. Praesent et porta odio. Sed sit amet volutpat lacus, et hendrerit lorem. Etiam non vestibulum nisl.</p>
+                Maecenas eget feugiat justo. Nullam eros erat, suscipit sed turpis ut, tempus pharetra orci. Suspendisse tincidunt nisl a vehicula fermentum. Mauris bibendum orci dictum placerat vulputate. Fusce ut velit pulvinar, sagittis ex ac, convallis lorem. Duis purus felis, venenatis tristique sollicitudin et, aliquam eget est. Donec egestas odio quis ligula pulvinar, id finibus est sodales. Integer eu semper leo. Maecenas eu lorem vel nunc dapibus ullamcorper. Etiam semper, eros ut ultricies maximus, felis metus aliquam libero, ac efficitur massa sapien eu urna. Nullam vehicula quis tellus tincidunt malesuada. Nulla pulvinar tempus mauris, mollis varius nisl blandit pulvinar. Praesent et porta odio. Sed sit amet volutpat lacus, et hendrerit lorem. Etiam non vestibulum nisl.
+            </p>
 
 
 
@@ -249,7 +257,7 @@
                     </p>
                 </div>
 
-                <div class = "DataLower">
+                <div id = "accessHist">
                     <div>
 
 
@@ -285,7 +293,7 @@
 
             </div>
             <div class="col-md-12 column">
-                <div class="btn-group-horizontal btn-group" id = "SpiderSelection">
+                <div class="btn-group-horizontal btn-group" id = "SpiderSelection" class = "containerGroup">
 
                     <div class="Btype slider">
                         <span></span><input id="LostSlider" type="range" min=0 max=6 step=1 value=0 oninput="showValue(value, 'Lost')"><span></span>
@@ -330,7 +338,7 @@
             <div class="btn-group-horizontal btn-group" id = "NetSelection">
 
                 <div class="Btype slider">
-                    <span></span><input id="netSlider" type="range" min=0 max=6 step=1 value=0 onchange="showValue(value, 'Net')"><span id="netSpan"></span>
+                    <span></span><input id="netSlider" type="range" min=0 max=6 step=1 value=0 oninput="showValue(value, 'Net')"><span id="netSpan"></span>
                     <span>Inundation Level :&nbsp;</span>
                     <span id="Netrange">0ft</span>
                 </div>
@@ -359,114 +367,8 @@
         </div>
 
     </div>
-
             <div class =  "row clearfix">
                 <div id = "testTable" style="height:300px;overflow:auto;">
-                    <script>
-
-                        var sorts = {"direction":0, current:null};
-                        d3.csv("data/transitLineSummary.csv",function(data){
-
-                            var tableData = data;
-                            // render the table
-                            var peopleTable = tabulate(data, ["Route","Mode","Base Ridership", "4ft Ridership","Difference"]);
-                            $('table').stickyTableHeaders();
-                        });
-
-                        function sortTable(h){
-                            console.log("sorting or not", h)
-                            sorts.direction += 1;
-                            var method=null;
-                            d3.select("#fullTable").selectAll(".tableRows").sort(function(a,b){
-                                if (h === "Route") {
-                                    return sorts.direction % 2 === 0 && sorts.current === h ? d3.descending(a[h], b[h]) :
-                                            d3.ascending(a[h], b[h])
-                                } else {
-                                    return sorts.direction % 2 === 0 && sorts.current === h ? a[h]-b[h] : b[h]-a[h]
-
-                                }
-
-                            })
-                            sorts.current = h;
-                        }
-
-                        function tabulate(data, columns) {
-                            var table = d3.select("#DataSelection").append("table")
-                                            .attr("id","fullTable")
-                                            .attr("style", "margin-left: 250px")
-                                            .attr("class", "TransitSelector"),
-                                    //thead = table.append("thead"),
-                                    tbody = table.append("tbody");
-
-                            // append the header row
-//                            thead.append("tr")
-//                                    .selectAll("th")
-//                                    .data(columns)
-//                                    .enter()
-//                                    .append("th")
-//                                    .on("click",function(d){
-//                                        console.log("CLICK", d)
-//                                        sortTable(d)
-//                                    })
-//                                    .attr("class", function(d){
-//                                       return "m" + d.split("_")[1]
-//                                    })
-//                                    .text(function(column) { return column; });
-
-
-                            var masterHead = d3.select("#masterHead").append("table")
-                                            .attr("style", "margin-left: 250px")
-                                            .attr("class", "TransitSelector"),
-                                    Mthead = masterHead.append("thead")
-
-                            // append the header row
-                            Mthead.append("tr")
-                                    .selectAll("th")
-                                    .data(columns)
-                                    .enter()
-                                    .append("th")
-                                    .on("click",function(d){
-                                        console.log("CLICK", d)
-                                        sortTable(d)
-                                    })
-                                    .attr("class", function(d){
-                                        return "m" + d.split("_")[1]
-                                    })
-                                    .text(function(column) { return column; });
-
-
-                            // create a row for each object in the data
-                            var rows = tbody.selectAll("tr")
-                                    .data(data)
-                                    .enter()
-                                    .append("tr")
-                                    .on("click", function(d){
-                                        console.log(d)
-                                        StreetMapGlobals.selectTransitLine(d.Route);
-                                        StreetMapGlobals.updateThePoints(d.Route);
-                                    })
-                                    .attr("class","tableRows");
-
-                            // create a cell in each row for each column
-                            var cells = rows.selectAll("td")
-                                    .data(function(row) {
-                                        return columns.map(function(column) {
-                                            return {column: column, value: row[column]};
-                                        });
-                                    })
-                                    .enter()
-                                    .append("td")
-                                    .attr("style", "font-family: Courier") // sets the font style
-                                    .html(function(d) { return d.value; });
-
-                            return table;
-
-
-
-                        }
-
-
-                    </script>
                 </div>
             </div>
 
@@ -654,7 +556,8 @@
 
         //Leaflet Base Maps
         map = L.map("map").setView([42.3596, -71.0561], 12);
-        L.tileLayer('http://{s}.acetate.geoiq.com/tiles/acetate/{z}/{x}/{y}.png', {
+        //'http://{s}.acetate.geoiq.com/tiles/acetate/{z}/{x}/{y}.png'
+        L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
             maxZoom: 18,
             minZoom: 9,
             id: 'examples.map-20v6611k'
@@ -723,10 +626,18 @@
     $(document).ready(function() {
         $(".AssetSelect").on("click", function (e) {
             var check = e.target.innerText;
-            console.log("CHECK", check);
+
             if (check !== "Highway" && check !== "Transit") {
+                asset_map_viz.toggleLegend(true);
+                console.log(check + "_");
                 if (asset_map_viz.Assets.selected !== check){
+
+                    var currentValue = asset_map_viz.Assets.selected;
+                    asset_map_viz.Assets.selected = check;
                     removeWater(map3);
+                    asset_map_viz.Assets.demoDim = undefined;
+                    asset_map_viz.updateAssetInfo();
+                    console.log("ch", check, "cv", currentValue, asset_map_viz.Assets.selected)
                 }
                 if (check === "Highway Exits") {
                     asset_map_viz.updateLayers("exits")
@@ -743,11 +654,11 @@
 
                 }
 
-                if (asset_map_viz.Assets.lookUp[check] !== asset_map_viz.Assets.lookUp[asset_map_viz.Assets.selected]) {
+                if (asset_map_viz.Assets.lookUp[check] !== asset_map_viz.Assets.lookUp[currentValue]) {
                     d3.selectAll(".littleCharts").remove();
-                    removeWater(map3)
+                    removeWater(map3);
                     updateSpecialChart(check);
-                    asset_map_viz.Assets.selected = check;
+
                     if (asset_map_viz.Assets.lookUp[check] === "Highway") {
                         asset_map_viz.asset_viz = new LineVis(d3.select("#chart"), exits, "exits");
                         asset_map_viz.asset_viz1 = new LineVis(d3.select("#chart1"), indRoads, "Roads");
@@ -759,7 +670,8 @@
                         asset_map_viz.asset_viz2 = new AssetVis(d3.select("#chart1"), Demographics.pop, "Pop");
                         asset_map_viz.asset_viz3 = new AssetVis(d3.select("#chart2"), Demographics.hh, "hh");
                         asset_map_viz.asset_viz4 = new AssetVis(d3.select("#chart3"), Demographics.tazarea, "Taz Area Meters Sq.");
-                        asset_map_viz.updateLayers("taz")
+                        asset_map_viz.wrangleDemData(Demographics.jobs, "JOBS", 0)
+
                     }
                 }
             }
@@ -770,11 +682,13 @@
 
     $(document).ready(function(){
         $("#SpiderSelection").on("click", function(e){
-            d3.select("#theSpiderSVG").remove();
-            d3.select("#theSpiderHist").remove();
-            d3.selectAll(".theSpiderLines").remove();
-            d3.selectAll(".centroids").remove();
-            spider_viz.changeMode(e.target)
+            if (e.target.type !== "range"){
+                d3.select("#theSpiderSVG").remove();
+                d3.select("#theSpiderHist").remove();
+                d3.selectAll(".theSpiderLines").remove();
+                d3.selectAll(".centroids").remove();
+                spider_viz.changeMode(e.target)
+            }
         })
     });
 
@@ -845,8 +759,8 @@
 
     //Slider
     function showValue(value, sliderViz){
-        console.log(value, sliderViz);
-        $(sliderViz + "range").html(value+"ft");
+        console.log(value, sliderViz, value);
+        $("#" + sliderViz + "range").html(value+"ft");
         if (sliderViz === "Access"){
             access_viz.showValue(value)
         } else if (sliderViz === "Net" ){
@@ -860,13 +774,16 @@
                 if(asset_map_viz.Assets.selected === "Demographics" )
                 {
                 if (value === "0"){
+                    asset_map_viz.toggleLegend(true);
                     d3.selectAll("rect.assetBar").classed("desaturate", false);
                     map3.removeLayer(asset_map_viz.Features);
                 } else {
                     d3.selectAll("rect.assetBar").classed("desaturate", true);
                     d3.selectAll("rect.s" + (value-1) + ".assetBar").classed("desaturate", false);
 
-                    var dim =asset_map_viz.Assets.demoDim;
+
+                    var dim = asset_map_viz.Assets.demoDim === undefined ? "jobs" : asset_map_viz.Assets.demoDim
+
                     map3.removeLayer(asset_map_viz.Features);
                     asset_map_viz.wrangleDemData(Demographics[dim.toLocaleLowerCase()], dim.toUpperCase(), +value)
                 }
@@ -908,6 +825,8 @@
                     clicked ===  "Ridership Decrease"  ? "Ridership Increase" : clicked;
             if (clicked === "Reset"){
                 street_viz.resetVis()
+            } else if (e.target.innerText === "Ridership Increase"){
+
             }
         })
 

@@ -32,6 +32,15 @@ AssetVis.prototype.initVis = function(){
     this.svg = this.parentElement.append("svg")
         .attr("id",this.label.split(" ")[0])
         .attr("class", "littleCharts")
+        .on("click", function(d,i){
+            console.log("Clicked Svg")
+            var level = $("#AssetSlider").val();
+            var dim = this.id;
+            console.log(dim, level)
+            asset_map_viz.Assets.demoDim = dim.toLocaleLowerCase();
+            map3.removeLayer(asset_map_viz.Features);
+            asset_map_viz.wrangleDemData(Demographics[dim.toLocaleLowerCase()], dim.toUpperCase(), level)
+        })
         .attr("width", this.width + this.margin.left + this.margin.right)
         .attr("height", this.height + this.margin.top + this.margin.bottom)
         .append("g")
@@ -85,16 +94,7 @@ AssetVis.prototype.initVis = function(){
         .style("stroke", "white")
         .style("stroke-width", 1)
         .attr("x", function(d,i){ return that.x(i); })
-        .on("click", function(d,i){
-            d3.selectAll(".assetBar").style("stroke", "white");
-            d3.select(this).style("stroke","black");
 
-            var level = +this.classList[0].slice(1,2)+1;
-            var dim = this.classList[2];
-            asset_map_viz.Assets.demoDim = dim.toLocaleLowerCase();
-            map3.removeLayer(asset_map_viz.Features);
-            asset_map_viz.wrangleDemData(Demographics[dim.toLocaleLowerCase()], dim.toUpperCase(), level)
-        });
 
     this.svg.append("g")
         .attr("class", "x axis")
