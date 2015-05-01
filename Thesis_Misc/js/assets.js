@@ -60,6 +60,8 @@ assetsGlobals = {
             layer.bindPopup(feature.properties["LINE"]);
         } else if (feature.properties && feature.properties["NAME"]) {
             layer.bindPopup(feature.properties["NAME"]);
+        } else if (feature.properties && feature.properties["TAZ"]){
+            layer.bindPopup(feature.properties["TAZ"]);
         }
 
         layer.on('mouseover', function (e) {
@@ -136,12 +138,15 @@ AssetMapVis.prototype.initViz = function(selected){
 
 };
 
-var info = L.control();
+
 
 
 AssetMapVis.prototype.updateVis = function() {
     var that = this;
     that.Assets.taz.setStyle(assetsGlobals.assetStyle);
+    that.Assets.taz.eachLayer(function(d){
+        d.bindPopup(String(Math.round(assetsGlobals.assetMap.get(d.feature.properties.TAZ))))
+    });
     that.Features.addTo(map3)
 };
 
@@ -184,7 +189,7 @@ AssetMapVis.prototype.wrangleDemData = function(dim, label, level) {
     if (level === 0){
         that.toggleLegend(true)
     } else {
-        that.toggleLegend(false)
+        that.toggleLegend(false);
         that.addDemLegend();
     }
 };
@@ -194,8 +199,8 @@ AssetMapVis.prototype.addDemLegend = function() {
     d3.selectAll(".assetLegendRect").remove();
     d3.selectAll(".assetLegendSVG").remove();
 
-    var legendData = assetsGlobals.classify.slice(0)
-    legendData = legendData.slice(1,9)
+    var legendData = assetsGlobals.classify.slice(0);
+    legendData = legendData.slice(1,9);
     var legendHeight = 180;
     var legend = d3.select(".assetLegend")
         .append("svg")

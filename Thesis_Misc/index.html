@@ -183,7 +183,7 @@
                     <div class="btn-group-horizontal btn-group" id = "TransitSelection">
                         <button type="button" class="btn btn-default  Ttype">Reset</button>
                         <button type="button" class="btn btn-default  Ttype">View Water</button>
-                        <button type="button" class="btn btn-default  Ttype" id = "searchType">Ridership Increase </button>
+                        <button type="button" class="btn btn-default  Ttype" id = "searchType">Ridership Increase | TOGGLE</button>
                         </div>
                     </div>
     </div>
@@ -214,15 +214,7 @@
         <div class="col-md-12 column intro" >
 
             <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ornare orci a finibus pulvinar. Donec dapibus magna a nunc accumsan mattis. Duis eu rhoncus quam. Vestibulum in tortor sed nisl malesuada malesuada. Vivamus sed neque a metus mattis molestie eu ut elit. Sed dignissim id dolor sit amet tristique. Vivamus porttitor nisi auctor aliquet fringilla. Aenean vel nunc ultricies velit pharetra maximus. Integer erat est, porttitor sed tempor nec, mollis ac mi.
-
-                Etiam ex nulla, sollicitudin vel laoreet in, finibus eu nunc. Vestibulum justo felis, dapibus id justo non, aliquam ullamcorper nulla. Pellentesque id posuere dolor. Sed id orci dignissim, aliquet tortor mattis, egestas eros. Interdum et malesuada fames ac ante ipsum primis in faucibus. Integer lobortis, orci at posuere scelerisque, tellus lectus hendrerit leo, non pulvinar lectus nisl at mauris. Cras cursus, nibh et iaculis dignissim, ante neque iaculis turpis, vitae auctor mi turpis id odio. Interdum et malesuada fames ac ante ipsum primis in faucibus.
-
-                Nam sed diam et urna fermentum luctus et eget magna. Fusce sed nisi tempor, molestie dui eget, interdum eros. Pellentesque habitant ta tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Quisque accumsan lorem finibus velit consectetur, a fermentum risus elementum. Aliquam lobortis enim at tristique maximus. Sed nec porttitor tortor. Aenean vitae metus non eros cursus hendrerit.
-
-                Aliquam erat volutpat. Nullam at mauris lorem. Aliquam tempus nec ligula id suscipit. Nunc elementum nulla a massa euismod, sed ullamcorper orci mollis. Morbi sem arcu, elementum ac dapibus in, tincidunt eu lectus. Nunc lacinia dolor turpis, id efficitur nisl congue condimentum. Praesent ullamcorper molestie nisl, id ornare nunc commodo ut. Donec suscipit tempus ultrices.
-
-                Maecenas eget feugiat justo. Nullam eros erat, suscipit sed turpis ut, tempus pharetra orci. Suspendisse tincidunt nisl a vehicula fermentum. Mauris bibendum orci dictum placerat vulputate. Fusce ut velit pulvinar, sagittis ex ac, convallis lorem. Duis purus felis, venenatis tristique sollicitudin et, aliquam eget est. Donec egestas odio quis ligula pulvinar, id finibus est sodales. Integer eu semper leo. Maecenas eu lorem vel nunc dapibus ullamcorper. Etiam semper, eros ut ultricies maximus, felis metus aliquam libero, ac efficitur massa sapien eu urna. Nullam vehicula quis tellus tincidunt malesuada. Nulla pulvinar tempus mauris, mollis varius nisl blandit pulvinar. Praesent et porta odio. Sed sit amet volutpat lacus, et hendrerit lorem. Etiam non vestibulum nisl.
+               aecenas eget feugiat justo. Nullam eros erat, suscipit sed turpis ut, tempus pharetra orci. Suspendisse tincidunt nisl a vehicula fermentum. Mauris bibendum orci dictum placerat vulputate. Fusce ut velit pulvinar, sagittis ex ac, convallis lorem. Duis purus felis, venenatis tristique sollicitudin et, aliquam eget est. Donec egestas odio quis ligula pulvinar, id finibus est sodales. Integer eu semper leo. Maecenas eu lorem vel nunc dapibus ullamcorper. Etiam semper, eros ut ultricies maximus, felis metus aliquam libero, ac efficitur massa sapien eu urna. Nullam vehicula quis tellus tincidunt malesuada. Nulla pulvinar tempus mauris, mollis varius nisl blandit pulvinar. Praesent et porta odio. Sed sit amet volutpat lacus, et hendrerit lorem. Etiam non vestibulum nisl.
             </p>
 
 
@@ -241,7 +233,7 @@
                 <button type="button" class="btn btn-default  Atype">Auto</button>
                 <button type="button" class="btn btn-default  Atype">Transit</button>
                 <button type="button" class="btn btn-default Atype">Walk</button>
-                <button type="button" id ="accessMethod" class="btn btn-default Atype">Cutoff Measure</button>
+                <button type="button" id ="accessMethod" class="btn btn-default Atype">Cutoff Measure | TOGGLE</button>
 
             </div>
 
@@ -280,16 +272,14 @@
         <!--Next Title Area-->
         <div class =  "row clearfix">
             <div class="col-md-12 column intro" >
-                <h1>Lost Trips</h1>
-                <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ornare orci a finibus pulvinar. Donec dapibus magna a nunc accumsan mattis. Duis eu rhoncus quam. Vestibulum in tortor sed nisl malesuada malesuada. Vivamus sed neque a metus mattis molestie eu ut elit. Sed dignissim id dolor sit amet tristique. Vivamus porttitor nisi auctor aliquet fringilla. Aenean vel nunc ultricies velit pharetra maximus. Integer erat est, porttitor sed tempor nec, mollis ac mi.
+                <h1>Lost Trips Given 4ft of Inundation</h1>
+                <p>
+                    Many trips can no longer be complteded given inundation of the road and transit networks. Below highilights the origin and destination pairs that lost the most trips. I used a cutoff value of 100 trips. If the total lost trips
+                    between a given Origin and Destination was less than 100 then a line is not drawn. The thickness of the lines indicate the number of lost trips they are further redundantly encoded by color
+                    to make them visually clear.
 
-                    Etiam ex nulla, sollicitudin vel laoreet in, finibus eu nunc. Vestibulum justo felis, dapibus id justo non, aliquam ullamcorper nulla. Pellentesque id posuere dolor. Sed id orci dignissim, aliquet tortor mattis, egestas eros. Interdum et malesuada fames ac ante ipsum primis in faucibus. Integer lobortis, orci at posuere scelerisque, tellus lectus hendrerit leo, non pulvinar lectus nisl at mauris. Cras cursus, nibh et iaculis dignissim, ante neque iaculis turpis, vitae auctor mi turpis id odio. Interdum et malesuada fames ac ante ipsum primis in faucibus.
-
-                    Nam sed diam et urna fermentum luctus et eget magna. Fusce sed nisi tempor, molestie dui eget, interdum eros. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Quisque accumsan lorem finibus velit consectetur, a fermentum risus elementum. Aliquam lobortis enim at tristique maximus. Sed nec porttitor tortor. Aenean vitae metus non eros cursus hendrerit.
-
-                    Aliquam erat volutpat. Nullam at mauris lorem. Aliquam tempus nec ligula id suscipit. Nunc elementum nulla a massa euismod, sed ullamcorper orci mollis. Morbi sem arcu, elementum ac dapibus in, tincidunt eu lectus. Nunc lacinia dolor turpis, id efficitur nisl congue condimentum. Praesent ullamcorper molestie nisl, id ornare nunc commodo ut. Donec suscipit tempus ultrices.
-
-                    Maecenas eget feugiat justo. Nullam eros erat, suscipit sed turpis ut, tempus pharetra orci. Suspendisse tincidunt nisl a vehicula fermentum. Mauris bibendum orci dictum placerat vulputate. Fusce ut velit pulvinar, sagittis ex ac, convallis lorem. Duis purus felis, venenatis tristique sollicitudin et, aliquam eget est. Donec egestas odio quis ligula pulvinar, id finibus est sodales. Integer eu semper leo. Maecenas eu lorem vel nunc dapibus ullamcorper. Etiam semper, eros ut ultricies maximus, felis metus aliquam libero, ac efficitur massa sapien eu urna. Nullam vehicula quis tellus tincidunt malesuada. Nulla pulvinar tempus mauris, mollis varius nisl blandit pulvinar. Praesent et porta odio. Sed sit amet volutpat lacus, et hendrerit lorem. Etiam non vestibulum nisl.</p>
+                    <h3>Click on the Buttons to change between Transit | Auto | Total </h3>
+                </p>
 
             </div>
             <div class="col-md-12 column">
@@ -388,6 +378,7 @@
     var currentMap = "Transit";
     var waterLayer = null;
     var lookUp ={};
+    var info = L.control();
     d3.json("data/relabelTransit.json", function(data){
         data.forEach(function(d){
             lookUp[d.Raw] = d.CleanName
@@ -559,7 +550,7 @@
         //'http://{s}.acetate.geoiq.com/tiles/acetate/{z}/{x}/{y}.png'
         L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
             maxZoom: 18,
-            minZoom: 9,
+            minZoom: 11,
             id: 'examples.map-20v6611k'
         }).addTo(map);
 
@@ -591,6 +582,8 @@
             minZoom: 9,
             id: 'examples.map-20v6611k'
         }).addTo(map5);
+
+
 
         L.control.scale().addTo(map);
         L.control.scale().addTo(map2);
@@ -629,7 +622,6 @@
 
             if (check !== "Highway" && check !== "Transit") {
                 asset_map_viz.toggleLegend(true);
-                console.log(check + "_");
                 if (asset_map_viz.Assets.selected !== check){
 
                     var currentValue = asset_map_viz.Assets.selected;
@@ -637,7 +629,6 @@
                     removeWater(map3);
                     asset_map_viz.Assets.demoDim = undefined;
                     asset_map_viz.updateAssetInfo();
-                    console.log("ch", check, "cv", currentValue, asset_map_viz.Assets.selected)
                 }
                 if (check === "Highway Exits") {
                     asset_map_viz.updateLayers("exits")
@@ -698,7 +689,6 @@
             var value = $("#netSlider").val();
             var data = nets["n"+ value];
             var attribute = check === "Volumes" ? "q" : "V";
-            console.log(check, data, value, attribute);
             e.target.innerText = e.target.innerText === "Volumes" ? "Queues" : "Volumes";
             e.target.value = e.target.innerText === "Queues" ? "q" : "V";
             traffic_map.updateVis(data,attribute)
@@ -728,7 +718,6 @@
                 if (!assetsGlobals.showWater){
                     addWater(0,map3)
                 }else {
-                    console.log("add")
                     addWater(sliderVal,map3)
                 }
             }
@@ -737,7 +726,6 @@
     //Water Layers For Many of the Views
     function addWater(level, theMap){
         if (theMap === map3 && !assetsGlobals.showWater) {
-            console.log("in here", +$(".waterSelect").val())
             if (waterLayer !== null)  theMap.removeLayer(waterLayer);
         } else {
         if (level > 0){
@@ -766,11 +754,9 @@
         } else if (sliderViz === "Net" ){
             var val = $("#netSlider").val();
             var attribute = $("#netType").val();
-            console.log("NETTUPE", attribute);
             var data = nets["n"+val];
             traffic_map.updateVis(data, attribute)
         } else if (sliderViz === "Asset" ){
-            console.log("Selected Asset", asset_map_viz.Assets.selected);
                 if(asset_map_viz.Assets.selected === "Demographics" )
                 {
                 if (value === "0"){
@@ -803,7 +789,6 @@
         var currentVal = +selected.val();
         currentVal += 1;
         selected.val(currentVal);
-        console.log("normal special fired");
         group_char_viz.updateVis(true, currentVal);
     }
 
@@ -820,12 +805,11 @@
 
         $('.Ttype').click(function(e){
             var clicked = e.target.innerText.trim();
-            console.log(clicked)
-            e.target.innerText = clicked === "Ridership Increase" ? "Ridership Decrease" :
-                    clicked ===  "Ridership Decrease"  ? "Ridership Increase" : clicked;
+            e.target.innerText = clicked === "Ridership Increase | TOGGLE" ? "Ridership Decrease | TOGGLE" :
+                    clicked ===  "Ridership Decrease | TOGGLE"  ? "Ridership Increase | TOGGLE" : clicked;
             if (clicked === "Reset"){
                 street_viz.resetVis()
-            } else if (e.target.innerText === "Ridership Increase"){
+            } else if (e.target.innerText === "Ridership Increase | TOGGLE"){
 
             }
         })
@@ -835,13 +819,12 @@
     //Acceessibility Click
     d3.select("body").selectAll(".Atype").on("click", function(d){
         var that = access_viz;
-        console.log("In the accses click", this);
-        if ( this.innerText === "Cutoff Measure" || this.innerText === "Gamma Measure"){
-            if (this.innerText === "Cutoff Measure") {
-                this.innerText = "Gamma Measure";
+        if ( this.innerText === "Cutoff Measure | TOGGLE" || this.innerText === "Gamma Measure | TOGGLE"){
+            if (this.innerText === "Cutoff Measure | TOGGLE") {
+                this.innerText = "Gamma Measure | TOGGLE";
                 accessUnits.method = "g";
-            } else if (this.innerText === "Gamma Measure") {
-                this.innerText = "Cutoff Measure";
+            } else if (this.innerText === "Gamma Measure | TOGGLE") {
+                this.innerText = "Cutoff Measure | TOGGLE";
                 accessUnits.method = "";
             }
             access = accessUnits[accessUnits.method + accessUnits.mode];

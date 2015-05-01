@@ -1,5 +1,5 @@
 /* Accessibility map2 Visualization */
-//TODO add the Legend
+//TODO maybe set up an enter exit update on the histogram
 accessVizGlobals = {};
 
 AccessVis = function(_parentElement, _classLabel){
@@ -175,7 +175,7 @@ AccessVis.prototype.wrangleData = function(access, level){
         current = access;
         that.classify = chloroQuantile(that.rateByTAZ.values(), 8, "jenks");}
     that.updateVis()
-    that.accessHist();
+    that.accessHist(that.mode);
 };
 
 
@@ -226,13 +226,14 @@ AccessVis.prototype.toggleLegend = function(bool){
 
 
 
-AccessVis.prototype.accessHist = function(){
+AccessVis.prototype.accessHist = function(mode){
     var that = this;
     var values = [];
     that.rateByTAZ.forEach(function(d) {
         values.push(that.rateByTAZ.get(d))
     });
 
+    var modeColor = mode === "a" ? "rgb(33,113,181)" : mode === "t" ? "#933838" : "#383838";
     // A formatter for counts.
     var formatCount = d3.format(",.0f");
 
@@ -277,7 +278,9 @@ AccessVis.prototype.accessHist = function(){
         .attr("x", 1)
         .attr("width", function(d){return (width/50)-2})
         .attr("height", function(d) { return height - y(d.y); })
-        .style("fill", "steelBlue")
+        .attr("class", function(d){
+            return that.manualColor(d[0]);
+        });
 
     svg.append("g")
         .attr("class", "brush")

@@ -293,7 +293,7 @@ tr[class = tableRows ]:hover{
     border-left: 2px solid red;
 }
 
-.info, .assetLegend, .accessLegend, .tranistLegend{
+.info, .streetInfo, .assetLegend, .accessLegend, .tranistLegend{
     padding: 6px 8px;
     font: 14px/16px Arial, Helvetica, sans-serif;
     background: white;
@@ -343,3 +343,4 @@ div.accessTip {
     font-weight: bold;
     /*background: url(') center no-repeat #fff;*/
 }
+
