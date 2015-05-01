@@ -297,11 +297,24 @@ AccessVis.prototype.accessHist = function(mode){
     svg.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0," + height + ")")
-        .call(xAxis);
+        .call(xAxis)
+        .append("text")
+        .attr("x", 25)
+        .attr("y", 8)
+        .attr("dy", ".71em")
+        .style("text-anchor", "end")
+        .text("Value");
+
 
     svg.append("g")
         .attr("class", "y axis")
-        .call(yAxis);
+        .call(yAxis)
+        .append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 6)
+        .attr("dy", ".71em")
+        .style("text-anchor", "end")
+        .text("Frequency");
 
 
 };

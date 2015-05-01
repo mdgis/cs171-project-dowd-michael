@@ -1,6 +1,4 @@
-//TODO need to add legend
-//TODO need to add button that clears the selection
-
+//TODO clear the pie graph
 var StreetMapGlobals ={
     "rootNodes": {},
     "gainScale": null,
@@ -38,7 +36,7 @@ var StreetMapGlobals ={
                 if (check1  && check2 ) {
                     var check = StreetMapGlobals.rootNodes[d.properties["A_1"]].Total;
                     //If visualizing nodes that had increases near a route
-                    if (check > 100 && searchType === "Ridership Increase") {
+                    if (check > 100 && searchType === "Ridership Increase | TOGGLE") {
                         for (var i = 0; i<routeNodes.length; i++){
                             var dist  = distance(routeNodes[i].lat,routeNodes[i].lng,d.LatLng.lat, d.LatLng.lng ) ;
                             if (dist < 1){
@@ -51,7 +49,7 @@ var StreetMapGlobals ={
                             }
                         }
                         //If visualizing nodes that decreases near a route
-                    } else if (check < -100 && searchType === "Ridership Decrease"){
+                    } else if (check < -100 && searchType === "Ridership Decrease | TOGGLE"){
                         for (var i = 0; i<routeNodes.length; i++){
                             dist  = distance(routeNodes[i].lat,routeNodes[i].lng,d.LatLng.lat, d.LatLng.lng ) ;
                             if (dist < 1){
@@ -366,6 +364,7 @@ StreetMapVis.prototype.resetVis = function(){
     that.TransitLines.eachLayer(function(layer){
         layer.setStyle(styles.transitStyle(layer.feature))
     })
+    that.resetPie()
 
 };
 
@@ -428,6 +427,20 @@ StreetMapVis.prototype.LinesAtStop = function(data){
             if (i === 1) return "Click circle to display routes at that stop" });
     })
 
+};
+
+StreetMapVis.prototype.resetPie = function() {
+    var that = street_viz;
+    that.pieData = [0, 0, 0, 1, 0, 0, 0, 0, 0, 0];
+    d3.selectAll(".pieText").remove();
+    that.piePath = that.piePath.data(that.pie(that.pieData)); // compute the new angles
+    that.piePath
+        .style("fill", function (d, i) {
+            return i === 0 ? "white" : i === 1 ? "white" : null;
+        })
+        .style("stroke", "black")
+        .style("opacity", 0.5)
+        .transition().duration(150).attrTween("d", arcTween); // redraw the arcs
 };
 
 StreetMapVis.prototype.UpdateLinesAtStop = function(selectedRouteData){
