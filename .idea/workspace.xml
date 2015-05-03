@@ -5,20 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="10c83956-f360-4252-aa0d-ae77d8c087e2" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Thesis_Misc/libs/polyLineOffset.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Thesis_Misc/js/Laccess.js" afterPath="$PROJECT_DIR$/Thesis_Misc/js/Laccess.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Thesis_Misc/old/accessibility.js" afterPath="$PROJECT_DIR$/Thesis_Misc/old/accessibility.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Thesis_Misc/js/assets.js" afterPath="$PROJECT_DIR$/Thesis_Misc/js/assets.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Thesis_Misc/data/assets/busLines.js" afterPath="$PROJECT_DIR$/Thesis_Misc/data/assets/busLines.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Thesis_Misc/js/chart.js" afterPath="$PROJECT_DIR$/Thesis_Misc/js/chart.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Thesis_Misc/js/chloroClass.js" afterPath="$PROJECT_DIR$/Thesis_Misc/js/chloroClass.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Thesis_Misc/index.html" afterPath="$PROJECT_DIR$/Thesis_Misc/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Thesis_Misc/data/assets/mbtaNodes.js" afterPath="$PROJECT_DIR$/Thesis_Misc/data/assets/mbtaNodes.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Thesis_Misc/css/mycss.css" afterPath="$PROJECT_DIR$/Thesis_Misc/css/mycss.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Thesis_Misc/js/spider.js" afterPath="$PROJECT_DIR$/Thesis_Misc/js/spider.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Thesis_Misc/js/streetMap.js" afterPath="$PROJECT_DIR$/Thesis_Misc/js/streetMap.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Thesis_Misc/js/topoMap.js" afterPath="$PROJECT_DIR$/Thesis_Misc/js/topoMap.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Thesis_Misc/old/topoNet.js" afterPath="$PROJECT_DIR$/Thesis_Misc/old/topoNet.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="cs171-project-dowd-michael.iws" />
@@ -194,6 +180,20 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="cs171-project-dowd-michael" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cs171-project-dowd-michael" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cs171-project-dowd-michael" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ProcessBookIMGS" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -397,13 +397,20 @@
       <option name="project" value="LOCAL" />
       <updated>1430446943860</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Sunday">
+      <created>1430667745481</created>
+      <option name="number" value="00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1430667745481</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="873" extended-state="0" />
     <editor active="false" />
     <layout>
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32945737" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -418,7 +425,6 @@
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32988167" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3989704" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32945737" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39792898" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -472,7 +478,8 @@
     <MESSAGE value="4_22 updates" />
     <MESSAGE value="restructure" />
     <MESSAGE value="Thursday" />
-    <option name="LAST_COMMIT_MESSAGE" value="Thursday" />
+    <MESSAGE value="Sunday" />
+    <option name="LAST_COMMIT_MESSAGE" value="Sunday" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
