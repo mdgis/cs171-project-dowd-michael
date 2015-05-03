@@ -1,6 +1,5 @@
 /* Accessibility map2 Visualization */
-//TODO maybe set up an enter exit update on the histogram
-accessVizGlobals = {"current":null};
+accessVizGlobals = {"current":null, "accessBrush":null};
 
 AccessVis = function(_parentElement, _classLabel){
     this.parentElement = _parentElement;
@@ -18,6 +17,7 @@ AccessVis = function(_parentElement, _classLabel){
         .scale(30000)
         .translate([this.width / 2, this.height / 2]);
     this.initVis();
+    $("#AccessA").addClass("selectedButton");
 };
 
 AccessVis.prototype.projectPoint =function(x, y) {
@@ -178,8 +178,6 @@ AccessVis.prototype.wrangleData = function(access, level){
     that.accessHist(that.mode);
 };
 
-
-
 AccessVis.prototype.addLegend = function() {
     var that = this;
     d3.selectAll(".accessLegendRect").remove();
@@ -223,8 +221,6 @@ AccessVis.prototype.toggleLegend = function(bool){
     //asset_map_viz.toggleLegend(true)
     //d3.select(".accessLegend").classed("hide",bool)
 };
-
-
 
 AccessVis.prototype.accessHist = function(mode){
     var that = this;
@@ -282,9 +278,11 @@ AccessVis.prototype.accessHist = function(mode){
             return that.manualColor(d[0]);
         });
 
-    svg.append("g")
-        .attr("class", "brush")
-        .call(d3.svg.brush().x(x)
+    accessVizGlobals.accessBrush = d3.svg.brush;
+
+        svg.append("g")
+        .attr("class", "brush access")
+        .call(accessVizGlobals.accessBrush().x(x)
             .on("brush", brushed))
         .selectAll("rect")
         .attr("height", height);
@@ -300,7 +298,7 @@ AccessVis.prototype.accessHist = function(mode){
         .call(xAxis)
         .append("text")
         .attr("x", 25)
-        .attr("y", 8)
+        .attr("y", 18)
         .attr("dy", ".71em")
         .style("text-anchor", "end")
         .text("Value");

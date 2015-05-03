@@ -96,17 +96,17 @@ assetsGlobals = {
 };
 ///////Exiting Viz Object Global///////
 
-
 AssetMapVis = function() {
     this.asset_viz = null;
     this.Features = new L.LayerGroup();
     this.initViz("Demographics")
+    $("#assetWater").addClass("selectedButton");
 };
 
 AssetMapVis.prototype.initViz = function(selected){
     var that = this;
     assetsGlobals.currentAsset = selected;
-
+    $("#AssetDM").addClass("selectedButton");
     that.Assets = {
         "lookUp":{
             "Roads"         : "Highway",
@@ -158,9 +158,6 @@ AssetMapVis.prototype.initViz = function(selected){
     legend.addTo(map3)
 
 };
-
-
-
 
 AssetMapVis.prototype.updateVis = function() {
     var that = this;
@@ -215,7 +212,6 @@ AssetMapVis.prototype.wrangleDemData = function(dim, label, level) {
     }
 };
 
-
 AssetMapVis.prototype.addDemLegend = function() {
     d3.selectAll(".assetLegendRect").remove();
     d3.selectAll(".assetLegendSVG").remove();
@@ -260,7 +256,6 @@ AssetMapVis.prototype.toggleLegend = function(bool){
     //asset_map_viz.toggleLegend(true)
     d3.select(".assetLegend").classed("hide",bool)
 };
-
 
 AssetMapVis.prototype.updateLayers = function(layer, layer2){
     var that = this;

@@ -1,4 +1,3 @@
-//TODO clear the pie graph
 var StreetMapGlobals ={
     "gainOrLoss": "Ridership Increase",
     "viewWater":false,
@@ -102,6 +101,16 @@ var StreetMapGlobals ={
     }
 };
 
+function distance(lat1, lon1, lat2, lon2) {
+    var R = 6371;
+    var a =
+        0.5 - Math.cos((lat2 - lat1) * Math.PI / 180)/2 +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+        (1 - Math.cos((lon2 - lon1) * Math.PI / 180))/2;
+
+    return R * 2 * Math.asin(Math.sqrt(a));
+}
+
 //Node Processing - Outputs Nested JSON saying which transit line is at which Transit Stop
 d3.tsv("RawData/PtOnOff.csv", function(data){
     //First Determine all Unique Nodes
@@ -118,8 +127,6 @@ d3.tsv("RawData/PtOnOff.csv", function(data){
         StreetMapGlobals.rootNodes[d.A].Total += +d.DiffB4ft;
     });
 });
-
-
 
 StreetMapVis = function(){
     this.initVis();
@@ -140,7 +147,7 @@ StreetMapVis = function(){
         var tableData = data;
         // render the table
         var peopleTable = tabulate(data, ["Route","Mode","Base Ridership", "4ft Ridership","Difference"]);
-        $('table').stickyTableHeaders();
+
     });
 
     function sortTable(h){
@@ -237,22 +244,14 @@ StreetMapVis = function(){
                 } else {
                     return commaFormat(Math.round(d.value))
                 }
-
-
             });
-
         return table;
-
-
-
     }
-
 };
-
-
 
 StreetMapVis.prototype.initVis = function(){
     var that = this;
+    $("#RI").addClass("selectedButton");
 
 
     this.TransitLines = L.geoJson(transitLines, {
@@ -346,7 +345,6 @@ StreetMapVis.prototype.initVis = function(){
         that.addLegend()
     });
 
-
 };
 
 StreetMapVis.prototype.resetVis = function(){
@@ -356,7 +354,7 @@ StreetMapVis.prototype.resetVis = function(){
         .transition().duration(1000)
         .attr("r", function(d) {
             if (StreetMapGlobals.rootNodes[d.properties["A_1"]] !== undefined){
-                var check = StreetMapGlobals.rootNodes[d.properties["A_1"]].Total
+                var check = StreetMapGlobals.rootNodes[d.properties["A_1"]].Total;
 
                 return check > 200 ? StreetMapGlobals.gainScale(check) :
                     check < -50 ? StreetMapGlobals.lossScale(Math.abs(check)) :
@@ -369,8 +367,6 @@ StreetMapVis.prototype.resetVis = function(){
 
 };
 
-
-
 StreetMapVis.prototype.LinesAtStop = function(data){
     var that = this;
     that.pieRadius = 90;
@@ -382,7 +378,7 @@ StreetMapVis.prototype.LinesAtStop = function(data){
         .attr("width", that.pieWidth)
         .attr("height",  that.pieHeight)
         .append("g")
-        .attr("transform", "translate(" + that.pieWidth / 2+ "," + that.pieHeight / 2 + ")")
+        .attr("transform", "translate(" + that.pieWidth / 2+ "," + that.pieHeight / 2 + ")");
 
 
     that.pie = d3.layout.pie()
@@ -542,8 +538,6 @@ function arcTween(a) {
     };
 }
 
-
-
 StreetMapVis.prototype.addLegend = function() {
     var that = this;
     //d3.selectAll(".accessLegendRect").remove();
@@ -565,9 +559,9 @@ StreetMapVis.prototype.addLegend = function() {
         .append("g")
         .attr("class", "transitLegend");
 
-    var ls_w = 30
+    var ls_w = 30;
     var initial = 0;
-    var xOffset = 43
+    var xOffset = 43;
     legend.append("circle")
         .attr("class","transitLossCircle")
         .attr("r", function(d) {
@@ -613,7 +607,6 @@ StreetMapVis.prototype.addLegend = function() {
         .text("Decreased");
 
 };
-
 
 StreetMapVis.prototype.updateAssetInfo = function(route){
     var that = this;

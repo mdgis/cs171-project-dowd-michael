@@ -109,7 +109,6 @@ LineVis.prototype.initVis = function() {
         }
         that.slrCounts[6] += 1
     });
-    console.log("SLRCOUNTS", that.slrCounts);
     this.svg.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0," + this.height + ")");

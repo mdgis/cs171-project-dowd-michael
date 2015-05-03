@@ -6,7 +6,7 @@ function chloroQuantile(data, k, brkOrJenk){
     data = data.sort(function(a,b) {return a-b});
     var quants = [];
     if (brkOrJenk === "jenks"){
-        quants = ss.jenks(data, k)
+        quants = ss.jenks(data, k);
         quants[quants.length-1]+= .00000001;
         return quants
     }
