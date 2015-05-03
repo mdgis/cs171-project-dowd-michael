@@ -1,5 +1,7 @@
 //TODO clear the pie graph
 var StreetMapGlobals ={
+    "gainOrLoss": "Ridership Increase",
+    "viewWater":false,
     "rootNodes": {},
     "gainScale": null,
     "lossScale": null,
@@ -36,7 +38,7 @@ var StreetMapGlobals ={
                 if (check1  && check2 ) {
                     var check = StreetMapGlobals.rootNodes[d.properties["A_1"]].Total;
                     //If visualizing nodes that had increases near a route
-                    if (check > 100 && searchType === "Ridership Increase | TOGGLE") {
+                    if (check > 100 && searchType === "Ridership Increase") {
                         for (var i = 0; i<routeNodes.length; i++){
                             var dist  = distance(routeNodes[i].lat,routeNodes[i].lng,d.LatLng.lat, d.LatLng.lng ) ;
                             if (dist < 1){
@@ -49,7 +51,7 @@ var StreetMapGlobals ={
                             }
                         }
                         //If visualizing nodes that decreases near a route
-                    } else if (check < -100 && searchType === "Ridership Decrease | TOGGLE"){
+                    } else if (check < -100 && searchType === "Ridership Decrease"){
                         for (var i = 0; i<routeNodes.length; i++){
                             dist  = distance(routeNodes[i].lat,routeNodes[i].lng,d.LatLng.lat, d.LatLng.lng ) ;
                             if (dist < 1){
@@ -68,7 +70,6 @@ var StreetMapGlobals ={
                 }
             });
 
-        console.log(nearGainNodes)
         routeNodes.forEach(function(d){
                 var nodeClass = ".n" + d.A;
                     d3.select(nodeClass).transition().duration(2000)
@@ -175,6 +176,7 @@ StreetMapVis = function(){
         return ax.length - bx.length;
     }
     function tabulate(data, columns) {
+        var that = street_viz;
 
         var table = d3.select("#DataSelection").append("table")
                 .attr("id","fullTable")
@@ -185,7 +187,7 @@ StreetMapVis = function(){
         var masterHead = d3.select("#masterHead").append("table")
                 .attr("style", "margin-left: 250px")
                 .attr("class", "TransitSelector"),
-            Mthead = masterHead.append("thead")
+            Mthead = masterHead.append("thead");
 
         // append the header row
         Mthead.append("tr")
@@ -208,10 +210,9 @@ StreetMapVis = function(){
             .enter()
             .append("tr")
             .on("click", function(d){
-                that.updateAssetInfo(d.Route)
-                var search =  $("#searchType").html();
+                street_viz.updateAssetInfo(d.Route);
                 StreetMapGlobals.selectTransitLine(d.Route);
-                StreetMapGlobals.updateThePoints(d.Route,search);
+                StreetMapGlobals.updateThePoints(d.Route,StreetMapGlobals.gainOrLoss);
             })
             .attr("class","tableRows");
 
@@ -310,7 +311,7 @@ StreetMapVis.prototype.initVis = function(){
             })
             .attr("r", function(d) {
                 if (StreetMapGlobals.rootNodes[d.properties["A_1"]] !== undefined){
-                    check = StreetMapGlobals.rootNodes[d.properties["A_1"]].Total;
+                    var check = StreetMapGlobals.rootNodes[d.properties["A_1"]].Total;
 
                 return check > 200 ? StreetMapGlobals.gainScale(check) :
                             check < -50 ? StreetMapGlobals.lossScale(Math.abs(check)) :
@@ -355,7 +356,7 @@ StreetMapVis.prototype.resetVis = function(){
         .transition().duration(1000)
         .attr("r", function(d) {
             if (StreetMapGlobals.rootNodes[d.properties["A_1"]] !== undefined){
-                check = StreetMapGlobals.rootNodes[d.properties["A_1"]].Total
+                var check = StreetMapGlobals.rootNodes[d.properties["A_1"]].Total
 
                 return check > 200 ? StreetMapGlobals.gainScale(check) :
                     check < -50 ? StreetMapGlobals.lossScale(Math.abs(check)) :
@@ -363,8 +364,8 @@ StreetMapVis.prototype.resetVis = function(){
         });
     that.TransitLines.eachLayer(function(layer){
         layer.setStyle(styles.transitStyle(layer.feature))
-    })
-    that.resetPie()
+    });
+    that.resetPie();
 
 };
 
@@ -381,7 +382,7 @@ StreetMapVis.prototype.LinesAtStop = function(data){
         .attr("width", that.pieWidth)
         .attr("height",  that.pieHeight)
         .append("g")
-        .attr("transform", "translate(" + that.pieWidth / 2+ "," + that.pieHeight / 2 + ")");
+        .attr("transform", "translate(" + that.pieWidth / 2+ "," + that.pieHeight / 2 + ")")
 
 
     that.pie = d3.layout.pie()
@@ -418,13 +419,7 @@ StreetMapVis.prototype.LinesAtStop = function(data){
                 (y/h * that.pieLabelr) +  ")";
         })
         .attr("dy", ".35em")
-        .attr("text-anchor", function(j) {
-            // are we past the center?
-            return (d.endAngle + d.startAngle)/2 > Math.PI ?
-                "end" : "start";
-        })
-        .text(function(j, i) {
-            if (i === 1) return "Click circle to display routes at that stop" });
+
     })
 
 };
@@ -509,6 +504,7 @@ StreetMapVis.prototype.UpdateLinesAtStop = function(selectedRouteData){
                         }
                     })
                 }
+            setTimeout(that.resetPie, 60000)
         });
 
         that.routeStopSVG.append("text")
@@ -549,7 +545,7 @@ function arcTween(a) {
 
 
 StreetMapVis.prototype.addLegend = function() {
-    that = this;
+    var that = this;
     //d3.selectAll(".accessLegendRect").remove();
     d3.selectAll(".transitLegendSVG").remove();
     var legendData = [500,15000,30000];
@@ -637,3 +633,14 @@ StreetMapVis.prototype.updateAssetInfo = function(route){
 
 
 };
+
+StreetMapVis.prototype.toggleWater = function(bool){
+    var that = this;
+    if (bool){
+        addWater(4,map)
+    } else {
+        addWater(0,map)
+    }
+
+};
+

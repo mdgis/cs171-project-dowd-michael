@@ -13,7 +13,7 @@ function chloroQuantile(data, k, brkOrJenk){
 
     var p = .99999999/k;
 
-    for (i=1; i<k+1; i++){
+    for (var i=1; i<k+1; i++){
         if (i===k){
             quants.push(ss.quantile(data, p*i) +.0000001)
         } else {

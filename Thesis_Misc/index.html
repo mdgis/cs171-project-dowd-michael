@@ -49,7 +49,6 @@
     <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
     <link rel="stylesheet" type="text/css" href="libs/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="libs/leaflet-0.7.3/leaflet.css" />
-    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
     <link rel="stylesheet" type="text/css" href="css/mycss.css">
 
     <script>
@@ -87,7 +86,7 @@
     </div>
 
     <!--This is the top Bar -->
-    <div class="row clearfix">
+    <div class="row clearfix" id="assetMaster">
         <div class="col-md-12 column" id = "Bar">
             <h2>Inundated Assets</h2>
                 <div class="btn-group-horizontal btn-group" id = "AssetSelection">
@@ -111,10 +110,8 @@
                                 data-toggle="dropdown">Transit<span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu AssetSelect">
-                            <li><a href="#">Bus Stops</a></li>
-                            <li><a href="#">Bus Lines</a></li>
-                            <li><a href="#">T-Stops</a></li>
-                            <li><a href="#">T-Lines</a></li>
+                            <li><a href="#">Bus</a></li>
+                            <li><a href="#">The-T</a></li>
                         </ul>
                      </div>
                     <button type="button" class="btn btn-default waterSelect" value = 0 id = "assetWater">Water</button>
@@ -183,7 +180,8 @@
                     <div class="btn-group-horizontal btn-group" id = "TransitSelection">
                         <button type="button" class="btn btn-default  Ttype">Reset</button>
                         <button type="button" class="btn btn-default  Ttype">View Water</button>
-                        <button type="button" class="btn btn-default  Ttype" id = "searchType">Ridership Increase | TOGGLE</button>
+                        <button type="button" class="btn btn-default searchType Ttype" id = "RI">Ridership Increase</button>
+                        <button type="button" class="btn btn-default searchType Ttype" id = "RD">Ridership Decrease</button>
                         </div>
                     </div>
     </div>
@@ -223,7 +221,7 @@
 
         <div class="col-md-12 column">
             <div class="btn-group-horizontal btn-group" id = "AccessSelection">
-                <h2>Accessibility Impacts</h2>
+                <h2>Accessibility To Jobs</h2>
                 <div class="Btype slider">
                     <span></span><input id="AccessSlider" type="range" min=0 max=6 step=1 value=0 oninput="showValue(value, 'Access')"><span></span>
                     <span>Inundation Level :&nbsp;</span>
@@ -233,7 +231,9 @@
                 <button type="button" class="btn btn-default  Atype">Auto</button>
                 <button type="button" class="btn btn-default  Atype">Transit</button>
                 <button type="button" class="btn btn-default Atype">Walk</button>
-                <button type="button" id ="accessMethod" class="btn btn-default Atype">Cutoff Measure | TOGGLE</button>
+                <button type="button" class="btn btn-default fillerButton"></button>
+                <button type="button" id ="CM" class="btn btn-default accessMethod Atype">Cutoff Measure</button>
+                <button type="button" id ="GM" class="btn btn-default accessMethod Atype">Gamma Measure</button>
 
             </div>
 
@@ -278,18 +278,18 @@
                     between a given Origin and Destination was less than 100 then a line is not drawn. The thickness of the lines indicate the number of lost trips they are further redundantly encoded by color
                     to make them visually clear.
 
-                    <h3>Click on the Buttons to change between Transit | Auto | Total </h3>
+                    <h3>Click the Buttons to change between Transit | Auto | Total </h3>
                 </p>
 
             </div>
             <div class="col-md-12 column">
                 <div class="btn-group-horizontal btn-group" id = "SpiderSelection" class = "containerGroup">
 
-                    <!--<div class="Btype slider">-->
-                        <!--<span></span><input id="LostSlider" type="range" min=0 max=6 step=1 value=0 oninput="showValue(value, 'Lost')"><span></span>-->
-                        <!--<span>Inundation Level :&nbsp;</span>-->
-                        <!--<span id="Lostrange">0ft</span>-->
-                    <!--</div>-->
+                    <div class="Btype slider">
+                        <span></span><input id="LostSlider" type="range" min=1 max=6 step=1 value=1 oninput="showValue(value, 'Lost')"><span></span>
+                        <span>Inundation Level :&nbsp;</span>
+                        <span id="Lostrange">1ft</span>
+                    </div>
 
                     <button type="button" class="btn btn-default  Stype">Auto</button>
                     <button type="button" class="btn btn-default  Stype">Transit</button>
@@ -373,9 +373,7 @@
     var test;
     var data;
     var access;
-    var current = null;
     var dta;
-    var currentMap = "Transit";
     var waterLayer = null;
     var lookUp ={};
     var info = L.control();
@@ -595,7 +593,7 @@
         //Public Transit On OFF Difference Maps
         street_viz = new StreetMapVis("map");
         //Access Map Stuff
-        current = null;
+        assetsGlobals.current = null;
         access = accessUnits.auto;
         access_viz = new AccessVis(d3.select("#map2"), "Access");
         //Asset Map
@@ -631,18 +629,13 @@
                     asset_map_viz.updateAssetInfo();
                 }
                 if (check === "Highway Exits") {
-                    asset_map_viz.updateLayers("exits")
-                } else if (check === "Bus Stops") {
-                    asset_map_viz.updateLayers("busStops")
+                    asset_map_viz.updateLayers("exits", "roads")
+                } else if (check === "Bus") {
+                    asset_map_viz.updateLayers("busStops","busLines")
                 } else if (check === "Roads") {
                     asset_map_viz.updateLayers("roads")
-                } else if (check === "T-Lines") {
-                    asset_map_viz.updateLayers("T_Lines")
-                } else if (check === "T-Stops") {
-                    asset_map_viz.updateLayers("T_Stops")
-                } else if (check === "Bus Lines") {
-                    asset_map_viz.updateLayers("busLines")
-
+                } else if (check === "The-T") {
+                    asset_map_viz.updateLayers("T_Stops","T_Lines")
                 }
 
                 if (asset_map_viz.Assets.lookUp[check] !== asset_map_viz.Assets.lookUp[currentValue]) {
@@ -653,7 +646,7 @@
                     if (asset_map_viz.Assets.lookUp[check] === "Highway") {
                         asset_map_viz.asset_viz = new LineVis(d3.select("#chart"), exits, "exits");
                         asset_map_viz.asset_viz1 = new LineVis(d3.select("#chart1"), indRoads, "Roads");
-                    } else if (asset_map_viz.Assets.lookUp[check] === "Transit") {
+                    } else if (check === "Bus" || check === "The-T") {
                         asset_map_viz.asset_viz = new LineVis(d3.select("#chart"), busStops, "Bus Stops");
                         asset_map_viz.asset_viz2 = new LineVis(d3.select("#chart1"), T_Stops, "T - Stops");
                     } else if (check === "Demographics") {
@@ -671,11 +664,13 @@
         });
     });
 
+    var q;
     $(document).ready(function(){
         $("#SpiderSelection").on("click", function(e){
-            if (e.target.type !== "range"){
-                d3.select("#theSpiderSVG").remove();
-                d3.select("#theSpiderHist").remove();
+            q = e.target
+            if (e.target !== "range" && ["Auto", "Transit", "Total"].indexOf(e.target.innerText) > -1){
+                console.log("it let me in ")
+                d3.selectAll(".spiderBar").remove();
                 d3.selectAll(".theSpiderLines").remove();
                 d3.selectAll(".centroids").remove();
                 spider_viz.changeMode(e.target)
@@ -696,13 +691,12 @@
     });
 
     function updateSpecialChart(check){
+        console.log("CHECK SPECIAL", check);
         $("#spNormal").val(0);
         group_char_viz.transitionVis();
-        var viz = asset_map_viz.Assets.lookUp[check];
-        console.log("VIZ", viz);
-        if (viz === "Highway") {
+        if (check === "Highway Exits" || check === "Roads") {
             group_char_viz.wrangleData(Demographics.groads)
-        } else if (viz === "Transit") {
+        } else if (check === "The-T" || check === "Bus") {
             group_char_viz.wrangleData(Demographics.gtlines)
         } else {
             group_char_viz.wrangleData(Demographics.gjobs)
@@ -781,6 +775,21 @@
             addWater(value, theMap);
 
 
+        } else if (sliderViz === "Lost") {
+            d3.selectAll(".theSpiderLines").remove();
+            d3.selectAll(".centroids").remove();
+
+            console.log("Current SPider Data",spider_viz.spiderData.current, "Value", value)
+            if (spider_viz.spiderData.current === "auto" && value > 1){
+                spider_viz.loaded(spider_viz.taz, spider_viz.spiderData[spider_viz.spiderData.current + value])
+            } else if (spider_viz.spiderData.current === "auto" && value == 1) {
+                console.log("IN HERERERRREERRREERRE")
+                d3.selectAll(".spiderBar").remove();
+            }
+            else {
+                spider_viz.loaded(spider_viz.taz, spider_viz.spiderData[spider_viz.spiderData.current + value])
+            }
+
         }
     }
 
@@ -805,12 +814,21 @@
 
         $('.Ttype').click(function(e){
             var clicked = e.target.innerText.trim();
-            e.target.innerText = clicked === "Ridership Increase | TOGGLE" ? "Ridership Decrease | TOGGLE" :
-                    clicked ===  "Ridership Decrease | TOGGLE"  ? "Ridership Increase | TOGGLE" : clicked;
             if (clicked === "Reset"){
                 street_viz.resetVis()
-            } else if (e.target.innerText === "Ridership Increase | TOGGLE"){
+            } else if (e.target.innerText === "View Water"){
+                street_viz.toggleWater(!StreetMapGlobals.viewWater);
+                StreetMapGlobals.viewWater = !StreetMapGlobals.viewWater;
+            } else if (clicked === 'Ridership Increase' || clicked === "Ridership Decrease"){
+                if (clicked === "Ridership Increase"){
+                    $("#RI").addClass("selectedButton");
+                    $("#RD").removeClass("selectedButton");
+                } else {
+                    $("#RD").addClass("selectedButton");
+                    $("#RI").removeClass("selectedButton");
+                }
 
+                StreetMapGlobals.gainOrLoss = clicked;
             }
         })
 
@@ -819,13 +837,15 @@
     //Acceessibility Click
     d3.select("body").selectAll(".Atype").on("click", function(d){
         var that = access_viz;
-        if ( this.innerText === "Cutoff Measure | TOGGLE" || this.innerText === "Gamma Measure | TOGGLE"){
-            if (this.innerText === "Cutoff Measure | TOGGLE") {
-                this.innerText = "Gamma Measure | TOGGLE";
-                accessUnits.method = "g";
-            } else if (this.innerText === "Gamma Measure | TOGGLE") {
-                this.innerText = "Cutoff Measure | TOGGLE";
+        if ( this.innerText === "Cutoff Measure" || this.innerText === "Gamma Measure"){
+            if (this.innerText === "Cutoff Measure") {
+                $("#CM").addClass("selectedButton");
+                $("#GM").removeClass("selectedButton");
                 accessUnits.method = "";
+            } else if (this.innerText === "Gamma Measure") {
+                $("#GM").addClass("selectedButton");
+                $("#CM").removeClass("selectedButton");
+                accessUnits.method = "g";
             }
             access = accessUnits[accessUnits.method + accessUnits.mode];
             that.wrangleData(access,+d3.select("#AccessSlider").property("value") )

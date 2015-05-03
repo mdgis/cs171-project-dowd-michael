@@ -1,13 +1,10 @@
-var gradient = golden;
-var currentAsset = null;
-
-
-//TODO Fix the on click bit, just have it change dimension not water level
 assetsGlobals = {
-    assetMap : null,
-    classify: null,
-    assetStyle: undefined,
-    showWater: true,
+    "gradient" : golden,
+    "currentAsset": null,
+    "assetMap" : null,
+    "classify": null,
+    "assetStyle": undefined,
+    "showWater": true,
     "highlightSlrFeatures" : function(level){
         var check = asset_map_viz.Assets.selected;
         if (check === "Roads" ){
@@ -18,9 +15,9 @@ assetsGlobals = {
                     layer.setStyle({color :'red', weight: 1});
                 }
             })
-        } else if (check === "Highway Exits" || check === "Bus Stops" || "Bus Lines" || "T-Stops"){
-            var asset = check === "Highway Exits" ? "exits" : check === "Bus Stops" ? "busStops" :
-                    check === "T-Stops" ? "T_Stops" : check === "Bus Lines" ?  "busLines" : undefined;
+        } else if (check === "Highway Exits" || check === "Bus" || "The-T"){
+            var asset = check === "Highway Exits" ? "exits" : check === "Bus" ? "busStops" :
+                    check === "The-T" ? "T_Stops"  : undefined;
             if (asset !== undefined){
                 asset_map_viz.Assets[asset].eachLayer(function(layer){
                     if (level === 0 ){
@@ -66,9 +63,23 @@ assetsGlobals = {
 
         layer.on('mouseover', function (e) {
             this.openPopup();
+
+            layer = e.target;
+            if (layer.feature.properties.DIRECTION ){
+                layer.setStyle({
+                    color: 'red'
+                })
+            }
+
         });
         layer.on('mouseout', function (e) {
             this.closePopup();
+            layer = e.target;
+            if (layer.feature.properties.DIRECTION ){
+                layer.setStyle({
+                    color: 'yellow'
+                })
+            }
         });
     },
 
@@ -94,16 +105,14 @@ AssetMapVis = function() {
 
 AssetMapVis.prototype.initViz = function(selected){
     var that = this;
-    currentAsset = selected;
+    assetsGlobals.currentAsset = selected;
 
     that.Assets = {
         "lookUp":{
             "Roads"         : "Highway",
             "Highway Exits" : "Highway",
-            "Bus Stops"     : "Transit",
-            "Bus Lines"     : "Transit",
-            "T-Stops"       : "Transit",
-            "T-Lines"       : "Transit",
+            "Bus"     : "Transit",
+            "The-T"     : "Transit",
             "Demographics"  : "Demographics"
         },
         "selected": "Demographics",
@@ -116,16 +125,28 @@ AssetMapVis.prototype.initViz = function(selected){
         }, onEachFeature: assetsGlobals.onEachFeature}),
         "busStops": L.geoJson(busStops, {style: function(feature) {
             return {color: "black"};}, pointToLayer: function(feature, latlng) {
-            return new L.CircleMarker(latlng, {radius: 4, fillOpacity: 0.85});
+            return new L.CircleMarker(latlng, {radius: 2, fillOpacity: 0.85});
         }, onEachFeature: assetsGlobals.onEachFeature}),
         "T_Lines":L.geoJson(mbtaArc, {style: styles.transitStyle, onEachFeature: assetsGlobals.onEachFeature}),
-        "T_Stops": L.geoJson(T_Stops, {style: function(feature) {
-            return {color: "steelBlue"};}, pointToLayer: function(feature, latlng) {
-            return new L.CircleMarker(latlng, {radius: 4, fillOpacity: 0.85});
+        "T_Stops": L.geoJson(T_Stops, {style: function(feature){
+            return Tstyle(feature)
+        },
+                pointToLayer: function(feature, latlng) {
+                    return new L.CircleMarker(latlng, {radius: 3, fill:"white"});
         }, onEachFeature: assetsGlobals.onEachFeature}),
-        "busLines":L.geoJson(transitLines, {onEachFeature: assetsGlobals.onEachFeature})
+        "busLines":L.geoJson(busLines, {style: function(feature){
+            return {weight: 2, color: "yellow", offset:100}
+        },onEachFeature: assetsGlobals.onEachFeature})
 
     };
+
+
+    function Tstyle(feature){
+        return {
+            color:"black", fill:"black", stroke: "black",weight:2, fillOpacity: 0.5
+        }
+    }
+
     that.wrangleDemData(Demographics.jobs, "jobs", 0);
 
     var legend = L.control( { position: 'bottomright' } );
@@ -153,7 +174,7 @@ AssetMapVis.prototype.updateVis = function() {
 AssetMapVis.prototype.wrangleDemData = function(dim, label, level) {
     var that = this;
     that.Assets.demoDim = label.toLowerCase();
-    gradient = label.toLocaleLowerCase() === "jobs" ? golden : label.toLocaleLowerCase() === "pop" ? bluish :
+    assetsGlobals.gradient = label.toLocaleLowerCase() === "jobs" ? golden : label.toLocaleLowerCase() === "pop" ? bluish :
         label.toLocaleLowerCase() === "hh" ? redish : golden;
     this.classMap = d3.map();
     Demographics[label.toLowerCase()].forEach(function (d) {
@@ -176,7 +197,7 @@ AssetMapVis.prototype.wrangleDemData = function(dim, label, level) {
     assetsGlobals.classify = chloroQuantile(this.classMap.values(), 8, "jenks");
     assetsGlobals.assetStyle = function (feature) {
         return {
-            fillColor: assetsGlobals.getColor(feature.properties.TAZ, gradient),
+            fillColor: assetsGlobals.getColor(feature.properties.TAZ, assetsGlobals.gradient),
             weight: 0.5,
             opacity: 1,
             color: 'white',
@@ -224,7 +245,7 @@ AssetMapVis.prototype.addDemLegend = function() {
         .attr("width", ls_w)
         .attr("height", ls_h)
         .style("fill", function(d, i) {
-                return gradient[i]
+                return assetsGlobals.gradient[i]
         })
         .style("opacity", 0.7);
 
@@ -241,10 +262,15 @@ AssetMapVis.prototype.toggleLegend = function(bool){
 };
 
 
-AssetMapVis.prototype.updateLayers = function(layer){
+AssetMapVis.prototype.updateLayers = function(layer, layer2){
     var that = this;
     that.Features.clearLayers();
-    that.Features.addLayer(that.Assets[layer]);
+    if (layer2){
+        that.Features.addLayer(that.Assets[layer2]);
+        that.Features.addLayer(that.Assets[layer]);
+    } else {
+        that.Features.addLayer(that.Assets[layer])
+    }
     that.updateVis();
 };
 

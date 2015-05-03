@@ -344,3 +344,11 @@ div.accessTip {
     /*background: url(') center no-repeat #fff;*/
 }
 
+.selectedButton{
+    border-bottom: 2px solid red;
+}
+
+.fillerButton{
+    border-bottom: none;
+    border-top: none;
+}

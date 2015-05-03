@@ -1,6 +1,6 @@
 /* Accessibility map2 Visualization */
 //TODO maybe set up an enter exit update on the histogram
-accessVizGlobals = {};
+accessVizGlobals = {"current":null};
 
 AccessVis = function(_parentElement, _classLabel){
     this.parentElement = _parentElement;
@@ -39,7 +39,7 @@ AccessVis.prototype.initVis = function() {
 
         return div
     };
-    Alegend.addTo(map2)
+    Alegend.addTo(map2);
 
     $('.leaflet-container').css('cursor','default');
     this.wrangleData(access, 0);
@@ -152,15 +152,15 @@ AccessVis.prototype.wrangleData = function(access, level){
     var that = this;
     d3.select("#theAccessHist").remove();
     //Control For First Case Situations
-    var first = current === null;
-    if(!current){ current = accessUnits.auto }
+    var first = accessVizGlobals.current === null;
+    if(!accessVizGlobals.current){ accessVizGlobals.current = accessUnits.auto }
 
     that.mode = access === accessUnits[accessUnits.method+"auto"] ? "a" :
         access === accessUnits[accessUnits.method+"transit"] ? "t" : "w";
 
-    if (Object.keys(current[0])[1] !== Object.keys(access[0])[1]){
+    if (Object.keys(accessVizGlobals.current[0])[1] !== Object.keys(access[0])[1]){
         that.max = 0;
-        that.current = access
+        accessVizGlobals.currentt = access
     }
     that.columns = Object.keys(access[0]);
     that.columns.splice(that.columns.indexOf("Z"),1);
@@ -171,8 +171,8 @@ AccessVis.prototype.wrangleData = function(access, level){
         that.rateByTAZ.set(Math.floor(d.Z), +d[level]); });
 
 
-    if (current !== access || first){
-        current = access;
+    if (accessVizGlobals.current !== access || first){
+        accessVizGlobals.current = access;
         that.classify = chloroQuantile(that.rateByTAZ.values(), 8, "jenks");}
     that.updateVis()
     that.accessHist(that.mode);
@@ -181,7 +181,7 @@ AccessVis.prototype.wrangleData = function(access, level){
 
 
 AccessVis.prototype.addLegend = function() {
-    that = this;
+    var that = this;
     d3.selectAll(".accessLegendRect").remove();
     d3.selectAll(".accessLegendSVG").remove();
     var legendData = that.classify.slice(0);
@@ -276,7 +276,7 @@ AccessVis.prototype.accessHist = function(mode){
 
     bar.append("rect")
         .attr("x", 1)
-        .attr("width", function(d){return (width/50)-2})
+        .attr("width", function(d){return (width/50)-4})
         .attr("height", function(d) { return height - y(d.y); })
         .attr("class", function(d){
             return that.manualColor(d[0]);
@@ -321,7 +321,6 @@ AccessVis.prototype.accessHist = function(mode){
 
 AccessVis.prototype.brushMap = function(extent){
     var that = this;
-
     var selectedPaths = d3.selectAll(".Z");
     if (extent[0]===extent[1]) {
         selectedPaths.classed("hide", false)

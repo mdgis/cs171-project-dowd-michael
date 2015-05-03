@@ -1,3 +1,5 @@
+//TODO redundantly encode volume map4
+
 TopoStreetMapVis = function(_map, _data){
     this.map = _map;
     this.collection = _data;
