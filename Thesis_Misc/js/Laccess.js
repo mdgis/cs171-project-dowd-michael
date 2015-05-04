@@ -28,6 +28,7 @@ AccessVis.prototype.projectPoint =function(x, y) {
 AccessVis.prototype.initVis = function() {
     var that = this;
     //D3 Overlay Stuff
+    $("#CM").addClass("selectedButton");
     accessVizGlobals.svg = d3.select(map2.getPanes().overlayPane).append("svg");
     accessVizGlobals.g = accessVizGlobals.svg.append("g").attr("class", "leaflet-zoom-hide");
     this.transform = d3.geo.transform({point: that.projectPoint});
@@ -153,7 +154,7 @@ AccessVis.prototype.wrangleData = function(access, level){
     d3.select("#theAccessHist").remove();
     //Control For First Case Situations
     var first = accessVizGlobals.current === null;
-    if(!accessVizGlobals.current){ accessVizGlobals.current = accessUnits.auto }
+    if(!accessVizGlobals.current){ accessVizGlobals.current = accessUnits.cauto }
 
     that.mode = access === accessUnits[accessUnits.method+"auto"] ? "a" :
         access === accessUnits[accessUnits.method+"transit"] ? "t" : "w";
@@ -174,7 +175,7 @@ AccessVis.prototype.wrangleData = function(access, level){
     if (accessVizGlobals.current !== access || first){
         accessVizGlobals.current = access;
         that.classify = chloroQuantile(that.rateByTAZ.values(), 8, "jenks");}
-    that.updateVis()
+    that.updateVis();
     that.accessHist(that.mode);
 };
 

@@ -129,7 +129,7 @@ LineVis.prototype.initVis = function() {
 
     this.displayData = d3.zip(d3.range(6), that.slrCounts);
     this.x.domain(d3.range(6));
-    this.updateVis(false)
+    this.updateVis(false);
 
     that.svg.append("path")
         .attr("class", "line asset")
@@ -173,9 +173,22 @@ LineVis.prototype.updateVis = function(normal){
 
     }
 
+
     that.yAxis = d3.svg.axis()
         .scale(that.y)
-        .orient("left");
+        .orient("left")
+        .tickFormat(function(d){
+            if (!normal){
+                return d3.format("0,000")(d)
+            } else {
+                if (String(d*100).length > 4 && d*100 < 1){
+                    return (d*100).toFixed(3) + "%"
+                }
+                else {
+                    return (d*100).toFixed() + "%"
+                }
+            }
+        });
 
     that.svg.select(".y.axis").transition().duration(750).call(this.yAxis);
     // updates axis

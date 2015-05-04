@@ -3,6 +3,7 @@
  */
 //TODO add legend
 var spider_viz = null;
+spiderVizGlobals = {spiderBrush:null, spiderMode:"Auto"};
 SpiderViz = function(_parentElement){
     this.parentElement = _parentElement;
     this.Mtaz = null;
@@ -30,9 +31,16 @@ SpiderViz = function(_parentElement){
         .defer(d3.csv, "data/spider/total4ftClean.csv")
         .defer(d3.csv, "data/spider/total5ftClean.csv")
         .defer(d3.csv, "data/spider/total6ftClean.csv")
-
         .await(this.ready);
 
+    //Initialize Legend
+    var Slegend = L.control( { position: 'bottomright' } );
+    Slegend.onAdd = function (map) {
+        var div = L.DomUtil.create('div', 'spiderLegend');
+        console.log("add the spider div")
+        return div
+    };
+    Slegend.addTo(map4);
 };
 
 SpiderViz.prototype.ready = function(error,taz,auto2,auto3,auto4,auto5,auto6,pt1,pt2,pt3,pt4,pt5,pt6,t1,t2,t3,t4,t5,t6) {
@@ -74,9 +82,14 @@ SpiderViz.prototype.initVis = function(){
         .domain([10,that.vMax])
         .range([.1,.8]);
 
+    that.transitDomain = [25,50,100,250,500, 750, that.vMax];
+    that.autoDomain = [50,250,500,1000,3000,5000,that.vMax];
+
+    that.lineDomain = spiderVizGlobals.mode === "Transit" ? that.transitDomain : that.autoDomain;
+    that.colorDomain = ["black","purple","darkblue","blue","red", "orange", "yellow"];
     that.color = d3.scale.linear()
-        .domain([50,250,500,1000,3000,5000,that.vMax])
-        .range(["black","purple","darkblue","blue","red", "orange", "yellow"]);
+        .domain(that.lineDomain)
+        .range(that.colorDomain);
 
 
     that.featureLine = that.g.append("g").attr("class","spiderLines").attr("class", "leaflet-zoom-hide")
@@ -140,6 +153,7 @@ SpiderViz.prototype.initVis = function(){
         that.featureLine.attr("d", that.path);
     }
 
+
     that.updateSpiderHist();
 };
 
@@ -166,6 +180,7 @@ SpiderViz.prototype.projectPoint = function (x, y) {
 };
 
 SpiderViz.prototype.loaded = function(taz, spider) {
+    console.log("in Loaded")
     var that = spider_viz;
     that.Mtaz = taz;
     that.links = [];
@@ -202,7 +217,7 @@ SpiderViz.prototype.loaded = function(taz, spider) {
     });
 
     that.initVis();
-
+    that.addLegend();
 
 };
 
@@ -300,13 +315,14 @@ SpiderViz.prototype.updateSpiderHist = function(){
 
     that.SPHjoin.exit().remove();
 
+    spiderVizGlobals.spiderBrush = d3.svg.brush;
+
     that.spiderHistSvg.append("g")
-        .attr("class", "brush")
-        .call(d3.svg.brush().x(that.SPHx)
+        .attr("class", "brush spider")
+        .call(spiderVizGlobals.spiderBrush().x(that.SPHx)
             .on("brush", brushed))
         .selectAll("rect")
         .attr("height", that.SPHheight);
-
 
 
 
@@ -318,7 +334,7 @@ SpiderViz.prototype.updateSpiderHist = function(){
 
     that.spiderHistSvg.select(".y.axis")
         .transition().duration(750)
-        .call(that.SPHyAxis)
+        .call(that.SPHyAxis);
 
 
     that.spiderHistSvg.select(".x.axis")
@@ -332,13 +348,62 @@ SpiderViz.prototype.updateSpiderHist = function(){
 SpiderViz.prototype.changeMode = function(e){
     var that = this;
     var level = $("#LostSlider").val();
+    d3.selectAll("g.brush.spider").remove();
     var spider = e.innerText === "Auto" ? "auto"  :
         e.innerText === "Transit" ? "pt" :
             e.innerText === "Total" ? "t" :
             null;
+    //accessVizGlobals.accessBrush().clear();
+    //spiderVizGlobals.spiderBrush().clear();
     d3.selectAll(".spiderBar").remove();
     if (spider !== null){
+        spiderVizGlobals.mode = e.innerText; //Used to pick the correct domain in next steps
         that.spiderData.current = spider;
+        d3.selectAll(".spiderLegendRect").remove();
+        d3.selectAll(".spiderLegendSVG").remove();
         that.loaded(that.taz, that.spiderData[spider+level]);
     }
+
+
+
+};
+
+
+SpiderViz.prototype.addLegend = function() {
+    console.log("adding legend")
+    var that = this;
+
+    var legendData = that.lineDomain;
+    var legendHeight = 200;
+    var legend = d3.select(".spiderLegend")
+        .append("svg")
+        .attr("class","spiderLegendSVG")
+        .attr("width",100)
+        .attr("height",legendHeight)
+        .append("g")
+        .attr("transform", "translate(0,0)")
+        .selectAll("g.accessLegend")
+        .data(legendData.reverse())
+        .enter()
+        .append("g")
+        .attr("class", "spiderLegend");
+
+    var ls_w = 30, ls_h = 20;
+
+    legend.append("rect")
+        .attr("class","spiderLegendRect")
+        .attr("x", 10)
+        .attr("y", function(d, i){ return legendHeight - (i*ls_h) - 2*ls_h;})
+        .attr("width", ls_w)
+        .attr("height", ls_h)
+        .attr("fill", function(d, i) {
+            return that.color(d)
+        })
+        .style("opacity", 0.6);
+
+    legend.append("text")
+        .attr("x", 50)
+        .attr("y", function(d, i){ return legendHeight - (i*ls_h) - ls_h - 4;})
+        .text(function(d, i){ return "-" + legendData[i].toFixed() });
+
 };

@@ -153,9 +153,13 @@ AssetVis.prototype.updateVis = function(first){
     } else {
         this.y.domain([0, d3.max(this.displayData, function(d) { return d })]);}
 
+
+    this.format = this.normal ? d3.format("%") : d3.format("0,000");
+
     this.yAxis = d3.svg.axis()
         .scale(this.y)
-        .orient("left");
+        .orient("left")
+        .tickFormat(this.format);
 
     // updates axis
     this.svg.select(".x.axis").call(this.xAxis)

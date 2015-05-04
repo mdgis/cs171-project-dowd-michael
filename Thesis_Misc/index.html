@@ -10,6 +10,7 @@
     <script src="libs/leaflet-0.7.3/leaflet.js"></script>
     <script src="packages/simple_statistics.js"></script>
     <script src="libs/jquery/jquery-ui.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
 
     <!-- My Tools -->
@@ -385,7 +386,12 @@
                             <h4 class="modal-title" id="assetModalLabel">Inundated Assets</h4>
                         </div>
                         <div class="modal-body">
-                            ...
+                            <h2>Use:</h2>
+                            <ul>
+                                <li>Blah</li>
+                                <li>Blah</li>
+                                <li>Blah</li>
+                            </ul>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -403,8 +409,23 @@
                             <h4 class="modal-title" id="myModalLabel">Transit Ridership</h4>
                         </div>
                         <div class="modal-body">
-                            <h3>Thish is some heading</h3>
-                            <p>Thisis is s some discussions ballahbhajbajhs husdfu sjhbfjs sdj </p>
+                            <h3>Use of This Visualization</h3>
+                            <p></p>
+                            <h4>Ridership Increase</h4>
+                            <p>When this button is selected ....</p>
+                            <h4>Ridership Decrease</h4>
+                            <p>When this button is selected ....</p>
+
+                            <h3>Main Takeaways</h3>
+                            <ul>
+                                <li>Provides opportunity to see shifts in route choice given inundation in the area and on the network.</li>
+                                <li></li>
+                                <li></li>
+                                <li></li>
+                             </ul>
+
+
+
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -422,6 +443,19 @@
                         <h4 class="modal-title" id="lostModalLabel">Accessibility Stuff</h4>
                     </div>
                     <div class="modal-body">
+
+                        <p>$$Jobs\ Impedance\ Accessibility_i =$$</p>
+
+                        <p>
+                            $$\sum \frac{Jobs_i}{\sum^{j=1}_{j=986} Jobs_i} * TravelTime^{-.503} * e^{-0.078 * TravelTime_{ij}} $$
+                        </p>
+
+                        <p>$$Jobs\ Cutoff\ Accessibility_i =$$</p>
+                        <p>
+                            $$\sum \frac{Jobs_i}{\sum^{i=1}_{i=986} Jobs_j} $$
+                        </p>
+                        <p>$$ Where \ Travel \ Time \ to \ Any \ Zone \ j < \; 60  \; Minutes $$</p>
+
 
                     </div>
                     <div class="modal-footer">
@@ -526,7 +560,7 @@
     };
 
     var accessUnits = {
-      "method": "",
+      "method": "c",
       "mode": "auto",
       "auto": null,
       "transit" : null,
@@ -598,9 +632,9 @@
 
     function ready(error, theTaz, Qjobs, Qhh, Qpop, Qtazarea, Qauto, Qtransit, Qwalk, QGauto, QGtransit, QGwalk,  Qgrjobs, Qnet0, Qgroads, Qgtlines) {
         data = theTaz;
-        accessUnits.auto = Qauto;
-        accessUnits.transit = Qtransit;
-        accessUnits.walk = Qwalk;
+        accessUnits.cauto = Qauto;
+        accessUnits.ctransit = Qtransit;
+        accessUnits.cwalk = Qwalk;
         accessUnits.gauto = QGauto;
         accessUnits.gwalk = QGtransit;
         accessUnits.gtransit = QGwalk;
@@ -682,7 +716,7 @@
         street_viz = new StreetMapVis("map");
         //Access Map Stuff
         assetsGlobals.current = null;
-        access = accessUnits.auto;
+        access = accessUnits.cauto;
         access_viz = new AccessVis(d3.select("#map2"), "Access");
         //Asset Map
         asset_map_viz = new AssetMapVis();
@@ -837,11 +871,17 @@
         });
         //Lost Trip Buttons
         $("#SpiderSelection").on("click", function(e){
+            console.log('e target', e.target)
             if (e.target !== "range" && ["Auto", "Transit", "Total"].indexOf(e.target.innerText) > -1){
-                d3.selectAll(".spiderBar").remove();
-                d3.selectAll(".theSpiderLines").remove();
-                d3.selectAll(".centroids").remove();
-                spider_viz.changeMode(e.target)
+                if ($("#LostSlider").val() == "1" && e.target.innerText === "Auto" ){
+                    //do nothing - no lost trips for auto at 1ft
+                } else {
+                    console.log("in the spider button click", e.target.innerText);
+                    d3.selectAll(".spiderBar").remove();
+                    d3.selectAll(".theSpiderLines").remove();
+                    d3.selectAll(".centroids").remove();
+                    spider_viz.changeMode(e.target)
+                }
             }
         });
         //Road Network Buttons
@@ -866,7 +906,8 @@
                 if (d.target.innerText === "Cutoff Measure") {
                     $("#CM").addClass("selectedButton");
                     $("#GM").removeClass("selectedButton");
-                    accessUnits.method = "";
+
+                    accessUnits.method = "c";
                 } else if (d.target.innerText === "Gamma Measure") {
                     $("#GM").addClass("selectedButton");
                     $("#CM").removeClass("selectedButton");
