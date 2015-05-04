@@ -10,8 +10,7 @@
     <script src="libs/leaflet-0.7.3/leaflet.js"></script>
     <script src="packages/simple_statistics.js"></script>
     <script src="libs/jquery/jquery-ui.js"></script>
-    <script src="libs/csvtotable/js/jquery.csvToTable.js"></script>
-    <script src="libs/stickyHeader/js/jquery.stickytableheaders.min.js"></script>
+
 
     <!-- My Tools -->
     <script src="js/chloroClass.js"></script>
@@ -47,7 +46,7 @@
 
     <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
     <link rel="stylesheet" type="text/css" href="libs/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="libs/leaflet-0.7.3/leaflet.css" />
+    <link rel="stylesheet" href="libs/leaflet-0.7.3/leaflet.css"/>
     <link rel="stylesheet" type="text/css" href="css/mycss.css">
     <link rel="stylesheet" type="text/css" href="css/sidebar.css">
 
@@ -80,10 +79,9 @@
 </head>
 
 <body>
-
 <div id="wrapper" class="toggled">
     <!--BLUR ON LOAD-->
-    <div class="se-pre-con" >Loading</div>
+
 
     <!--************  THE SIDEBAR ************-->
     <div id="sidebar-wrapper">
@@ -110,7 +108,7 @@
                 <a href="#">Process Book</a>
             </li>
             <li>
-                <a href="#">Use Video</a>
+                <a href="#" data-toggle="modal" data-target="#accessModal" >Use Video</a>
             </li>
         </ul>
     </div>
@@ -123,12 +121,16 @@
     </div>
 
     <!--************ EVERYTHING THE SIDEBAR ************-->
+    <div class="se-pre-con">Loading</div>
+
     <div id="allButMenu">
     <!--IN HERE IS WHERE THE VIZS LIVE-->
 
         <!--************ INUNDATED ASSETS ************-->
         <div class="row clearfix" id="assetMaster">
             <div class="col-md-12 column" id = "Bar">
+
+
                 <h1>Visualizing Inundation Impacts on Transportation Networks</h1>
                 <h2>Inundated Assets</h2>
                     <div class="btn-group-horizontal btn-group" id = "AssetSelection">
@@ -157,6 +159,8 @@
                             </ul>
                          </div>
                         <button type="button" class="btn btn-default waterSelect" value = 0 id = "assetWater">Water</button>
+                        <button type="button" class="btn btn-default fillerButton"></button>
+                        <button type="button" class="btn btn-default " data-toggle="modal" data-target="#assetModal">?</button>
                      </div>
                  </div>
             </div>
@@ -214,6 +218,9 @@
                     <button type="button" class="btn btn-default  Ttype">View Water</button>
                     <button type="button" class="btn btn-default searchType Ttype" id = "RI">Ridership Increase</button>
                     <button type="button" class="btn btn-default searchType Ttype" id = "RD">Ridership Decrease</button>
+                    <button type="button" class="btn btn-default fillerButton"></button>
+                    <button type="button" class="btn btn-default " data-toggle="modal" data-target="#transitRidershipModal">?</button>
+
                 </div>
             </div>
         </div>
@@ -235,7 +242,7 @@
                 </div>
             </div>
         </div>
-
+        <!--*************************** ACCESSIBILITY CHANGE ***************************-->
         <div class="row clearfix">
             <div class="col-md-12 column intro" >
                 <p>
@@ -259,6 +266,9 @@
                     <button type="button" class="btn btn-default fillerButton"></button>
                     <button type="button" id ="CM" class="btn btn-default accessMethod Atype">Cutoff Measure</button>
                     <button type="button" id ="GM" class="btn btn-default accessMethod Atype">Gamma Measure</button>
+                    <button type="button" class="btn btn-default fillerButton"></button>
+                    <button type="button" class="btn btn-default "  data-toggle="modal" data-target="#accessModal">?</button>
+
 
                 </div>
 
@@ -314,6 +324,9 @@
                     <button type="button" class="btn btn-default  Stype" id = "SpiderA">Auto</button>
                     <button type="button" class="btn btn-default  Stype" id = "SpiderT">Transit</button>
                     <button type="button" class="btn btn-default Stype" id  = "SpiderTot">Total</button>
+                    <button type="button" class="btn btn-default fillerButton"></button>
+                    <button type="button" class="btn btn-default " data-toggle="modal" data-target="#lostTripsModal">?</button>
+
                 </div>
             </div>
             <!--Spider Map-->
@@ -337,8 +350,11 @@
                         <span>Inundation Level :&nbsp;</span>
                         <span id="Netrange">0ft</span>
                     </div>
-                    <button type="button" class="btn btn-default" class="netType" value = "V">Volumes</button>
-                    <button type="button" class="btn btn-default" class="netType" value = "q">Queues</button>
+                    <button type="button" class="btn btn-default netType" id = "netV" value = "V">Volumes</button>
+                    <button type="button" class="btn btn-default netType" id = "netq" value = "q">Queues</button>
+                    <button type="button" class="btn btn-default fillerButton"></button>
+                    <button type="button" class="btn btn-default " data-toggle="modal" data-target="#autoNetModal">?</button>
+
                 </div>
             </div>
 
@@ -358,10 +374,105 @@
         <!--END ALL BUT THE MENU-->
     </div>
 
+    <!--*****************************************-->
+    <!--******************MODALS****************-->
+    <!-- Inundated Assets Modal -->
+            <div class="modal fade" id="assetModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="assetModalLabel">Inundated Assets</h4>
+                        </div>
+                        <div class="modal-body">
+                            ...
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transit Ridership Trips Modal -->
+            <div class="modal fade" id="transitRidershipModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">Transit Ridership</h4>
+                        </div>
+                        <div class="modal-body">
+                            <h3>Thish is some heading</h3>
+                            <p>Thisis is s some discussions ballahbhajbajhs husdfu sjhbfjs sdj </p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        <!-- Accessibility Trips Modal -->
+        <div class="modal fade" id="accessModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="lostModalLabel">Accessibility Stuff</h4>
+                    </div>
+                    <div class="modal-body">
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lost Trips Modal -->
+        <div class="modal fade" id="lostTripsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Lost Trips</h4>
+                    </div>
+                    <div class="modal-body">
+                        ...
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Auto Network  Modal -->
+        <div class="modal fade" id="autoNetModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Auto Network Stuff</h4>
+                    </div>
+                    <div class="modal-body">
+                        ...
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
 </div>
 </body>
 
 <script>
+    //TODO change all normalized chart axes to percentages
     var test;
     var data;
     var access;
@@ -578,7 +689,7 @@
         group_char_viz = new GroupChartVis("#context");
         //Spider Map
         spider_viz = new SpiderViz(map4);
-        traffic_map = new TopoStreetMapVis(map5, nets.n0);
+        traffic_map = new NetViz(map5, nets.n0);
 
         //END READY FUNCTION
     }
@@ -592,9 +703,8 @@
             access_viz.showValue(value)
         } else if (sliderViz === "Net" ){
             var val = $("#netSlider").val();
-            var attribute = $("#netType").val();
             var data = nets["n"+val];
-            traffic_map.updateVis(data, attribute)
+            traffic_map.updateVis(data, netVizGlobals.attribute)
         } else if (sliderViz === "Asset" ){
             if(asset_map_viz.Assets.selected === "Demographics" )
             {
@@ -641,11 +751,11 @@
         $("#spNormal").val(0);
         group_char_viz.transitionVis();
         if (check === "Highway Exits" || check === "Roads") {
-            group_char_viz.wrangleData(Demographics.groads)
+            group_char_viz.wrangleData(Demographics.groads, groupCharGlobals.label.Highway)
         } else if (check === "The-T" || check === "Bus") {
-            group_char_viz.wrangleData(Demographics.gtlines)
+            group_char_viz.wrangleData(Demographics.gtlines, groupCharGlobals.label.Transit)
         } else {
-            group_char_viz.wrangleData(Demographics.gjobs)
+            group_char_viz.wrangleData(Demographics.gjobs, groupCharGlobals.label.Demographics)
 
         }
     }
@@ -691,11 +801,13 @@
                     updateSpecialChart(check);
 
                     if (asset_map_viz.Assets.lookUp[check] === "Highway") {
-                        asset_map_viz.asset_viz = new LineVis(d3.select("#chart"), exits, "exits");
-                        asset_map_viz.asset_viz1 = new LineVis(d3.select("#chart1"), indRoads, "Roads");
+                        asset_map_viz.asset_viz = new LineVis(d3.select("#chart"), exits, "Highway Exits",true);
+                        asset_map_viz.asset_viz2 = new LineVis(d3.select("#chart1"), assetsGlobals.roadTotals, "Roads",false);
                     } else if (check === "Bus" || check === "The-T") {
-                        asset_map_viz.asset_viz = new LineVis(d3.select("#chart"), busStops, "Bus Stops");
-                        asset_map_viz.asset_viz2 = new LineVis(d3.select("#chart1"), T_Stops, "T - Stops");
+                        asset_map_viz.asset_viz = new LineVis(d3.select("#chart"), busStops, "Bus Stops", true);
+                        asset_map_viz.asset_viz2 = new LineVis(d3.select("#chart1"), T_Stops, "T - Stops",true);
+                        asset_map_viz.asset_viz3 = new LineVis(d3.select("#chart2"), assetsGlobals.tLineTotals, "T - Lines Sq.Miles",false);
+                        asset_map_viz.asset_viz4 = new LineVis(d3.select("#chart3"), assetsGlobals.busLineTotals, "Bus Lines Sq.Miles",false);
                     } else if (check === "Demographics") {
                         $("#AssetDM").addClass("selectedButton");
                         asset_map_viz.asset_viz = new AssetVis(d3.select("#chart"), Demographics.jobs, "Jobs");
@@ -737,8 +849,15 @@
             var check = e.target.innerText;
             var value = $("#netSlider").val();
             var data = nets["n"+ value];
-            var attribute = check === "Volumes" ? "q" : "V";
-            traffic_map.updateVis(data,attribute)
+            netVizGlobals.attribute = check === "Queues" ? "q" : "V";
+            if (netVizGlobals.attribute === "V"){
+                $("#netV").addClass("selectedButton");
+                $("#netq").removeClass("selectedButton");
+            } else{
+                $("#netq").addClass("selectedButton");
+                $("#netV").removeClass("selectedButton");
+            }
+            traffic_map.updateVis(data,netVizGlobals.attribute)
         });
         //Acceessibility Buttons
         $(".Atype").on("click", function(d){
@@ -830,11 +949,13 @@
     }
 
     function normalSpecial(){
-        var selected = $("#spNormal");
-        var currentVal = +selected.val();
-        currentVal += 1;
-        selected.val(currentVal);
-        group_char_viz.updateVis(true, currentVal);
+        groupCharGlobals.normal = !groupCharGlobals.normal
+        if (groupCharGlobals.normal) {
+            d3.select("#groupYlabel").classed("hide", true);  //If normalized then hide axis unti label
+        } else {
+            d3.select("#groupYlabel").classed("hide", false); //Else show the unit label
+        }
+        group_char_viz.updateVis(true, groupCharGlobals.normal);
     }
 
     function normalCharts(){

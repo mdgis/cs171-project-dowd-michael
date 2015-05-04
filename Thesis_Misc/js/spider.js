@@ -1,6 +1,7 @@
 /**
  * Created by mdowd on 4/10/15.
  */
+//TODO add legend
 var spider_viz = null;
 SpiderViz = function(_parentElement){
     this.parentElement = _parentElement;
@@ -117,7 +118,6 @@ SpiderViz.prototype.initVis = function(){
     // Reposition the SVG to cover the features.
     function reset() {
         var that = spider_viz;
-        console.log("that", that)
         var bounds = that.path.bounds(topojson.feature(that.Mtaz, that.Mtaz.objects.tazCenter)),
             topLeft = bounds[0],
             bottomRight = bounds[1];
@@ -166,7 +166,6 @@ SpiderViz.prototype.projectPoint = function (x, y) {
 };
 
 SpiderViz.prototype.loaded = function(taz, spider) {
-    console.log("Spider", spider)
     var that = spider_viz;
     that.Mtaz = taz;
     that.links = [];
@@ -240,20 +239,33 @@ SpiderViz.prototype.initSpiderHist = function(){
         .scale(that.SPHy)
         .orient("left");
 
+
+
     that.spiderHistSvg.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0," + that.SPHheight + ")")
-        .call(that.SPHxAxis);
+        .call(that.SPHxAxis)
+        .append("text")
+        .attr("x", 25)
+        .attr("y", 18)
+        .attr("dy", ".71em")
+        .style("text-anchor", "end")
+        .text("Value");
+
 
     that.spiderHistSvg.append("g")
         .attr("class", "y axis")
-        .call(that.SPHyAxis);
+        .call(that.SPHyAxis)
+        .append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 6)
+        .attr("dy", ".71em")
+        .style("text-anchor", "end")
+        .text("Frequency");
 };
 
 SpiderViz.prototype.updateSpiderHist = function(){
-    console.log("update spider hist");
     var that = this;
-    console.log("spider data", that.spiderHistVals);
     that.SPHx.domain([d3.min(that.spiderHistVals), d3.max(that.spiderHistVals)]);
 
     d3.selectAll(".spiderBar").remove();
@@ -265,8 +277,6 @@ SpiderViz.prototype.updateSpiderHist = function(){
     that.SPHy
         .domain([0, 10 + d3.max(that.SPHdata, function(d) { return d.y; })])
         .range([that.SPHheight, 0]);
-
-    console.log(that.SPHy.domain());
 
     that.SPHjoin = that.spiderHistSvg.selectAll(".spiderBar")
         .data(that.SPHdata);
@@ -280,10 +290,6 @@ SpiderViz.prototype.updateSpiderHist = function(){
     that.SPHbar.append("rect")
         .attr("x", function(d){return that.SPHx(d.x)});
 
-
-
-
-    console.log("HIST", that.SPHdata)
     that.SPHjoin.selectAll("rect").transition().duration(500)
         .attr("y", function(d){return that.SPHy(d.y)})
         .attr("width", function(d){return Math.ceil(that.SPHwidth/100)-1})
@@ -303,6 +309,8 @@ SpiderViz.prototype.updateSpiderHist = function(){
 
 
 
+
+
     function brushed() {
         var s = d3.event.target.extent();
         that.updateVis(s);
@@ -310,11 +318,13 @@ SpiderViz.prototype.updateSpiderHist = function(){
 
     that.spiderHistSvg.select(".y.axis")
         .transition().duration(750)
-        .call(that.SPHyAxis);
+        .call(that.SPHyAxis)
+
 
     that.spiderHistSvg.select(".x.axis")
         .transition().duration(750)
         .call(that.SPHxAxis);
+
 
 
 };
@@ -322,13 +332,11 @@ SpiderViz.prototype.updateSpiderHist = function(){
 SpiderViz.prototype.changeMode = function(e){
     var that = this;
     var level = $("#LostSlider").val();
-    console.log("e.inner.text", e.innerText);
     var spider = e.innerText === "Auto" ? "auto"  :
         e.innerText === "Transit" ? "pt" :
             e.innerText === "Total" ? "t" :
             null;
-    console.log("spider", spider, "Level", level);
-    d3.selectAll(".spiderBar").remove()
+    d3.selectAll(".spiderBar").remove();
     if (spider !== null){
         that.spiderData.current = spider;
         that.loaded(that.taz, that.spiderData[spider+level]);
