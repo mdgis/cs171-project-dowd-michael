@@ -41,6 +41,9 @@ SpiderViz = function(_parentElement){
         return div
     };
     Slegend.addTo(map4);
+
+    //Make Iniitial Button Selection
+    $("#spAuto").addClass("selectedButton");
 };
 
 SpiderViz.prototype.ready = function(error,taz,auto2,auto3,auto4,auto5,auto6,pt1,pt2,pt3,pt4,pt5,pt6,t1,t2,t3,t4,t5,t6) {
@@ -362,6 +365,12 @@ SpiderViz.prototype.changeMode = function(e){
         d3.selectAll(".spiderLegendRect").remove();
         d3.selectAll(".spiderLegendSVG").remove();
         that.loaded(that.taz, that.spiderData[spider+level]);
+
+       $("#spAuto").removeClass("selectedButton");
+       $("#spTransit").removeClass("selectedButton");
+       $("#spTotal").removeClass("selectedButton");
+       $("#sp" +spiderVizGlobals.mode).addClass("selectedButton");
+
     }
 
 

@@ -5,15 +5,43 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="10c83956-f360-4252-aa0d-ae77d8c087e2" name="Default" comment="Sunday">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Thesis_Misc/js/Laccess.js" afterPath="$PROJECT_DIR$/Thesis_Misc/js/Laccess.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Thesis_Misc/js/LineCharts.js" afterPath="$PROJECT_DIR$/Thesis_Misc/js/LineCharts.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Thesis_Misc/js/chart.js" afterPath="$PROJECT_DIR$/Thesis_Misc/js/chart.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Thesis_Misc/js/groupedChart.js" afterPath="$PROJECT_DIR$/Thesis_Misc/js/groupedChart.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Thesis_Misc/data/img/Preloader_10.gif" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Thesis_Misc/data/img/Preloader_6.gif" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Thesis_Misc/css/close.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Thesis_Misc/css/spinner.gif" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Thesis_Misc/libs/activity-indicator-1.0.0/README" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Thesis_Misc/data/TransitLines.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Thesis_Misc/data/assets/busLines copy.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Thesis_Misc/data/spider/diffAuto1ft.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Thesis_Misc/data/spider/diffAuto2ft.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Thesis_Misc/data/spider/diffAuto2ftClean.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Thesis_Misc/data/spider/diffAuto3ftClean.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Thesis_Misc/data/spider/diffAuto4ftClean.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Thesis_Misc/data/spider/diffAuto5ftClean.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Thesis_Misc/data/spider/diffAuto6ftClean.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Thesis_Misc/data/spider/diffpt1ftClean.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Thesis_Misc/data/spider/diffpt2ftClean.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Thesis_Misc/data/spider/diffpt3ftClean.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Thesis_Misc/data/spider/diffpt4ftClean.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Thesis_Misc/data/spider/diffpt5ftClean.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Thesis_Misc/data/spider/diffpt6ftClean.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Thesis_Misc/libs/activity-indicator-1.0.0/index.html" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Thesis_Misc/libs/activity-indicator-1.0.0/jquery.activity-indicator-1.0.0.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Thesis_Misc/libs/activity-indicator-1.0.0/jquery.activity-indicator-1.0.0.min.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Thesis_Misc/data/test.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Thesis_Misc/data/spider/total1ftClean.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Thesis_Misc/data/spider/total2ftClean.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Thesis_Misc/data/spider/total3ftClean.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Thesis_Misc/data/spider/total4ftClean.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Thesis_Misc/data/spider/total5ftClean.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Thesis_Misc/data/spider/total6ftClean.csv" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/Thesis_Misc/data/transitLineSummary.csv" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Thesis_Misc/libs/polyLineOffset.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/Thesis_Misc/libs/spin.js" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Thesis_Misc/index.html" afterPath="$PROJECT_DIR$/Thesis_Misc/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Thesis_Misc/indexBuses.html" afterPath="$PROJECT_DIR$/Thesis_Misc/indexBuses.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Thesis_Misc/css/mycss.css" afterPath="$PROJECT_DIR$/Thesis_Misc/css/mycss.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Thesis_Misc/js/spider.js" afterPath="$PROJECT_DIR$/Thesis_Misc/js/spider.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Thesis_Misc/js/streetMap.js" afterPath="$PROJECT_DIR$/Thesis_Misc/js/streetMap.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Thesis_Misc/js/topoMap.js" afterPath="$PROJECT_DIR$/Thesis_Misc/js/topoMap.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="cs171-project-dowd-michael.iws" />
@@ -41,8 +69,8 @@
       <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Thesis_Misc/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-10.875" vertical-offset="13931" max-vertical-offset="16336">
-              <caret line="887" column="46" selection-start-line="887" selection-start-column="46" selection-end-line="887" selection-end-column="46" />
+            <state vertical-scroll-proportion="-3.6470587" vertical-offset="4966" max-vertical-offset="16336">
+              <caret line="322" column="55" selection-start-line="322" selection-start-column="55" selection-end-line="322" selection-end-column="55" />
               <folding>
                 <element signature="n#style#0;n#div#1;n#div#0;n#body#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#a#0;n#p#0;n#div#1;n#div#0;n#body#0;n#!!top" expanded="true" />
@@ -52,35 +80,12 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="streetMap.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Thesis_Misc/js/streetMap.js">
+      <file leaf-file-name="mycss.css" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Thesis_Misc/css/mycss.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-3.017857" vertical-offset="7495" max-vertical-offset="8192">
-              <caret line="604" column="38" selection-start-line="604" selection-start-column="38" selection-end-line="604" selection-end-column="38" />
-              <folding>
-                <element signature="e#5039#5459#0" expanded="false" />
-                <element signature="e#15249#15737#0" expanded="false" />
-                <element signature="e#15810#19354#0" expanded="false" />
-                <element signature="n#!!block;n#arcTween#0" expanded="false" />
-                <element signature="e#22051#22158#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Laccess.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Thesis_Misc/js/Laccess.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="25.481482" vertical-offset="1104" max-vertical-offset="3392">
-              <caret line="46" column="21" selection-start-line="46" selection-start-column="21" selection-end-line="46" selection-end-column="21" />
-              <folding>
-                <element signature="e#146#632#0" expanded="false" />
-                <element signature="e#684#789#0" expanded="false" />
-                <element signature="e#1601#1639#0" expanded="false" />
-                <element signature="e#1689#2291#0" expanded="false" />
-                <element signature="e#2336#4812#0" expanded="false" />
-                <element signature="e#10102#10542#0" expanded="false" />
-              </folding>
+            <state vertical-scroll-proportion="0.0" vertical-offset="4478" max-vertical-offset="5808">
+              <caret line="303" column="69" selection-start-line="303" selection-start-column="69" selection-end-line="303" selection-end-column="69" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -88,20 +93,40 @@
       <file leaf-file-name="spider.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Thesis_Misc/js/spider.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-18.592592" vertical-offset="5434" max-vertical-offset="6160">
-              <caret line="401" column="29" selection-start-line="401" selection-start-column="29" selection-end-line="401" selection-end-column="29" />
+            <state vertical-scroll-proportion="-13.259259" vertical-offset="5306" max-vertical-offset="6304">
+              <caret line="384" column="37" selection-start-line="384" selection-start-column="37" selection-end-line="384" selection-end-column="37" />
               <folding>
-                <element signature="e#1801#2285#0" expanded="false" />
-                <element signature="e#5759#5905#0" expanded="false" />
+                <element signature="e#1884#2368#0" expanded="false" />
+                <element signature="e#5842#5988#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="indexBuses.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="diffAuto1ft.csv" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Thesis_Misc/data/spider/diffAuto1ft.csv">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="496">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="topoMap.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Thesis_Misc/js/topoMap.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1632">
+              <caret line="16" column="22" selection-start-line="16" selection-start-column="22" selection-end-line="16" selection-end-column="22" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="indexBuses.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Thesis_Misc/indexBuses.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.22633745" vertical-offset="2827" max-vertical-offset="4096">
+            <state vertical-scroll-proportion="-6.875" vertical-offset="2827" max-vertical-offset="4096">
               <caret line="187" column="40" selection-start-line="187" selection-start-column="40" selection-end-line="187" selection-end-column="40" />
               <folding />
             </state>
@@ -179,16 +204,16 @@
         <option value="$PROJECT_DIR$/Thesis_Misc/css/sidebar.css" />
         <option value="$PROJECT_DIR$/Thesis_Misc/js/chloroClass.js" />
         <option value="$PROJECT_DIR$/Thesis_Misc/js/assets.js" />
-        <option value="$PROJECT_DIR$/Thesis_Misc/js/topoMap.js" />
         <option value="$PROJECT_DIR$/Thesis_Misc/js/chart.js" />
         <option value="$PROJECT_DIR$/Thesis_Misc/js/groupedChart.js" />
         <option value="$PROJECT_DIR$/Thesis_Misc/js/LineCharts.js" />
         <option value="$PROJECT_DIR$/Thesis_Misc/js/Laccess.js" />
         <option value="$PROJECT_DIR$/Thesis_Misc/js/streetMap.js" />
+        <option value="$PROJECT_DIR$/Thesis_Misc/indexBuses.html" />
         <option value="$PROJECT_DIR$/Thesis_Misc/css/mycss.css" />
+        <option value="$PROJECT_DIR$/Thesis_Misc/js/topoMap.js" />
         <option value="$PROJECT_DIR$/Thesis_Misc/index.html" />
         <option value="$PROJECT_DIR$/Thesis_Misc/js/spider.js" />
-        <option value="$PROJECT_DIR$/Thesis_Misc/indexBuses.html" />
       </list>
     </option>
   </component>
@@ -253,24 +278,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="Thesis_Misc" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cs171-project-dowd-michael" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="cs171-project-dowd-michael" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Thesis_Misc" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -530,7 +537,13 @@
       <option name="project" value="LOCAL" />
       <updated>1430702584698</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="Sunday">
+      <created>1430753679191</created>
+      <option name="number" value="00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1430753679191</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -539,7 +552,7 @@
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3290653" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3290653" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3989704" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32947233" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -615,20 +628,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Thesis_Misc/data/assets/exitsPT.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0839895" vertical-offset="0" max-vertical-offset="6944">
-          <caret line="4" column="46" selection-start-line="4" selection-start-column="38" selection-end-line="4" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Thesis_Misc/data/assets/mbtaArc.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0839895" vertical-offset="0" max-vertical-offset="1168">
-          <caret line="4" column="42" selection-start-line="4" selection-start-column="38" selection-end-line="4" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Thesis_Misc/data/assets/busStops.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="10432">
@@ -713,35 +712,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Thesis_Misc/libs/stickyHeader/demo/bootstrap.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-1.3333334" vertical-offset="0" max-vertical-offset="1600">
-          <caret line="2" column="55" selection-start-line="2" selection-start-column="55" selection-end-line="2" selection-end-column="55" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Thesis_Misc/libs/stickyHeader/demo/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="753">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Thesis_Misc/libs/stickyHeader/demo/tablesorter.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="24384">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Thesis_Misc/libs/stickyHeader/demo/scrollable-div.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.9411765" vertical-offset="0" max-vertical-offset="40784">
-          <caret line="3" column="61" selection-start-line="3" selection-start-column="51" selection-end-line="3" selection-end-column="61" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Thesis_Misc/js/ColorScales.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.27755645" vertical-offset="15" max-vertical-offset="768">
@@ -752,13 +722,6 @@
     <entry file="file://$PROJECT_DIR$/Thesis_Misc/data/img/Preloader_6.gif">
       <provider selected="true" editor-type-id="images">
         <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Thesis_Misc/libs/spin.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.06374502" vertical-offset="0" max-vertical-offset="753">
-          <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
-        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Thesis_Misc/libs/activity-indicator-1.0.0/README">
@@ -797,24 +760,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Thesis_Misc/libs/polyLineOffset.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.8518519" vertical-offset="3624" max-vertical-offset="4272">
-          <caret line="261" column="3" selection-start-line="261" selection-start-column="3" selection-end-line="261" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Thesis_Misc/RawData/Lines.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="648">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Thesis_Misc/scratch/offsetExample.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3621795" vertical-offset="350" max-vertical-offset="1648">
-          <caret line="213" column="24" selection-start-line="213" selection-start-column="16" selection-end-line="213" selection-end-column="24" />
         </state>
       </provider>
     </entry>
@@ -877,16 +826,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Thesis_Misc/libs/jquery.mmodal.min.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="753">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="n#!!doc" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Thesis_Misc/data/assets/groupTransitLines.csv">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.16998672" vertical-offset="0" max-vertical-offset="753">
@@ -899,14 +838,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.14873838" vertical-offset="0" max-vertical-offset="753">
           <caret line="7" column="58" selection-start-line="7" selection-start-column="6" selection-end-line="7" selection-end-column="58" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Thesis_Misc/js/topoMap.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.02124834" vertical-offset="0" max-vertical-offset="1520">
-          <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -953,28 +884,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Thesis_Misc/css/mycss.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.44352618" vertical-offset="4478" max-vertical-offset="5808">
-          <caret line="300" column="23" selection-start-line="300" selection-start-column="23" selection-end-line="300" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Thesis_Misc/js/streetMap.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-3.017857" vertical-offset="7495" max-vertical-offset="8192">
-          <caret line="604" column="38" selection-start-line="604" selection-start-column="38" selection-end-line="604" selection-end-column="38" />
-          <folding>
-            <element signature="e#5039#5459#0" expanded="false" />
-            <element signature="e#15249#15737#0" expanded="false" />
-            <element signature="e#15810#19354#0" expanded="false" />
-            <element signature="n#!!block;n#arcTween#0" expanded="false" />
-            <element signature="e#22051#22158#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Thesis_Misc/js/Laccess.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="25.481482" vertical-offset="1104" max-vertical-offset="3392">
@@ -990,10 +899,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Thesis_Misc/indexBuses.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-6.875" vertical-offset="2827" max-vertical-offset="4096">
+          <caret line="187" column="40" selection-start-line="187" selection-start-column="40" selection-end-line="187" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Thesis_Misc/js/topoMap.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1632">
+          <caret line="16" column="22" selection-start-line="16" selection-start-column="22" selection-end-line="16" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Thesis_Misc/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-10.875" vertical-offset="13931" max-vertical-offset="16336">
-          <caret line="887" column="46" selection-start-line="887" selection-start-column="46" selection-end-line="887" selection-end-column="46" />
+        <state vertical-scroll-proportion="-3.6470587" vertical-offset="4966" max-vertical-offset="16336">
+          <caret line="322" column="55" selection-start-line="322" selection-start-column="55" selection-end-line="322" selection-end-column="55" />
           <folding>
             <element signature="n#style#0;n#div#1;n#div#0;n#body#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#a#0;n#p#0;n#div#1;n#div#0;n#body#0;n#!!top" expanded="true" />
@@ -1002,21 +927,43 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Thesis_Misc/js/spider.js">
+    <entry file="file://$PROJECT_DIR$/Thesis_Misc/js/streetMap.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-18.592592" vertical-offset="5434" max-vertical-offset="6160">
-          <caret line="401" column="29" selection-start-line="401" selection-start-column="29" selection-end-line="401" selection-end-column="29" />
+        <state vertical-scroll-proportion="10.812052" vertical-offset="128" max-vertical-offset="8192">
+          <caret line="604" column="38" selection-start-line="604" selection-start-column="38" selection-end-line="604" selection-end-column="38" />
           <folding>
-            <element signature="e#1801#2285#0" expanded="false" />
-            <element signature="e#5759#5905#0" expanded="false" />
+            <element signature="e#5039#5459#0" expanded="false" />
+            <element signature="e#15249#15737#0" expanded="false" />
+            <element signature="e#15810#19354#0" expanded="false" />
+            <element signature="n#!!block;n#arcTween#0" expanded="false" />
+            <element signature="e#22051#22158#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Thesis_Misc/indexBuses.html">
+    <entry file="file://$PROJECT_DIR$/Thesis_Misc/css/mycss.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.22633745" vertical-offset="2827" max-vertical-offset="4096">
-          <caret line="187" column="40" selection-start-line="187" selection-start-column="40" selection-end-line="187" selection-end-column="40" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="4478" max-vertical-offset="5808">
+          <caret line="303" column="69" selection-start-line="303" selection-start-column="69" selection-end-line="303" selection-end-column="69" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Thesis_Misc/js/spider.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-13.259259" vertical-offset="5306" max-vertical-offset="6304">
+          <caret line="384" column="37" selection-start-line="384" selection-start-column="37" selection-end-line="384" selection-end-column="37" />
+          <folding>
+            <element signature="e#1884#2368#0" expanded="false" />
+            <element signature="e#5842#5988#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Thesis_Misc/data/spider/diffAuto1ft.csv">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="753">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>

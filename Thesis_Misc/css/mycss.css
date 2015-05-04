@@ -293,7 +293,7 @@ tr[class = tableRows ]:hover{
     border-left: 2px solid red;
 }
 
-.info, .streetInfo, .assetLegend, .accessLegend, .transitLegend, .spiderLegend{
+.info, .streetInfo, .assetLegend, .accessLegend, .transitLegend, .spiderLegend, .netLegend{
     padding: 6px 8px;
     font: 14px/16px Arial, Helvetica, sans-serif;
     background-color: rgba(255,255,255,0.8);
@@ -301,7 +301,7 @@ tr[class = tableRows ]:hover{
     border-radius: 5px;
 }
 
-.assetLegend, .accessLegend, .transitLegend, .spiderLegend{
+.assetLegend, .accessLegend, .transitLegend, .spiderLegend,.netLegend{
     height: 200px;
     width: 100px;
 }

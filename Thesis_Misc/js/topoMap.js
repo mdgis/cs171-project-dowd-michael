@@ -8,6 +8,13 @@ NetViz = function(_map, _data){
     $("#netV").addClass("selectedButton");
     this.initVis();
     this.updateVis(this.collection, "V")
+    //Initialize Legend
+    var Nlegend = L.control( { position: 'bottomright' } );
+    Nlegend.onAdd = function (map) {
+        var div = L.DomUtil.create('div', 'netLegend');
+        return div
+    };
+    Nlegend.addTo(map5);
 };
 
 NetViz.prototype.initVis = function() {
