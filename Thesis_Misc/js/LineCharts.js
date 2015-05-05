@@ -10,7 +10,7 @@
  */
 
 
-LineVis = function(_parentElement, _data, _label,_jsonBool ){
+LineVis = function(_parentElement, _data, _label,_jsonBool, _special ){
     this.parentElement = _parentElement;
     this.data = _data;
     this.displayData = [];
@@ -21,11 +21,18 @@ LineVis = function(_parentElement, _data, _label,_jsonBool ){
     this.denominator = 1;
     this.jsonBool = _jsonBool;
     this.baseTicks = [];
+    this.special = _special;
 
     // define all constants here
     this.margin = {top: 30, right: 50, bottom: 30, left: 80};
-    this.width = 340 - this.margin.left - this.margin.right;
-    this.height = 200 - this.margin.top - this.margin.bottom;
+    if (this.special) {
+        this.width = 500 - this.margin.left - this.margin.right;
+        this.height = 250 - this.margin.top - this.margin.bottom;
+    } else {
+        this.width = 340 - this.margin.left - this.margin.right;
+        this.height = 200 - this.margin.top - this.margin.bottom;
+    }
+
     this.initVis();
 };
 
@@ -35,11 +42,21 @@ LineVis = function(_parentElement, _data, _label,_jsonBool ){
  */
 LineVis.prototype.initVis = function() {
     var that = this; // read about the this
-    this.svg = this.parentElement.append("svg").attr("class", "littleCharts")
-        .attr("width", this.width + this.margin.left + this.margin.right)
-        .attr("height", this.height + this.margin.top + this.margin.bottom)
-        .append("g")
-        .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
+
+    if (this.special){
+        this.svg = this.parentElement.append("svg").attr("class", "littleSpecial")
+            .attr("width", this.width + this.margin.left + this.margin.right)
+            .attr("height", this.height + this.margin.top + this.margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
+    } else {
+        this.svg = this.parentElement.append("svg").attr("class", "littleCharts")
+            .attr("width", this.width + this.margin.left + this.margin.right)
+            .attr("height", this.height + this.margin.top + this.margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
+    }
+
 
     this.svg.append("text")
         .attr("x", (this.width / 2))
@@ -57,6 +74,8 @@ LineVis.prototype.initVis = function() {
     this.xAxis = d3.svg.axis()
         .scale(this.x)
         .orient("bottom");
+
+
 
     this.xAxis.tickFormat(function (d, i) {
         return String(i + 1) + "ft."
@@ -132,8 +151,9 @@ LineVis.prototype.initVis = function() {
     this.updateVis(false);
 
     that.svg.append("path")
-        .attr("class", "line asset")
+        .attr("class", "line asset " + "sp"+that.special )
         .attr("d", that.line(that.displayData));
+
 };
 
 LineVis.prototype.updateVis = function(normal){
@@ -179,7 +199,7 @@ LineVis.prototype.updateVis = function(normal){
         .orient("left")
         .tickFormat(function(d){
             if (!normal){
-                return d3.format("0,000")(d)
+                return that.special ? "-" + (d*100).toFixed() + "%" :  d3.format("0,000")(d)
             } else {
                 if (String(d*100).length > 4 && d*100 < 1){
                     return (d*100).toFixed(3) + "%"
@@ -201,6 +221,7 @@ LineVis.prototype.updateVis = function(normal){
             "use strict";
             return "rotate(-65)";
         });
+
 
 };
 

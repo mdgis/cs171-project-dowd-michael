@@ -10,7 +10,7 @@
     <script src="libs/leaflet-0.7.3/leaflet.js"></script>
     <script src="packages/simple_statistics.js"></script>
     <script src="libs/jquery/jquery-ui.js"></script>
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!--<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
 
 
     <!-- My Tools -->
@@ -172,13 +172,9 @@
             <div class="col-lg-6">
                 <div class="tabContainer">
                     <ul class="tabs">
-                        <li class="tab-link" data-tab="tab-1">Context</li>
                         <li class="tab-link-current" data-tab="tab-2">Charts</li>
                         <li class="tab-link" data-tab="tab-3">Specifics</li>
                     </ul>
-                    <div id="tab-1" class = "tab-content">
-                        <p>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor. Aenean aliquet fringilla sem. Suspendisse sed ligula in ligula suscipit aliquam. Praesent in eros vestibulum mi adipiscing adipiscing. Morbi facilisis. Curabitur ornare consequat nunc. Aenean vel metus. Ut posuere viverra nulla. Aliquam erat volutpat. Pellentesque convallis. Maecenas feugiat, tellus pellentesque pretium posuere, felis lorem euismod felis, eu ornare leo nisi vel felis. Mauris consectetur tortor et purus.</p>
-                    </div>
 
                     <div id="tab-2" class="tab-content current">
                         <p><strong>Click Chart to View Different Asset &nbsp;&nbsp;&nbsp; </strong>
@@ -333,7 +329,7 @@
             <!--Spider Map-->
             <div class="col-md-6 column">
                 <div id="spiderHist"></div>
-                <div class = "DataLower"></div>
+                <div id = "totalLost"></div>
             </div>
             <div class="col-md-6 column">
                 <div id="map4"></div>
@@ -353,6 +349,9 @@
                     </div>
                     <button type="button" class="btn btn-default netType" id = "netV" value = "V">Volumes</button>
                     <button type="button" class="btn btn-default netType" id = "netq" value = "q">Queues</button>
+                    <!--<button type="button" class="btn btn-default fillerButton"></button>-->
+                    <!--<button type="button" class="btn btn-default " id = "netPlay" >Play</button>-->
+                    <!--<button type="button" class="btn btn-default " id = "netReset" >Reset</button>-->
                     <button type="button" class="btn btn-default fillerButton"></button>
                     <button type="button" class="btn btn-default " data-toggle="modal" data-target="#autoNetModal">?</button>
 
@@ -360,17 +359,11 @@
             </div>
 
             <!--Traffic Volumes Map-->
-            <div class="col-md-6 column">
+            <div class="col-md-12 column">
                 <!--Top-->
-                <div class="DataSelection">
-                    <p>   Etiam ex nulla, sollicitudin vel laoreet in, finibus eu nunc. Vestibulum justo felis, dapibus id justo non, aliquam ullamcorper nulla. Pellentesque id posuere dolor. Sed id orci dignissim, aliquet tortor mattis, egestas eros. Interdum et malesuada fames ac ante ipsum primis in faucibus. Integer lobortis, orci at posuere scelerisque, tellus lectus hendrerit leo, non pulvinar lectus nisl at mauris. Cras cursus, nibh et iaculis dignissim, ante neque iaculis turpis, vitae auctor mi turpis id odio. Interdum et malesuada fames ac ante ipsum primis in faucibus.
-                        Etiam ex nulla, sollicitudin vel laoreet in, finibus eu nunc. Vestibulum justo felis, dapibus id justo non, aliquam ullamcorper nulla. Pellentesque id posuere dolor. Sed id orci dignissim, aliquet tortor mattis, egestas eros. Interdum et malesuada fames ac ante ipsum primis in faucibus. Integer lobortis, orci at posuere scelerisque, tellus lectus hendrerit leo, non pulvinar lectus nisl at mauris. Cras cursus, nibh et iaculis dignissim, ante neque iaculis turpis, vitae auctor mi turpis id odio. Interdum et malesuada fames ac ante ipsum primis in faucibus.
-                    </p>
-                </div>
-            </div>
-            <div class="col-md-6 column">
+
                 <div id="map5"></div>
-            </div>
+
         </div>
         <!--END ALL BUT THE MENU-->
     </div>
@@ -492,7 +485,14 @@
                         <h4 class="modal-title" id="myModalLabel">Auto Network Stuff</h4>
                     </div>
                     <div class="modal-body">
-                        ...
+                        <h2>Auto Network Volumes & Queues</h2>
+                        <p>Blah blah ablahb ablah a</p>
+                        <br>
+                        <h3>Volumes</h3>
+                        <p>Modeled auto volumes each link. The unit of measurement is vehicles per link</p>
+                        <h3>Queues</h3>
+                        <p>Queuing vehicles are those vehicles that can pass througha given link because of congestion on the highway network. Areas of high queues would
+                        be areas that are heavily congested (i.e. standstill traffic) </p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -502,6 +502,7 @@
         </div>
 
 
+    </div>
 </div>
 </body>
 
@@ -520,7 +521,7 @@
             .defer(d3.json, "data/assets/jobs.json")
             .defer(d3.json, "data/assets/hh.json")
             .defer(d3.json, "data/assets/pop.json")
-            .defer(d3.json, "data/assets/tazarea.json")
+            .defer(d3.json, "data/assets/firms.json")
             .defer(d3.csv, "data/access_JOBS/autoJobs.csv")
             .defer(d3.csv, "data/access_JOBS/transitJobs.csv")
             .defer(d3.csv, "data/access_JOBS/walkJobs.csv")
@@ -551,9 +552,9 @@
 
     var Demographics = {
         "jobs": null,
-        "hh"  : null,
+        "households":null,
         "pop" : null,
-        "tazarea":null,
+        "firms":null,
         "gjobs": null,
         "groads":null,
         "gtlines":null
@@ -630,8 +631,15 @@
 
     };
 
-    function ready(error, theTaz, Qjobs, Qhh, Qpop, Qtazarea, Qauto, Qtransit, Qwalk, QGauto, QGtransit, QGwalk,  Qgrjobs, Qnet0, Qgroads, Qgtlines) {
+    function ready(error, theTaz, Qjobs, Qhh, Qpop, Qfirms, Qauto, Qtransit, Qwalk, QGauto, QGtransit, QGwalk,  Qgrjobs, Qnet0, Qgroads, Qgtlines) {
         data = theTaz;
+        Demographics.jobs = Qjobs;
+        Demographics.households = Qhh;
+        Demographics.pop = Qpop;
+        Demographics.gjobs = Qgrjobs;
+        Demographics.firms = Qfirms;
+        Demographics.groads = Qgroads;
+        Demographics.gtlines = Qgtlines;
         accessUnits.cauto = Qauto;
         accessUnits.ctransit = Qtransit;
         accessUnits.cwalk = Qwalk;
@@ -639,13 +647,6 @@
         accessUnits.gwalk = QGtransit;
         accessUnits.gtransit = QGwalk;
         access = accessUnits.auto;
-        Demographics.jobs = Qjobs;
-        Demographics.hh = Qhh;
-        Demographics.pop = Qpop;
-        Demographics.gjobs = Qgrjobs;
-        Demographics.tazarea = Qtazarea;
-        Demographics.groads = Qgroads;
-        Demographics.gtlines = Qgtlines;
         nets.n0 = Qnet0;
 
 
@@ -670,7 +671,7 @@
 
         //Leaflet Base Maps
         map = L.map("map").setView([42.3596, -71.0561], 12);
-        //'http://{s}.acetate.geoiq.com/tiles/acetate/{z}/{x}/{y}.png'
+
         L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
             maxZoom: 18,
             minZoom: 11,
@@ -723,6 +724,7 @@
         group_char_viz = new GroupChartVis("#context");
         //Spider Map
         spider_viz = new SpiderViz(map4);
+        asset_map_viz.asset_viz4 = new LineVis(d3.select("#totalLost"), assetsGlobals.totalLostTrips, "Total Percent Lost Trips",false,true);
         traffic_map = new NetViz(map5, nets.n0);
 
         //END READY FUNCTION
@@ -767,18 +769,10 @@
         } else if (sliderViz === "Lost") {
             d3.selectAll(".theSpiderLines").remove();
             d3.selectAll(".centroids").remove();
-
-            console.log("Current SPider Data",spider_viz.spiderData.current, "Value", value);
-            if (spider_viz.spiderData.current === "auto" && value > 1){
-                spider_viz.loaded(spider_viz.taz, spider_viz.spiderData[spider_viz.spiderData.current + value])
-            } else if (spider_viz.spiderData.current === "auto" && value == 1) {
-                d3.selectAll(".spiderBar").remove();
-            }
-            else {
-                spider_viz.loaded(spider_viz.taz, spider_viz.spiderData[spider_viz.spiderData.current + value])
+            spider_viz.loaded(spider_viz.taz, spider_viz.spiderData[spider_viz.spiderData.current + value])
             }
 
-        }
+
     }
 
     function updateSpecialChart(check){
@@ -846,8 +840,8 @@
                         $("#AssetDM").addClass("selectedButton");
                         asset_map_viz.asset_viz = new AssetVis(d3.select("#chart"), Demographics.jobs, "Jobs");
                         asset_map_viz.asset_viz2 = new AssetVis(d3.select("#chart1"), Demographics.pop, "Pop");
-                        asset_map_viz.asset_viz3 = new AssetVis(d3.select("#chart2"), Demographics.hh, "hh");
-                        asset_map_viz.asset_viz4 = new AssetVis(d3.select("#chart3"), Demographics.tazarea, "Taz Area Meters Sq.");
+                        asset_map_viz.asset_viz3 = new AssetVis(d3.select("#chart2"), Demographics.households, "Households");
+                        asset_map_viz.asset_viz4 = new AssetVis(d3.select("#chart3"), Demographics.firms, "Firms");
                         asset_map_viz.wrangleDemData(Demographics.jobs, "JOBS", 0)
 
                     }
@@ -871,18 +865,14 @@
         });
         //Lost Trip Buttons
         $("#SpiderSelection").on("click", function(e){
-            console.log('e target', e.target)
             if (e.target !== "range" && ["Auto", "Transit", "Total"].indexOf(e.target.innerText) > -1){
-                if ($("#LostSlider").val() == "1" && e.target.innerText === "Auto" ){
-                    //do nothing - no lost trips for auto at 1ft
-                } else {
                     console.log("in the spider button click", e.target.innerText);
                     d3.selectAll(".spiderBar").remove();
                     d3.selectAll(".theSpiderLines").remove();
                     d3.selectAll(".centroids").remove();
                     spider_viz.changeMode(e.target)
                 }
-            }
+
         });
         //Road Network Buttons
         $(".netType").on("click", function(e){
@@ -897,6 +887,8 @@
                 $("#netq").addClass("selectedButton");
                 $("#netV").removeClass("selectedButton");
             }
+            d3.selectAll(".netLegendRect").remove();
+            d3.selectAll(".netLegendSVG").remove();
             traffic_map.updateVis(data,netVizGlobals.attribute)
         });
         //Acceessibility Buttons
@@ -906,7 +898,6 @@
                 if (d.target.innerText === "Cutoff Measure") {
                     $("#CM").addClass("selectedButton");
                     $("#GM").removeClass("selectedButton");
-
                     accessUnits.method = "c";
                 } else if (d.target.innerText === "Gamma Measure") {
                     $("#GM").addClass("selectedButton");
@@ -1008,7 +999,75 @@
 
 
 
-
+//$("#netPlay").on("click", function(){
+//    var vals = [0,1,2,3,4,5,6];
+//    var index = 0;
+//    var first = true;
+//
+//    var start = new Date().getTime();
+//    function execute() {
+//
+//        if ((new Date().getTime() - start) > 30000  ){
+//            clearInterval(call)
+//        }
+//
+//        console.log("index", index, vals);
+//        $("#netSlider").val(index);
+//        showValue(vals[index], 'Net');
+//        if (index === 6){
+//            vals.reverse();
+//            index = 5;
+//        } if (index===0 && !first){
+//            vals.reverse()
+//        }
+//
+//        if (vals[0]===6){
+//            index -= 1;
+//        } else {
+//            index += 1
+//        }
+//        first = false;
+//    }
+//
+//    var call = setInterval(execute, 2000)
+//
+//
+//
+//})$("#netPlay").on("click", function(){
+//    var vals = [0,1,2,3,4,5,6];
+//    var index = 0;
+//    var first = true;
+//
+//    var start = new Date().getTime();
+//    function execute() {
+//
+//        if ((new Date().getTime() - start) > 30000  ){
+//            clearInterval(call)
+//        }
+//
+//        console.log("index", index, vals);
+//        $("#netSlider").val(index);
+//        showValue(vals[index], 'Net');
+//        if (index === 6){
+//            vals.reverse();
+//            index = 5;
+//        } if (index===0 && !first){
+//            vals.reverse()
+//        }
+//
+//        if (vals[0]===6){
+//            index -= 1;
+//        } else {
+//            index += 1
+//        }
+//        first = false;
+//    }
+//
+//    var call = setInterval(execute, 2000)
+//
+//
+//
+//})
 
 
 

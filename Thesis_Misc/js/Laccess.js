@@ -1,4 +1,6 @@
 /* Accessibility map2 Visualization */
+
+//TODO add mode to the info box
 accessVizGlobals = {"current":null, "accessBrush":null};
 
 AccessVis = function(_parentElement, _classLabel){
@@ -214,8 +216,11 @@ AccessVis.prototype.addLegend = function() {
     legend.append("text")
         .attr("x", 50)
         .attr("y", function(d, i){ return legendHeight - (i*ls_h) - ls_h - 4;})
-        .text(function(d, i){ return legendData[i].toFixed(3) });
+        .text(function(d, i){
+            return accessUnits.method === "c" ? (legendData[i] * 100).toFixed() + "%" :
+             legendData[i].toFixed(3) });
 
+    that.updateAssetInfo();
 };
 
 AccessVis.prototype.toggleLegend = function(bool){
@@ -315,6 +320,12 @@ AccessVis.prototype.accessHist = function(mode){
         .style("text-anchor", "end")
         .text("Frequency");
 
+    svg.append("text")
+        .attr("x", (width / 2))
+        .attr("y", 10)
+        .attr("text-anchor", "middle")
+        .style("font-size", "16px")
+        .text("Histogram of Accessibility Values by Zone");
 
 };
 
@@ -334,4 +345,31 @@ AccessVis.prototype.brushMap = function(extent){
 
         })
     }
+};
+
+
+AccessVis.prototype.updateAssetInfo = function(){
+    var that = this;
+    $(".accessInfo").remove();
+    info.onAdd = function (map) {
+        this._div = L.DomUtil.create('div', 'accessInfo');
+        this.update();
+        return this._div;
+    };
+
+    //Control FLow for Labels - sort of a mess but running out of time.
+    var label = accessUnits.method;
+    if (label === "g"){
+        label = "Gamma"
+    } else {
+        label = "Cutoff"
+    }
+
+
+    info.update = function (asset) {
+        this._div.innerHTML = '<h4>' + label + '</h4>'
+    };
+    info.addTo(map2);
+
+
 };

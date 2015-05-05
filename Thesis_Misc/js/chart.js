@@ -15,7 +15,6 @@ AssetVis = function(_parentElement, _data, _label){
     this.totalAssets = 0;
     this.denominator = 1;
 
-
     // define all constants here
     this.margin = {top: 30, right: 50, bottom: 30, left: 80};
     this.width = 340 - this.margin.left - this.margin.right;
@@ -33,10 +32,8 @@ AssetVis.prototype.initVis = function(){
         .attr("id",this.label.split(" ")[0])
         .attr("class", "littleCharts")
         .on("click", function(d,i){
-            console.log("Clicked Svg")
             var level = $("#AssetSlider").val();
-            var dim = this.id;
-            console.log(dim, level)
+            var dim = this.id === "Taz" ? "tazarea" : this.id;
             map3.removeLayer(asset_map_viz.Features);
             asset_map_viz.wrangleDemData(Demographics[dim.toLocaleLowerCase()], dim.toUpperCase(), level)
         })
@@ -86,8 +83,8 @@ AssetVis.prototype.initVis = function(){
         .attr("class","assetBar")
         .attr("class", function(d,i){ return "s" + String(i) + " " + "assetBar "  + that.label})
         .style("fill", function(d,i){
-            return that.label === "Jobs" ? golden[i+1] : that.label === "Pop" ? bluish[i] : that.label === "hh" ? redish[i]
-                : golden[i]
+            return that.label === "Jobs" ? golden[i+1] : that.label === "Pop" ? bluish[i] : that.label === "Households" ? redish[i]
+                : purplish[i]
         })
         .style("opacity", 0.8)
         .style("stroke", "white")
@@ -145,8 +142,6 @@ AssetVis.prototype.updateVis = function(first){
     }
 
     this.x.domain(this.displayData.map(function(d,i) {return i; }));
-
-    //console.log(d3.max(this.displayData, function(d) {return d/that.totalAssets}));
     if (this.normal){
         this.y.domain([0, (0.05 + +(d3.max(this.displayData, function(d) {return d/that.totalAssets}))).toFixed(1)
         ])
@@ -198,7 +193,6 @@ AssetVis.prototype.updateVis = function(first){
 };
 
 AssetVis.prototype.normalize = function(){
-    console.log("in normalize");
     this.normal = !this.normal;
     this.updateVis(false)
 };
