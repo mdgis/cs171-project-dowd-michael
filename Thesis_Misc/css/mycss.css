@@ -280,7 +280,7 @@ table.TransitSelector{
 
 td {
     min-width: 15%;
-    cursor: crosshair;
+    cursor: default;
 
 }
 
@@ -290,7 +290,7 @@ tr[class = tableRows ]:hover{
 
 .littleCharts:hover{
     cursor: pointer;
-    border-left: 2px solid red;
+    border-left: 1px solid red;
 }
 
 .assetLegend, .accessLegend, .transitLegend, .spiderLegend, .netLegend{
@@ -315,7 +315,7 @@ tr[class = tableRows ]:hover{
     width: 100px;
 }
 
-.transitLegend,{
+.transitLegend{
     height: 170px;
 }
 .spiderLegend{

@@ -112,7 +112,7 @@ function distance(lat1, lon1, lat2, lon2) {
 }
 
 //Node Processing - Outputs Nested JSON saying which transit line is at which Transit Stop
-d3.tsv("RawData/PtOnOff.csv", function(data){
+d3.tsv("data/PtOnOff.csv", function(data){
     //First Determine all Unique Nodes
     data.forEach(function(d){
         if (!StreetMapGlobals.rootNodes[d.A]) {

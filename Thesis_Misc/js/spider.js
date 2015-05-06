@@ -12,7 +12,7 @@ SpiderViz = function(_parentElement){
     this.transit = null;
     this.taz = null;
 
-    queue().defer(d3.json, "RawData/tazCtopo.json")
+    queue().defer(d3.json, "data/tazCtopo.json")
         .defer(d3.csv, "data/spider/diffAuto1ftClean.csv")
         .defer(d3.csv, "data/spider/diffAuto2ftClean.csv")
         .defer(d3.csv, "data/spider/diffAuto3ftClean.csv")
@@ -37,7 +37,7 @@ SpiderViz = function(_parentElement){
     var Slegend = L.control( { position: 'bottomright' } );
     Slegend.onAdd = function (map) {
         var div = L.DomUtil.create('div', 'spiderLegend');
-        console.log("add the spider div");
+
         return div
     };
     Slegend.addTo(map4);
@@ -80,8 +80,8 @@ SpiderViz.prototype.ready = function(error,taz,auto1,auto2,auto3,auto4,auto5,aut
 SpiderViz.prototype.initVis = function(){
     var that = this;
     //that.vMax = d3.max(that.links, function(d) {return Math.abs(d.val)});
-    that.vMax = spiderVizGlobals.mode === "Transit" ? 1275 : 7715;
-    console.log("init max", that.vMax)
+    that.vMax = spiderVizGlobals.spiderMode === "Transit" ? 1275 : 7715;
+    //console.log("init max", that.vMax)
     that.vScale = d3.scale.linear()
         .domain([10,that.vMax])
         .rangeRound([0,30]);
@@ -94,7 +94,7 @@ SpiderViz.prototype.initVis = function(){
     that.transitDomain = [25,50,100,250,500, 750, 1275];
     that.autoDomain = [50,250,500,1000,3000,5000,7715];
 
-    that.lineDomain = spiderVizGlobals.mode === "Transit" ? that.transitDomain : that.autoDomain;
+    that.lineDomain = spiderVizGlobals.spiderMode === "Transit" ? that.transitDomain : that.autoDomain;
     that.colorDomain = ["black","purple","darkblue","blue","red", "orange", "yellow"];
     that.color = d3.scale.linear()
         .domain(that.lineDomain)
@@ -190,7 +190,7 @@ SpiderViz.prototype.projectPoint = function (x, y) {
 };
 
 SpiderViz.prototype.loaded = function(taz, spider) {
-    console.log("in Loaded")
+
     var that = spider_viz;
     that.Mtaz = taz;
     that.links = [];
@@ -383,7 +383,7 @@ SpiderViz.prototype.changeMode = function(e){
        $("#spAuto").removeClass("selectedButton");
        $("#spTransit").removeClass("selectedButton");
        $("#spTotal").removeClass("selectedButton");
-       $("#sp" +spiderVizGlobals.mode).addClass("selectedButton");
+       $("#sp" +spiderVizGlobals.spiderMode).addClass("selectedButton");
 
     }
 
@@ -393,7 +393,7 @@ SpiderViz.prototype.changeMode = function(e){
 
 
 SpiderViz.prototype.addLegend = function() {
-    console.log("adding spider legend")
+
     var that = this;
 
     var legendData = that.lineDomain;

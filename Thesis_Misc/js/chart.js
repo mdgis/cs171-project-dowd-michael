@@ -16,8 +16,8 @@ AssetVis = function(_parentElement, _data, _label){
     this.denominator = 1;
 
     // define all constants here
-    this.margin = {top: 30, right: 50, bottom: 30, left: 80};
-    this.width = 340 - this.margin.left - this.margin.right;
+    this.margin = {top: 30, right: 50, bottom: 30, left: 60};
+    this.width = 320 - this.margin.left - this.margin.right;
     this.height = 200 - this.margin.top - this.margin.bottom;
     this.initVis();
 };
@@ -107,8 +107,7 @@ AssetVis.prototype.initVis = function(){
 };
 
 AssetVis.prototype.wrangleData= function(){
-    // displayData should hold the data which is visualized
-    //this.displayData = this.filterAndAggregate(_filterFunction);
+   // console.log("the data", this.data)
     var totals = {};
     for (var key in this.data[0]){
         totals[key] = 0
@@ -119,11 +118,15 @@ AssetVis.prototype.wrangleData= function(){
         totals[key] += d[key]}
         });
 
+
     delete totals["TAZ"];
     this.displayData = [];
     for (var key in totals){this.displayData.push(totals[key])}
+
+    //console.log("display Data",this.label, this.displayData)
     this.totalAssets = this.displayData[6];
     this.displayData = this.displayData.slice(0,6);
+    //console.log("this.totalAssets", this.label, this.totalAssets)
 
 };
 
@@ -141,7 +144,7 @@ AssetVis.prototype.updateVis = function(first){
         that = this
     }
 
-    this.x.domain(this.displayData.map(function(d,i) {return i; }));
+    this.x.domain(this.displayData.map(function(d,i) {return i;}));
     if (this.normal){
         this.y.domain([0, (0.05 + +(d3.max(this.displayData, function(d) {return d/that.totalAssets}))).toFixed(1)
         ])

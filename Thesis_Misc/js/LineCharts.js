@@ -170,17 +170,14 @@ LineVis.prototype.updateVis = function(normal){
         that.y.domain([0,d3.max(that.slrCounts.slice(0,6))]);
     }
 
-    console.log(that.label, that.y.domain());
 
 
     if (normal) {
         that.normalData  = that.slrCounts.slice(0,6).map(function(d){
-        console.log("d", d, "denom", denominator)
         return d/denominator})
 
         that.normalData = d3.zip(d3.range(6), that.normalData);
 
-        console.log("normal data", that.normalData)
         that.svg.selectAll(".line.asset")
             .transition().duration(2000)
             .attr("d", that.line(that.normalData));
